@@ -1,0 +1,40 @@
+{
+    "Titles": {
+        "home": "Home"
+    },
+
+    "validation": {
+        "image": "Image required",
+        "name": "Name Is required",
+        "phone": "Please enter phone number",
+        "email": "Please enter a valid Email",
+        "password": "Please enter your password",
+        "confirmPassword": "The password does not match",
+        "code": "Activation code is required."
+      },
+
+    "Auth": {
+        "login": "Login",
+        "mobile_and_password" : "Enter your mobile number and password",
+        "phone_email" : "Mobile number / email",
+        "mobile_number" : "Mobile number",
+        "password" : "Password",
+        "enter_password" : "Enter your password",
+        "email" : "Email",
+        "enter_email" : "Enter your email",
+        "forget_password" : "Did you forget your password ?",
+        "dont_have_account" : "Don't have an account?",
+        "create_account" : "Create an account",
+        "restore_password" : "Restore password",
+        "register_store" : "Log in to your store",
+        "welcome" : "Welcome to Barwazah",
+        "forgot_password" : "Forgot your password?",
+        "send" : "Send",
+        "get_code" : "Enter your email to get the activation code",
+        "send_code" : "The code has been sent to your email.",
+        "reset_password" : "Reset password",
+        "havent_received_code" : "Didn't receive the code?",
+        "resend_code" : "Resend code"
+    }
+
+}
