@@ -4,6 +4,7 @@
             <h1 class="main-title bold lg mb-5">{{ $t("Auth.forgot_password") }}</h1>
             <div class="layout-form md custom-width">
                 <img src="@/assets/images/logo.svg" alt="logo" class="Auth-logo mb-5">
+                
                 <!-- start to steps component -->
 
                 <GlobalSteps :activeSteps="[3, 2]" />

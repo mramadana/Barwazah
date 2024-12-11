@@ -1,48 +1,55 @@
 <template>
     <div class="container">
-        <div class="layout-form custom-width">
-            <h1 class="main-title bold lg mb-5">{{ $t("Auth.restore_password") }}</h1>
-            <form @submit.prevent="submitData" ref="confirmPasswordForm">
-                <div class="row">
-                    <div class="col-12 col-md-8 mr-auto">
-                        <div class="text-center mb-5">
-                            <img src="@/assets/images/restore-image.svg" loading="lazy" alt="restore-image" class="restore-image mb-4">
-                            <p class="main-title">{{ $t("Auth.confirm_password") }}</p>
-                        </div>
-                        <div class="form-group">
-                            <label class="label">
-                                {{ $t('Auth.new_password') }}
-                                <span class="hint-red">*</span>
-                            </label>
-                            <div class="main_input with_icon">
-                                <input :type="inputType('definitelyNewPassword')" name="password" v-model="password" class="custum-input-icon validInputs" :placeholder=" $t('Auth.please_enter_password') ">
-                                <button class="static-btn with_eye" type="button" @click="togglePasswordVisibility('definitelyNewPassword')" :class="{ 'active_class': passwordVisible.definitelyNewPassword }">
-                                <i class="far fa-eye icon"></i>
-                                </button>
+        <div class="auth-layout flex-column">
+            <h1 class="main-title bold lg mb-5">{{ $t("Auth.forgot_password") }}</h1>
+            <div class="layout-form md custom-width">
+                
+                <img src="@/assets/images/logo.svg" alt="logo" class="Auth-logo mb-5">
+                
+                <!-- start to steps component -->
+    
+                <GlobalSteps :activeSteps="[3, 2, 1]" />
+    
+                <form @submit.prevent="submitData" ref="confirmPasswordForm">
+                    <div class="row">
+                        <div class="col-12 col-md-10 mr-auto">
+
+                            <p class="main-title bold mb-4">{{ $t("Auth.new_password") }}</p>
+
+                            <div class="form-group">
+                                <label class="label">
+                                    {{ $t('Auth.password_2') }}
+                                </label>
+                                <div class="main_input with_icon">
+                                    <input :type="inputType('definitelyNewPassword')" name="password" v-model="password" class="custum-input-icon validInputs" :placeholder=" $t('Auth.password_2') ">
+                                    <button class="static-btn with_eye" type="button" @click="togglePasswordVisibility('definitelyNewPassword')" :class="{ 'active_class': passwordVisible.definitelyNewPassword }">
+                                    <i class="far fa-eye icon"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="label">
-                                {{ $t('Auth.definitely_new_password') }}
-                                <span class="hint-red">*</span>
-                            </label>
-                            <div class="main_input with_icon">
-                                <input :type="inputType('definitelyNewPassword_2')" name="password_confirmation" v-model="confirmPassword" class="custum-input-icon validInputs" :placeholder=" $t('Auth.please_confirm_password') ">
-                                <button class="static-btn with_eye" type="button" @click="togglePasswordVisibility('definitelyNewPassword_2')" :class="{ 'active_class': passwordVisible.definitelyNewPassword_2 }">
-                                <i class="far fa-eye icon"></i>
-                                </button>
+    
+                            <div class="form-group">
+                                <label class="label">
+                                    {{ $t('Auth.confirm_password') }}
+                                </label>
+                                <div class="main_input with_icon">
+                                    <input :type="inputType('definitelyNewPassword_2')" name="password_confirmation" v-model="confirmPassword" class="custum-input-icon validInputs" :placeholder=" $t('Auth.confirm_password') ">
+                                    <button class="static-btn with_eye" type="button" @click="togglePasswordVisibility('definitelyNewPassword_2')" :class="{ 'active_class': passwordVisible.definitelyNewPassword_2 }">
+                                    <i class="far fa-eye icon"></i>
+                                    </button>
+                                </div>
                             </div>
+    
+                            <button class="custom-btn mr-auto">
+                                {{ $t('Auth.save') }}
+                                <span class="spinner-border spinner-border-sm" v-if="loading" role="status" aria-hidden="true"></span>
+                            </button>
+    
                         </div>
-
-                        <button class="custom-btn w-100 mr-auto">
-                            {{ $t('Auth.confirmation') }}
-                            <span class="spinner-border spinner-border-sm" v-if="loading" role="status" aria-hidden="true"></span>
-                        </button>
-
                     </div>
-                </div>
-            </form>
+                </form>
+
+            </div>
         </div>
     </div>
 </template>
@@ -50,6 +57,7 @@
 <script setup>
     definePageMeta({
         name: "Auth.new_password",
+        layout: false
     });
 
     const { t } = useI18n({ useScope: 'global' });
@@ -108,7 +116,7 @@
         await axios.post("reset-password", fd).then(res => {
         if (response(res) == "success") {
             successToast(res.data.msg);
-            navigateTo('/Auth/login');
+            navigateTo('/Auth/passwordResets');
         } else {
             errorToast(res.data.msg)
         }
@@ -118,33 +126,3 @@
     };
 </script>
 
-<!-- <script>
-definePageMeta({
-    name: "Auth.new_password",
-});
-export default {
-    
-    data() {
-        return {
-            passwordVisible: {
-                definitelyNewPassword: false,
-                definitelyNewPassword_2: false
-            }
-        }
-    },
-
-    methods: {
-        togglePasswordVisibility(input) {
-            this.passwordVisible[input] = !this.passwordVisible[input];
-        },
-
-        inputType(input) {
-            return this.passwordVisible[input] ? 'text' : 'password';
-        },
-
-        submitData() {
-            this.$router.push('/Auth/login')
-        }
-    }
-}
-</script> -->

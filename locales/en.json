@@ -34,7 +34,13 @@
         "send_code" : "The code has been sent to your email.",
         "reset_password" : "Reset password",
         "havent_received_code" : "Didn't receive the code?",
-        "resend_code" : "Resend code"
+        "resend_code" : "Resend code",
+        "new_password" : "Enter a new password",
+        "password_2" : "Password",
+        "confirm_password" : "Confirm password",
+        "save" : "Save",
+        "password_reset" : "Your password has been reset",
+        "sign_with_new_password" : "Please sign in with your new password"
     }
 
 }
