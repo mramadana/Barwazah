@@ -48,7 +48,9 @@
         "sure_logout": "Are you sure you want to logout?",
         "retreat": "Retreat",
         "males": "Males",
-        "females": "Females"
+        "females": "Females",
+        "show_all": "Show all",
+        "gender": "Gender"
       },
 
     "Sidebar": {

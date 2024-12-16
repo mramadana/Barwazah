@@ -5,11 +5,18 @@
               id="bar"
               title="Bar Chart"
               desc="SSR + client-side lazy loading"
-              style="height: 500px; width: 100%; display: block"
+              style="height: 400px; width: 100%; display: block"
             >
-            <div class="custom-btns">
-                <button ref="toggleVisibility">Toggle Females Visibility</button>
-                <button ref="otherToggleVisibility">Toggle Males Visibility</button>
+
+            <div class="d-flex align-items-center justify-content-center gap-4">
+                <label class="label mb-0">
+                    {{$t('Global.gender')}}
+                </label>
+                <div class="with_cun_select custom-select">
+                    <div class="flex justify-content-center dropdown_card">
+                        <Dropdown v-model="rentalType" @change="handleRentalTypeChange" :options="rentals" optionLabel="name" :placeholder="$t('Global.show_all')" class="w-full md:w-14rem custum-dropdown" />
+                    </div>
+                </div>
             </div>
               <VChart ref="chart" :option="option" />
             </NExample>
@@ -39,7 +46,13 @@
   const chart = ref(null);
   const toggleVisibility = ref(null);
   const otherToggleVisibility = ref(null);
+  const rentalType = ref(null);
   
+  const rentals = ref([
+    { name: t('Global.show_all'), id: 0 },
+    { name: t('Global.males'), id: 1 },
+    { name: t('Global.females'), id: 2 },
+  ])
  
   const option = ref({
     animation: true,
@@ -107,6 +120,28 @@
     chartInstance.setOption(option.value, true); 
   }
   
+  const showAllData = () => {
+    option.value.legend.selected[t('Global.females')] = true;
+    option.value.legend.selected[t('Global.males')] = true;
+  };
+
+  const handleRentalTypeChange = (event) => {
+  const selectedRental = event.value;
+
+  if (selectedRental) {
+    switch (selectedRental.id) {
+      case 0:
+        showAllData();
+        break;
+      case 1:
+        toggleMalesVisibility();
+        break;
+      case 2:
+        toggleFemalesVisibility();
+        break;
+    }
+  }
+};
   
   onMounted(async () => {
 

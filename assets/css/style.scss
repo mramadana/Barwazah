@@ -442,12 +442,12 @@ body {
 }
 
 .with_cun_select {
-  display: flex;
-  align-items: center;
-  box-shadow: 0px 0px 2px #D9D9D9;
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-  overflow: hidden;
+  // display: flex;
+  // align-items: center;
+  // box-shadow: 0px 0px 2px #D9D9D9;
+  // border: 1px solid #dddddd;
+  // border-radius: 5px;
+  // overflow: hidden;
   .main_input, .dropdown_card {
   border: 0;
   box-shadow: none;
@@ -473,7 +473,7 @@ body {
   }
 
   .p-dropdown {
-    padding: 0 7px;
+    padding: 5px 7px;
     box-shadow: none;
     .p-dropdown-trigger {
         width: 17px;
@@ -1330,7 +1330,6 @@ input.p-inputtext.p-component {
 .disabledClass {
   cursor: no-drop !important;
 }
-
 
 
 

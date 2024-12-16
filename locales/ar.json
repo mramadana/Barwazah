@@ -49,7 +49,9 @@
         "sure_logout": "هل انت متأكد من تسجيل الخروج",
         "retreat": "تراجع",
         "males": "ذكور",
-        "females": "إناث"
+        "females": "إناث",
+        "show_all": "عرض الكل",
+        "gender": "الجنس"
       },
 
     "Sidebar": {
