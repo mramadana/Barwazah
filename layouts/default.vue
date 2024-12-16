@@ -1,19 +1,11 @@
 <template>
     <div>
-      <!-- loader -->
 
-      <!-- <div v-if="loading" class="fixed_class">
-        
-      </div> -->
+        <LayoutSideBar />
 
-
-        <LayoutHeader />
-
-        <div>
+        <div class="main-content">
             <slot />
         </div>
-
-        <LayoutFooter />
 
     </div>
 </template>
@@ -39,25 +31,6 @@ const route = useRoute();
     loading.value = false;
   });
 </script>
-
-
-<!-- <script>
-import { useI18n } from "vue-i18n";
-import { useRoute } from "#vue-router";
-export default {
-  setup() {
-    const { t, locale } = useI18n();
-    const route = useRoute();
-    watchEffect(() => {
-      useHead({
-        title: `${t(route.name)}`,
-      });
-    });
-    
-  },
-};
-</script> -->
-
 
 <style>
 .layout-enter-active,

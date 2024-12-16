@@ -41,6 +41,26 @@
         "save" : "Save",
         "password_reset" : "Your password has been reset",
         "sign_with_new_password" : "Please sign in with your new password"
+    },
+
+    "Global": {
+        "welcome": "Welcome",
+        "sure_logout": "Are you sure you want to logout?",
+        "retreat": "Retreat",
+        "males": "Males",
+        "females": "Females"
+      },
+
+    "Sidebar": {
+        "marketing_assistant": "Marketing Assistant",
+        "conversion": "Conversion",
+        "sales": "Sales",
+        "business_growth": "Business Growth",
+        "recommendations": "Recommendations",
+        "settings": "Settings",
+        "store": "Al-Badri Store",
+        "logout": "Logout"
     }
+
 
 }

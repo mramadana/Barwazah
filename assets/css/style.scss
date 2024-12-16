@@ -712,9 +712,12 @@ input.p-inputtext.p-component {
   }
 
   &.logout {
-    background-color: #F5E1E1;
-    border-color: #F5E1E1;
-    color: #EB5757;
+    background-color: #EB5757;
+    border-color: #EB5757;
+    color: #fff;
+    &:hover {
+      color: #EB5757 !important;
+    }
   }
 
   &.order-btn {
@@ -810,6 +813,10 @@ input.p-inputtext.p-component {
     @media (max-width: $screen-xs) {
       font-size: 17px;
     }
+  }
+
+  &.cl-red {
+    color: #e5254a;
   }
   
   &.sm {

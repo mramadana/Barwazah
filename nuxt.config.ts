@@ -1,5 +1,4 @@
 export default defineNuxtConfig({
-
   performance: {
     gzip: true, // Enable Gzip compression
     brotli: true, // Enable Brotli compression
@@ -7,21 +6,30 @@ export default defineNuxtConfig({
     preload: true, // Enable preloading
   },
 
-    // Reduce JavaScript chunk size
-    vite: {
-      build: {
-        chunkSizeWarningLimit: 500, // Set maximum chunk size
-        rollupOptions: {
-          output: {
-            manualChunks: (id) => {
-              if (id.includes('node_modules')) {
-                return id.toString().split('node_modules/')[1].split('/')[0];
-              }
-            },
+  // Reduce JavaScript chunk size
+  vite: {
+    build: {
+      chunkSizeWarningLimit: 500, // Set maximum chunk size
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+            if (id.includes('node_modules')) {
+              return id.toString().split('node_modules/')[1].split('/')[0];
+            }
           },
         },
       },
+      transpile: ['echarts-liquidfill']
     },
+
+    resolve: {
+      alias: { 'echarts/lib/util/number': 'echarts/lib/util/number.js' },
+    },
+    
+    optimizeDeps: {
+      include: ['some-module'],
+    },
+  },
 
   // Disable unnecessary features
   experimental: {
@@ -38,20 +46,20 @@ export default defineNuxtConfig({
     },
   },
 
-    // Image optimization
-    image: {
-      // domains: ['localhost:3000'], // Add your allowed domains for images
-      // quality: 80, // Set image quality
-      dir: 'assets/images',
-      format: ['webp', 'jpeg'], // Use modern formats
-    },
-  
-    // Reduce prefetching/prefetch links
-    router: {
-      prefetchLinks: false, // Disable automatic link prefetching
-    },
+  // Image optimization
+  image: {
+    // domains: ['localhost:3000'], // Add your allowed domains for images
+    // quality: 80, // Set image quality
+    dir: 'assets/images',
+    format: ['webp', 'jpeg'], // Use modern formats
+  },
 
-      // Tree shaking and module optimization
+  // Reduce prefetching/prefetch links
+  // Tree shaking and module optimization
+  router: {
+    prefetchLinks: false, // Disable automatic link prefetching
+  },
+
   build: {
     analyze: false, // Disable build analysis
     extractCSS: true, // Extract CSS to separate files
@@ -62,7 +70,7 @@ export default defineNuxtConfig({
       commons: true, // Separate shared modules
     },
   },
-  
+
   devtools: { enabled: true },
 
   app: {
@@ -88,12 +96,27 @@ export default defineNuxtConfig({
     '@pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/i18n',
     '@nuxt/image',
+    "nuxt-echarts"
   ],
-  
-    alias: {
-    // "@": resolve(__dirname, "/"),
-    assets: "/<rootDir>/assets",
+
+  echarts: {
+    ssr: true,
+    renderer: ['canvas', 'svg'],
+    charts: ['BarChart', 'MapChart'],
+    components: [
+      'DatasetComponent',
+      'GridComponent',
+      'TooltipComponent',
+      'ToolboxComponent',
+      'GeoComponent',
+      'VisualMapComponent',
+    ],
   },
+
+  alias: {
+  // "@": resolve(__dirname, "/"),
+  assets: "/<rootDir>/assets",
+},
 
   css: [
     "bootstrap/dist/css/bootstrap.rtl.css",
@@ -103,4 +126,5 @@ export default defineNuxtConfig({
     "~/assets/css/style.scss",
   ],
 
+  compatibilityDate: "2024-12-15",
 })

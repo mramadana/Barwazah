@@ -58,14 +58,14 @@
 
 <script setup>
 
-    import { useI18n } from 'vue-i18n';
-
     definePageMeta({
         name: "Auth.login",
         layout: false
     })
+    import { useI18n } from 'vue-i18n';
 
     const { t } = useI18n();
+
 
     // success response
     const { response } = responseApi();
@@ -117,6 +117,7 @@
 
 
     // login Function
+
     const login = async () => {
         loading.value = true;
         const fd = new FormData(loginForm.value);
@@ -151,6 +152,10 @@
             loading.value = false;
         }
     }
+
+    // const login = async () => {
+    //     navigateTo("/");
+    // }
 
     // toggle password
     const togglePasswordVisibility = () => {
