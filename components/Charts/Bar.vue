@@ -110,7 +110,8 @@
     if (!chartInstance) return;
   
     const legendSelected = option.value.legend.selected[t('Global.females')];
-    option.value.legend.selected[t('Global.females')] = !legendSelected;
+    option.value.legend.selected[t('Global.females')] = false;
+    option.value.legend.selected[t('Global.males')] = true;
   
     chartInstance.setOption(option.value, true); 
   }
@@ -120,8 +121,8 @@
     if (!chartInstance) return;
   
     const legendSelected = option.value.legend.selected[t('Global.males')];
-    option.value.legend.selected[t('Global.males')] = !legendSelected;
-  
+    option.value.legend.selected[t('Global.males')] = false;
+    option.value.legend.selected[t('Global.females')] = true;
     chartInstance.setOption(option.value, true); 
   }
   
