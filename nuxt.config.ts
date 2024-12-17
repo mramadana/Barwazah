@@ -19,7 +19,7 @@ export default defineNuxtConfig({
           },
         },
       },
-      transpile: ['echarts-liquidfill']
+      transpile: ['echarts']
     },
 
     resolve: {
@@ -27,7 +27,7 @@ export default defineNuxtConfig({
     },
     
     optimizeDeps: {
-      include: ['some-module'],
+      include: ['some-module', 'echarts'],
     },
   },
 

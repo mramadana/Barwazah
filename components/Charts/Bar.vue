@@ -26,21 +26,17 @@
   
   <script setup>
   import { ref, onMounted, nextTick } from 'vue';
-  import * as echarts from 'echarts/core';
-  import { BarChart } from 'echarts/charts';
+  const echarts = await import('echarts/core');
   import { LegendComponent, TooltipComponent, GridComponent, DatasetComponent } from 'echarts/components';
-  import { CanvasRenderer } from 'echarts/renderers';
   import { useI18n } from 'vue-i18n';
   
   const { t } = useI18n();
   
   echarts.use([
-    BarChart,
     LegendComponent,
     TooltipComponent,
     GridComponent,
     DatasetComponent,
-    CanvasRenderer,
   ]);
   
   const chart = ref(null);
@@ -86,6 +82,9 @@
         barGap: '0%',
         barWidth: 20,
         itemStyle: { color: '#013660' },
+        showBackground: true,
+        color: '#a9dfd8',
+        
       },
       {
         name: t('Global.males'),
@@ -93,9 +92,16 @@
         barGap: '0%',
         barWidth: 20,
         itemStyle: { color: '#e5254a' },
+        showBackground: true,
+        color: '#a9dfd8',
+        
+        // backgroundStyle: {
+        //     color: 'rgba(43, 43, 54, 1)',
+        // },
       },
+      
     ],
-    itemStyle: { borderRadius: 5 },
+    itemStyle: { borderRadius: [5, 5, 0, 0] },
   });
   
 
@@ -109,7 +115,6 @@
     chartInstance.setOption(option.value, true); 
   }
   
-  // تبديل رؤية الذكور
   function toggleMalesVisibility() {
     const chartInstance = chart.value?.chart; 
     if (!chartInstance) return;

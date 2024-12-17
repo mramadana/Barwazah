@@ -16,6 +16,10 @@
                     <div class="col-6">
                         <ChartsBar />
                     </div>
+
+                    <div class="col-6">
+                        <ChartsGradientArea />
+                    </div>
                 </div>
             </div>
     
