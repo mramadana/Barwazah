@@ -1220,6 +1220,11 @@ input.p-inputtext.p-component {
 .main-cl {
     color: var(--main) !important;
 }
+
+.red-cl {
+    color: var(--red) !important;
+}
+
 .custom-pd {
   padding: 12px;
 }
@@ -1334,3 +1339,10 @@ input.p-inputtext.p-component {
 
 
 
+.diamond {
+  width: 50px; /* Control size */
+  height: 50px;
+  background: linear-gradient(135deg, #e63950, #1e1a3c); /* Gradient colors */
+  transform: rotate(45deg); /* Rotate the square to make it a diamond */
+  border-radius: 12px; /* Slight curve on the corners */
+}

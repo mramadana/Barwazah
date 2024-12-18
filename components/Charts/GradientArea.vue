@@ -1,5 +1,20 @@
 <template>
-    <div v-if="dataReady" style="width: 100%; height: 400px;">
+    <div v-if="dataReady" style="width: 100%; height: 350px;">
+      <div class="diamond"></div>
+
+      <div class="radio-container">
+
+        <input type="radio" id="radio1" name="slider">
+        <label for="radio1" class="main-cl" >للسوق</label>
+        
+        <input type="radio" id="radio2" name="slider" checked>
+        <label for="radio2">الكل</label> 
+        
+        <input type="radio" id="radio3" name="slider">
+        <label for="radio3" class="cl-red">للمتجر</label>
+
+        <div class="marker"></div>
+      </div>
       <div class="d-flex align-items-center justify-content-center gap-4">
         <label class="label mb-0">
           {{$t('Global.gender')}}
@@ -54,8 +69,8 @@
     legend: {
       top: '5%',
       selected: {
-        'المجموعة 1': true, // Females
-        'المجموعة 2': true, // Males
+        [t('Global.females')]: true,
+        [t('Global.males')]: true,  
       },
 
       show: false,
@@ -81,7 +96,7 @@
     },
     series: [
       {
-        name: 'المجموعة 1',
+        name: t('Global.females'),
         type: 'line',
         smooth: true,
         symbol: 'square',
@@ -98,7 +113,7 @@
         data: [40, 50, 60, 70, 65, 75, 85, 80, 90, 95, 110],
       },
       {
-        name: 'المجموعة 2',
+        name: t('Global.males'),
         type: 'line',
         smooth: true,
         symbol: 'square',
@@ -127,16 +142,16 @@
   
       switch (selectedRental.id) {
         case 0: // Show All
-          option.value.legend.selected['المجموعة 1'] = true;
-          option.value.legend.selected['المجموعة 2'] = true;
+          option.value.legend.selected[t('Global.females')] = true;
+          option.value.legend.selected[t('Global.males')] = true;
           break;
         case 1: // Males Only
-          option.value.legend.selected['المجموعة 1'] = false;
-          option.value.legend.selected['المجموعة 2'] = true;
+          option.value.legend.selected[t('Global.females')] = false;
+          option.value.legend.selected[t('Global.males')] = true;
           break;
         case 2: // Females Only
-          option.value.legend.selected['المجموعة 1'] = true;
-          option.value.legend.selected['المجموعة 2'] = false;
+          option.value.legend.selected[t('Global.females')] = true;
+          option.value.legend.selected[t('Global.males')] = false;
           break;
       }
       chartInstance.setOption(option.value, true);
@@ -144,3 +159,61 @@
   };
   </script>
   
+  <style>
+
+
+.radio-container {
+  position: relative;
+  width: 500px;
+  background-color: #f4f9fd;
+  border-radius: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.radio-container label {
+  position: relative;
+  z-index: 2;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-radius: 15px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #e63950, #1e1a3c); 
+  transition: all 0.5s cubic-bezier(0.42, 0, 0.58, 1); 
+}
+
+.radio-container input[type="radio"] {
+  display: none; 
+}
+
+
+#radio1:checked ~ .marker {
+  left: calc(100% - 40px);
+}
+
+#radio2:checked ~ .marker {
+  left: 50%; 
+}
+
+#radio3:checked ~ .marker {
+  left: calc(10% - 10px); /* تحريك إلى اليمين */
+}
+
+/* تغيير لون النص عند التحديد */
+.radio-container input[type="radio"]:checked + label {
+  color: white !important;
+}
+
+</style>

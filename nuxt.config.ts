@@ -126,5 +126,5 @@ export default defineNuxtConfig({
     "~/assets/css/style.scss",
   ],
 
-  compatibilityDate: "2024-12-15",
+  compatibilityDate: '2024-12-18',
 })
