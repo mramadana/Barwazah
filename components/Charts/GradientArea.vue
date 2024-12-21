@@ -251,9 +251,10 @@
 
 <!-- الكود الاساسى -->
 
-<template>
-  <div v-if="dataReady" style="width: 100%; height: 350px;">
-    <div class="radio-container mb-4">
+<!-- <template>
+  <div v-if="dataReady" class="w-100">
+
+    <div class="radio-container">
       <input type="radio" id="radio1" name="slider" value="1" @change="handleRentalTypeChange">
       <label for="radio1" class="main-cl">للسوق</label>
 
@@ -282,7 +283,7 @@
       </div>
     </div>
 
-    <VChart ref="chart" :option="option" style="height: 100%; width: 100%;" />
+    <VChart ref="chart" :option="option" style="height: 250px; width: 100%; display: block" />
   </div>
 </template>
 
@@ -297,13 +298,15 @@ import { CanvasRenderer } from 'echarts/renderers';
 
 echarts.use([LineChart, TooltipComponent, GridComponent, CanvasRenderer, LegendComponent]);
 
+
 // Data readiness flag
 const dataReady = ref(false);
 
 // Dropdown selections
-const selectedMonth = ref(0); // Default: "الكل"
+const selectedMonth = ref(0); 
 
-const Allmonths = ref(['مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر', 'يناير', 'فبراير', 'مارس']);
+// const Allmonths = ref(['مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر', 'يناير', 'فبراير', 'مارس']);
+const Allmonths = ref(['ديسمبر', 'نوفمبر', 'أكتوبر', 'سبتمبر', 'أغسطس', 'يوليو', 'يونيو', 'مايو', 'أبريل', 'مارس', 'فبراير', 'يناير']);
 
 const months = ref([
   { name: 'عرض الكل', id: 0 },
@@ -359,7 +362,7 @@ const option = ref({
   },
   yAxis: {
     type: 'value',
-    show: true,
+    show: false,
   },
   series: [
     {
@@ -401,52 +404,52 @@ const option = ref({
 
 const manualMonthlyData = {
   1: { 
-    female: [10, 20, 15, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160], 
-    male: [12, 18, 20, 22, 28, 32, 36, 38, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76, 80, 84, 88, 92, 96, 100, 104, 108, 112, 116, 120, 124, 128] 
+    store: [10, 20, 15, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160], 
+    market: [12, 18, 20, 22, 28, 32, 36, 38, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76, 80, 84, 88, 92, 96, 100, 104, 108, 112, 116, 120, 124, 128] 
   }, // بيانات شهر يناير
   2: { 
-    female: [30, 25, 20, 35, 40, 45, 50, 55, 60, 65, 70], 
-    male: [28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 50] 
+    store: [30, 25, 20, 35, 40, 45, 50, 55, 60, 65, 70], 
+    market: [28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 50] 
   }, // بيانات شهر فبراير
   3: { 
-    female: [40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90], 
-    male: [38, 42, 48, 52, 58, 62, 66, 70, 74, 78, 82] 
+    store: [40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90], 
+    market: [38, 42, 48, 52, 58, 62, 66, 70, 74, 78, 82] 
   }, // بيانات شهر مارس
   4: { 
-    female: [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100], 
-    male: [48, 52, 58, 62, 68, 72, 76, 80, 84, 88, 92] 
+    store: [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100], 
+    market: [48, 52, 58, 62, 68, 72, 76, 80, 84, 88, 92] 
   }, // بيانات شهر أبريل
   5: { 
-    female: [60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110], 
-    male: [58, 62, 68, 72, 78, 82, 86, 90, 94, 98, 102] 
+    store: [60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110], 
+    market: [58, 62, 68, 72, 78, 82, 86, 90, 94, 98, 102] 
   }, // بيانات شهر مايو
   6: { 
-    female: [70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120], 
-    male: [68, 72, 78, 82, 88, 92, 96, 100, 104, 108, 112] 
+    store: [70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120], 
+    market: [68, 72, 78, 82, 88, 92, 96, 100, 104, 108, 112] 
   }, // بيانات شهر يونيو
   7: { 
-    female: [80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130], 
-    male: [78, 82, 88, 92, 98, 102, 106, 110, 114, 118, 122] 
+    store: [80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130], 
+    market: [78, 82, 88, 92, 98, 102, 106, 110, 114, 118, 122] 
   }, // بيانات شهر يوليو
   8: { 
-    female: [90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140], 
-    male: [88, 92, 98, 102, 108, 112, 116, 120, 124, 128, 132] 
+    store: [90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140], 
+    market: [88, 92, 98, 102, 108, 112, 116, 120, 124, 128, 132] 
   }, // بيانات شهر أغسطس
   9: { 
-    female: [100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150], 
-    male: [98, 102, 108, 112, 118, 122, 126, 130, 134, 138, 142] 
+    store: [100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150], 
+    market: [98, 102, 108, 112, 118, 122, 126, 130, 134, 138, 142] 
   }, // بيانات شهر سبتمبر
   10: { 
-    female: [110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160], 
-    male: [108, 112, 118, 122, 128, 132, 136, 140, 144, 148, 152] 
+    store: [110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160], 
+    market: [108, 112, 118, 122, 128, 132, 136, 140, 144, 148, 152] 
   }, // بيانات شهر أكتوبر
   11: { 
-    female: [120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170], 
-    male: [118, 122, 128, 132, 138, 142, 146, 150, 154, 158, 162] 
+    store: [120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170], 
+    market: [118, 122, 128, 132, 138, 142, 146, 150, 154, 158, 162] 
   }, // بيانات شهر نوفمبر
   12: { 
-    female: [130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180], 
-    male: [128, 132, 138, 142, 148, 152, 156, 160, 164, 168, 172] 
+    store: [130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180], 
+    market: [128, 132, 138, 142, 148, 152, 156, 160, 164, 168, 172] 
   }, // بيانات شهر ديسمبر
 };
 
@@ -495,8 +498,8 @@ const handleMonthChange = () => {
   if (monthId === 0) {
     // عرض كل البيانات
     option.value.xAxis.data = Allmonths.value;
-    option.value.series[0].data = [40, 50, 60, 70, 65, 75, 85, 80, 90, 95, 110];
-    option.value.series[1].data = [30, 40, 55, 50, 55, 60, 75, 72, 78, 82, 90];
+    option.value.series[0].data = [40, 50, 60, 70, 65, 75, 85, 80, 90, 95, 110, 115];
+    option.value.series[1].data = [30, 40, 55, 50, 55, 60, 75, 72, 78, 82, 90, 95];
   } else {
     // البحث عن بيانات الشهر
     const selectedMonthData = months.value.find((month) => month.id === monthId);
@@ -522,9 +525,9 @@ const handleMonthChange = () => {
     const customData = manualMonthlyData[monthId];
     if (customData) {
       // استخدام البيانات اليدوية
-      option.value.series[0].data = customData.female; // بيانات الإناث
-      option.value.series[1].data = customData.male;   // بيانات الذكور
-      console.log("Custom Data:", customData.female, customData.male);
+      option.value.series[0].data = customData.store; // بيانات الإناث
+      option.value.series[1].data = customData.market;   // بيانات الذكور
+      console.log("Custom Data:", customData.store, customData.market);
     } else {
       // في حالة عدم وجود بيانات يدوية، يتم إنشاء بيانات عشوائية
       option.value.series[0].data = generateDailyData(days); // الإناث
@@ -551,78 +554,260 @@ const handleMonthChange = () => {
 
 onBeforeMount(() => {
   option.value.xAxis.data = Allmonths.value;
-  option.value.series[0].data = [40, 50, 60, 70, 65, 75, 85, 80, 90, 95, 110];
-  option.value.series[1].data = [30, 40, 55, 50, 55, 60, 75, 72, 78, 82, 90];
+  option.value.series[0].data = [40, 50, 60, 70, 65, 75, 85, 80, 90, 95, 110, 115];
+  option.value.series[1].data = [30, 40, 55, 50, 55, 60, 75, 72, 78, 82, 90, 95];
 })
 
+</script> -->
+
+
+
+
+
+<!-- the reall code -->
+
+<template>
+  <div v-if="dataReady" class="w-100">
+    <div class="radio-container">
+      <input type="radio" id="radio1" name="slider" value="1" @change="handleRentalTypeChange">
+      <label for="radio1" class="main-cl">للمتجر</label>
+
+      <input type="radio" id="radio2" name="slider" value="0" @change="handleRentalTypeChange" checked>
+      <label for="radio2">الكل</label>
+
+      <input type="radio" id="radio3" name="slider" value="2" @change="handleRentalTypeChange">
+      <label for="radio3" class="cl-red">للسوق</label>
+
+      <div class="marker"></div>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-center gap-4">
+      <label class="label mb-0">اختر الشهر</label>
+      <div class="with_cun_select custom-select">
+        <div class="flex justify-content-center dropdown_card">
+          <Dropdown 
+            v-model="selectedMonth" 
+            @change="handleMonthChange" 
+            :options="months" 
+            optionLabel="name" 
+            :placeholder="'اختر الشهر'" 
+            class="w-full md:w-14rem custum-dropdown" 
+          />
+        </div>
+      </div>
+    </div>
+
+    <VChart ref="chart" :option="option" style="height: 250px; width: 100%; display: block" />
+  </div>
+</template>
+
+<script setup>
+
+import { useI18n } from 'vue-i18n';
+const echarts = await import('echarts/core');
+
+const props = defineProps({
+  initialMonths: { type: Array, required: true },
+  initialAllMonths: { type: Array, required: true },
+  initialOption: { type: Object, required: true },
+  initialMonthlyData: { type: Object, required: true },
+  // first data render
+  initialSeriesData: { type: Array, required: true },
+});
+
+const emit = defineEmits(['rental-type-change']);
+
+const { t } = useI18n();
+
+// State
+const dataReady = ref(false);
+const selectedMonth = ref({ id: 0 });
+const months = ref(props.initialMonths);
+const Allmonths = ref(props.initialAllMonths);
+// const option = ref(props.initialOption);
+const manualMonthlyData = ref(props.initialMonthlyData);
+
+// Ref for the chart instance
+const chart = ref(null);
+
+const handleMonthChange = () => {
+  // Validate selected month
+  if (!selectedMonth.value || typeof selectedMonth.value.id === "undefined") {
+    console.error("Invalid selected month: ", selectedMonth.value);
+    return;
+  }
+
+  const monthId = selectedMonth.value.id;
+
+  if (monthId === 0) {
+    // Handle "عرض كل البيانات" (Show All Data)
+    option.value.xAxis.data = Allmonths.value;
+    option.value.series[0].data = props.initialSeriesData[0] || [];
+    option.value.series[1].data = props.initialSeriesData[1] || [];
+  } else {
+    // Retrieve the selected month data
+    const selectedMonthData = months.value.find((month) => month.id === monthId);
+
+    if (!selectedMonthData) {
+      console.error("Invalid month ID: ", monthId);
+      return;
+    }
+
+    const days = selectedMonthData.days;
+    const dailyLabels = Array.from({ length: days }, (_, i) => `اليوم ${i + 1}`);
+
+    // Update xAxis configuration
+    option.value.xAxis = {
+      type: 'category',
+      boundaryGap: false,
+      data: dailyLabels,
+      axisLabel: {
+        interval: 0, // Show all days
+        rotate: 45,  // Rotate labels for better readability
+      },
+    };
+
+    // Check for manual data for the month
+    const customData = manualMonthlyData.value[monthId];
+    if (customData) {
+      
+      // Use manual data if available
+      option.value.series[0].data = customData.store; // Females data
+      option.value.series[1].data = customData.market; // Males data
+      console.log("Custom Data:", customData.store, customData.market);
+    } else {
+      // Generate random data if manual data is unavailable
+      option.value.series[0].data = generateDailyData(days); // Females
+      option.value.series[1].data = generateDailyData(days); // Males
+    }
+  }
+
+  // Update the chart instance with the new options
+  if (chart.value?.chart) {
+    chart.value.chart.setOption(option.value, true);
+  } else {
+    console.error("Chart instance is not ready.");
+  }
+};
+
+const option = ref({
+    legend: {
+      top: '5%',
+      show: false,
+      selected: {
+          [t('Global.females')]: true,
+          [t('Global.males')]: true,  
+        },
+    },
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: { type: 'cross', label: { backgroundColor: '#6a7985' } },
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true,
+    
+  },
+  xAxis: {
+    type: 'category',
+    boundaryGap: false,
+    data: [],
+  },
+  yAxis: {
+    type: 'value',
+    show: false,
+  },
+  series: [
+    {
+    name: t('Global.females'),
+      type: 'line',
+      smooth: true,
+      symbol: 'square',
+      symbolSize: 7,
+      showSymbol: true,
+      lineStyle: { width: 2, color: '#4681f4' },
+      itemStyle: { color: '#013660' },
+      areaStyle: {
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: 'rgba(70, 129, 244, 0.6)' },
+          { offset: 1, color: 'rgba(70, 129, 244, 0.2)' },
+        ]),
+      },
+      data: [],
+    },
+    {
+    name: t('Global.males'),
+      type: 'line',
+      smooth: true,
+      symbol: 'square',
+      symbolSize: 7,
+      showSymbol: true,
+      lineStyle: { width: 2, color: '#f75c5c' },
+      itemStyle: { color: '#e5254a' },
+      areaStyle: {
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: 'rgba(247, 92, 92, 0.6)' },
+          { offset: 1, color: 'rgba(247, 92, 92, 0.2)' },
+        ]),
+      },
+      data: [],
+    },
+  ],
+})
+
+// فى حالة ان method ها تتعمل ف الـ parent ، شغل دى 
+
+// const handleRentalTypeChange = (event) => {
+//   const rentalType = Number(event.target.value); // Get the selected value
+//   console.log('Rental Type Change in Child:', rentalType); // Debugging output
+
+//   // Emit the event to the parent
+//   emit('rental-type-change', rentalType);
+// };
+
+// Initialize data
+
+// فى حالة ان method ها تتعمل ف الـ child ، شغل دى
+const handleRentalTypeChange = (event) => {
+    console.log('Rental Type Change:', event.target.value); // Check value
+    const selectedRental = { id: Number(event.target.value) };
+  
+    if (selectedRental) {
+      const chartInstance = chart.value?.chart;
+      if (!chartInstance) return;
+  
+      switch (selectedRental.id) {
+        case 0: // Show All (both males and females)
+          option.value.legend.selected[t('Global.females')] = true;
+          option.value.legend.selected[t('Global.males')] = true;
+          break;
+        case 1: // Males Only
+          option.value.legend.selected[t('Global.females')] = false;
+          option.value.legend.selected[t('Global.males')] = true;
+          break;
+        case 2: // Females Only
+          option.value.legend.selected[t('Global.females')] = true;
+          option.value.legend.selected[t('Global.males')] = false;
+          break;
+      }
+      chartInstance.setOption(option.value, true);
+    }
+  };
+
+
+
+onBeforeMount(() => {
+  dataReady.value = true;
+  option.value.xAxis.data = Allmonths.value;
+  // Use series data from props
+  option.value.series[0].data = props.initialSeriesData[0] || [];
+  option.value.series[1].data = props.initialSeriesData[1] || [];
+});
+
+
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <style>
@@ -637,6 +822,8 @@ onBeforeMount(() => {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
+  margin: 0 auto 35px;
+  max-width: 100%;
 }
 
 .radio-container label {

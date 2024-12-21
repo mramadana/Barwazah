@@ -444,9 +444,9 @@ body {
 .with_cun_select {
   // display: flex;
   // align-items: center;
-  // box-shadow: 0px 0px 2px #D9D9D9;
-  // border: 1px solid #dddddd;
-  // border-radius: 5px;
+  box-shadow: 0px 0px 2px #D9D9D9;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
   // overflow: hidden;
   .main_input, .dropdown_card {
   border: 0;
@@ -773,6 +773,10 @@ input.p-inputtext.p-component {
         transform: scale(1);
       }
     }
+  }
+
+  &.chart_layout{
+    padding: 30px 15px;
   }
 }
 

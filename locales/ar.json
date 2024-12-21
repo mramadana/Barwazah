@@ -51,7 +51,12 @@
         "males": "ذكور",
         "females": "إناث",
         "show_all": "عرض الكل",
-        "gender": "الجنس"
+        "gender": "الجنس",
+        "market": "السوق",
+        "store": "متجر",
+        "sales": "المبيعات",
+        "commercial_Products": "المنتجات الرائجة",
+        "highest_Sales": "نسبة بيع منتجاتك الاعلى مبيعا فى متجرك"
       },
 
     "Sidebar": {

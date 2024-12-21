@@ -5,7 +5,7 @@
               id="bar"
               title="Bar Chart"
               desc="SSR + client-side lazy loading"
-              style="height: 400px; width: 100%; display: block"
+              style="height: 300px; width: 100%; display: block"
             >
 
             <div class="d-flex align-items-center justify-content-center gap-4">
@@ -39,6 +39,10 @@
     DatasetComponent,
   ]);
   
+    // Define props
+  const props = defineProps({
+    sourceData: { type: Array, required: true }, // Source data passed from the parent
+  });
   const chart = ref(null);
   const toggleVisibility = ref(null);
   const otherToggleVisibility = ref(null);
@@ -49,13 +53,14 @@
     { name: t('Global.males'), id: 1 },
     { name: t('Global.females'), id: 2 },
   ])
+
  
   const option = ref({
     animation: true,
     animationDuration: 1000,
     animationEasing: 'cubicOut',
     legend: {
-      top: '95%',
+      top: '92%',
       itemGap: 50,
       selected: {
         [t('Global.females')]: true,
@@ -64,14 +69,7 @@
     },
     tooltip: {},
     dataset: {
-      source: [
-        ['label 1', 43.3, 85.8],
-        ['label 2', 83.1, 73.4],
-        ['label 3', 86.4, 65.2],
-        ['label 4', 72.4, 53.9],
-        ['label 5', 43.3, 85.8],
-        ['Ramadan', 83.1, 73.4],
-      ],
+      source: props.sourceData
     },
     xAxis: { type: 'category' },
     yAxis: { show: false },
@@ -147,7 +145,7 @@
         break;
     }
   }
-};
+  };
   
   onMounted(async () => {
 
@@ -160,6 +158,7 @@
     if (otherToggleVisibility.value) {
       otherToggleVisibility.value.addEventListener('click', toggleMalesVisibility);
     }
+
   });
   </script>
   
