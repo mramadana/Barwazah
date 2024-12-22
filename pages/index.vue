@@ -64,6 +64,12 @@
                         </div>
                     </div>
 
+                    <div class="col-6">
+                        <div class="layout-form chart_layout">
+                            <ChartsVisitors />
+                        </div>
+                    </div>
+
                 </div>
             </div>
     
