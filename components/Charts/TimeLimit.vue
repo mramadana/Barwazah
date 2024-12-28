@@ -18,13 +18,12 @@
         </div>
       </div>
   
-      <VChart ref="chart" :option="option" style="height: 300px; width: 100%; display: block" />
+      <VChart ref="chart" class="custom-chart" :option="option" style="height: 300px; width: 100%; display: block" />
     </div>
 
   </template>
   
   <script setup>
-  import { ref } from 'vue';
   import { useI18n } from 'vue-i18n';
   const { t } = useI18n();
   const echarts = await import('echarts/core');
@@ -60,10 +59,6 @@
   
   // Chart instance and data
   const chart = ref(null);
-  
-  setTimeout(() => {
-    dataReady.value = true;
-  }, 10);
   
   // Data for the chart
   const option = ref({
@@ -232,10 +227,17 @@
   
   
   
-  onBeforeMount(() => {
+  onMounted(() => {
+    dataReady.value = true;
     option.value.xAxis.data = Allmonths.value;
     option.value.series[0].data = [40, 50, 60, 70, 65, 75, 85, 80, 90, 95, 110, 115];
   })
   
   </script>
   
+  <style lang="scss">
+    .custom-chart {
+      width: 550px;
+      max-width: 100%;
+    }
+  </style>

@@ -338,16 +338,26 @@ margin: 0;
       padding: 5px;
       position: relative;
       color: #000;
-      background: linear-gradient(var(--main) 0 0) var(--p, 0) / var(--p, 0) no-repeat;
       transition: .6s, background-position 0s;
       font-size: 13.5px;
-      overflow: hidden;
+      // overflow: hidden;
       border-radius: 12px;
-      &.active, &:hover {
-        --p: 100%;
-        color: #fff;
-        .hint-img {
-          background-color: #fff;
+      &::before {
+        content: '';
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        right: -10px;
+        width: 7px;
+        height: 100%;
+        background-color: rgba(229, 37, 74, 1);
+        border-radius: 12px 0 0 12px;
+        background: linear-gradient(#f75c5c 0 0) var(--p, 0) / var(--p, 0) no-repeat;
+        transition: .6s, background-position 0s;
+      }
+      &.active {
+        &::before {
+          --p: 100%;
         }
       }
       &:not(:last-child) {
@@ -366,9 +376,7 @@ margin: 0;
         height: 35px;
         display: flex;
         align-items: center;
-        background: #F5F5F5;
         justify-content: center;
-        border-radius: 5px;
         img {
             max-width: 35px;
             object-fit: cover;

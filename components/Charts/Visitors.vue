@@ -20,10 +20,6 @@
     const dataReady = ref(false);
     const chart = ref(null);
 
-    setTimeout(() => {
-        dataReady.value = true;
-    }, 10);
-
     const option = ref({
         grid: {
             left: '5%',
@@ -89,5 +85,8 @@
         ],
     });
     
+    onMounted(() => {
+        dataReady.value = true;
+    })
   </script>
 

@@ -19,21 +19,21 @@
 
                 <nuxt-link class="link" to="/" :class="{ 'active': isActiveLink('/') }">
                     <div class="hint-img">
-                        <!-- <img src="@/assets/images/sidebar/index.png" alt="hint-img"> -->
-                    </div>
-                   <span> {{ $t('Sidebar.marketing_assistant') }}</span>
-                </nuxt-link>
-
-                <nuxt-link class="link" to="/Mycars" :class="{ 'active': isActiveLink('/Mycars') }">
-                    <div class="hint-img">
-                        <!-- <img src="@/assets/images/sidebar/cars.png" alt="hint-img"> -->
+                        <img src="@/assets/images/Conversion.svg" alt="hint-img">
                     </div>
                    <span> {{ $t('Sidebar.conversion') }}</span>
                 </nuxt-link>
 
+                <nuxt-link class="link" to="/sales" :class="{ 'active': isActiveLink('/sales') }">
+                    <div class="hint-img">
+                        <img src="@/assets/images/Sales.svg" alt="hint-img">
+                    </div>
+                   <span> {{ $t('Sidebar.sales') }}</span>
+                </nuxt-link>
+
                 <nuxt-link class="link" to="/myorders" :class="{ 'active': isActiveLink('/myorders') }">
                     <div class="hint-img">
-                        <!-- <img src="@/assets/images/sidebar/orders.png" alt="hint-img"> -->
+                        <img src="@/assets/images/Growth.svg" alt="hint-img">
                     </div>
                    <span> {{ $t('Sidebar.sales') }}</span>
                 </nuxt-link>
@@ -41,35 +41,35 @@
 
                 <nuxt-link class="link" to="/employees" :class="{ 'active': isActiveLink('/employees') }">
                     <div class="hint-img">
-                        <!-- <img src="@/assets/images/sidebar/orders.png" alt="hint-img"> -->
+                        <img src="@/assets/images/Suggestions.svg" alt="hint-img">
                     </div>
                    <span> {{ $t('Sidebar.business_growth') }}</span>
                 </nuxt-link>
 
                 <nuxt-link class="link" to="/privacyPolicy" :class="{ 'active': isActiveLink('/privacypolicy') }">
                     <div class="hint-img">
-                        <!-- <img src="@/assets/images/sidebar/privacy.png" alt="hint-img"> -->
+                        <img src="@/assets/images/AI Assestant.svg" alt="hint-img">
                     </div>
                    <span> {{ $t('Sidebar.recommendations') }}</span>
                 </nuxt-link>
 
                 <nuxt-link class="link" to="/terms" :class="{ 'active': isActiveLink('/terms') }">
                     <div class="hint-img">
-                        <!-- <img src="@/assets/images/sidebar/later.png" alt="hint-img"> -->
+                        <img src="@/assets/images/Settings.svg" alt="hint-img">
                     </div>
                    <span> {{ $t('Sidebar.settings') }}</span>
                 </nuxt-link>
 
                 <nuxt-link class="link" to="/whoarewe" :class="{ 'active': isActiveLink('/whoarewe') }">
                     <div class="hint-img">
-                        <!-- <img src="@/assets/images/sidebar/users.png" alt="hint-img"> -->
+                        <img src="@/assets/images/Rectangle.svg" alt="hint-img">
                     </div>
                    <span> {{ $t('Sidebar.store') }}</span>
                 </nuxt-link>
 
-                <button class="link w-100" @click="logoutDialog = true">
+                <button class="link w-100 transparent" @click="logoutDialog = true">
                     <div class="hint-img">
-                        <!-- <img src="@/assets/images/sidebar/logout.png" alt="hint-img"> -->
+                        <img src="@/assets/images/logout.svg" alt="hint-img">
                     </div>
                    <span> {{ $t('Sidebar.logout') }}</span>
                   </button>

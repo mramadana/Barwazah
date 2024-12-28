@@ -6,72 +6,89 @@
 
             <div class="container">
 
-                <div v-if="isLoggedIn" class="mb-4">
+                <div v-if="user">
                     <h1 class="main-title bold cl-red">{{ $t("Global.welcome") }} &nbsp; {{ user.name }}</h1>
                     <h3 class="main-title normal main-cl">{{ user.email }}</h3>
                 </div>
                 
                 <div v-else>
-                    <h1 class="main-title bold cl-red mb-4"> Home page</h1>
+                    <h1 class="main-title bold cl-red"> Home page</h1>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-item market-size">
+                        <div class="info-content">
+                            <span>حجم السوق</span>
+                            <h2>10.8</h2>
+                            <small>مليون</small>
+                        </div>
+                        <img src="@/assets/images/attach_money.svg" alt="Dollar Icon">
+                    </div>
+                    <div class="info-box-item store-clients">
+                        <div class="info-content">
+                            <span>عملاء المتجر</span>
+                            <h2>1.03</h2>
+                            <small>ألف</small>
+                        </div>
+                        <img src="@/assets/images/Store.svg" alt="Store Icon">
+                    </div>
+                    <div class="info-box-item market-clients">
+                        <div class="info-content">
+                            <span>متوسط عملاء السوق</span>
+                            <h2>3.95</h2>
+                            <small>ألف</small>
+                        </div>
+                        <img src="@/assets/images/Customer.svg" alt="User Icon">
+                    </div>
                 </div>
 
                 <div class="row">
 
-                    <div class="col-12 col-md-3 mb-4">
-                        <div class="info-box">
-                            <div class="info-box-item market-size">
-                                <div class="info-content">
-                                    <span>حجم السوق</span>
-                                    <div class="d-flex align-items-baseline gap-2">
-                                        <h2>10.8</h2>
-                                        <small>مليون</small>
-                                    </div>
-                                </div>
-                                <img src="@/assets/images/attach_money.svg" alt="Dollar Icon">
-                            </div>
-                            <div class="info-box-item store-clients">
-                                <div class="info-content">
-                                    <span>عملاء المتجر</span>
-                                    <div class="d-flex align-items-baseline gap-2">
-                                        <h2>1.03</h2>
-                                        <small>ألف</small>
-                                    </div>
-                                </div>
-                                <img src="@/assets/images/Store.svg" alt="Store Icon">
-                            </div>
-                            <div class="info-box-item market-clients">
-                                <div class="info-content">
-                                    <span>متوسط عملاء السوق</span>
-                                    <div class="d-flex align-items-baseline gap-2">
-                                        <h2>3.95</h2>
-                                        <small>ألف</small>
-                                    </div>
-                                </div>
-                                <img src="@/assets/images/Customer.svg" alt="User Icon">
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-12 col-md-9 mb-4">
+
+                    <div class="col-12 mb-5">
                         <div class="layout-form chart_layout">
-                            <h3 class="main-title bold text-center mb-4">متوسط زيارات السوق</h3>
-                            <ChartsYearLimit />
+                        <h3 class="main-title bold lg text-center mb-4">{{ $t("Global.sales") }}</h3>
+                        <ChartsGradientArea
+                            :initialMonths="months"
+                            :initialAllMonths="allMonths"
+                            :initialOption="chartOptions"
+                            :initialMonthlyData="manualMonthlyData"
+                            @rental-type-change="handleRentalTypeChange"
+                            :initialSeriesData="seriesData"
+                        />
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6 mb-4">
+                    <div class="col-12 col-md-6">
+                        <div class="layout-form">
+                            <ChartsBar :source-data="sourceData" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
                         <div class="layout-form chart_layout">
-                            <h3 class="main-title bold text-center mb-3">{{ $t("Global.distribution") }}</h3>
-                            <h3 class="main-title sm text-center mb-0">{{ $t("Global.distribution_channels") }}</h3>
-                            <ChartsVisitors />
+                            <ChartsTimeLimit />
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6 mb-4">
+                    <div class="col-12 col-md-6">
+                        <div class="layout-form chart_layout">
+                            <ChartsOrders />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
                         <div class="layout-form chart_layout">
                             <h3 class="main-title bold text-center mb-3">{{ $t("Global.commercial_Products") }}</h3>
                             <h3 class="main-title sm text-center mb-0">{{ $t("Global.highest_Sales") }}</h3>
                             <ChartsProducts />
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="layout-form chart_layout">
+                            <ChartsVisitors />
                         </div>
                     </div>
 
@@ -98,7 +115,7 @@ const { token, user } = storeToRefs(store);
 
 <script setup>
 definePageMeta({
-    name: "Titles.home",
+    name: "Titles.sales",
 });
 
 import * as echarts from 'echarts/core';
@@ -118,7 +135,7 @@ const { t } = useI18n();
 
 const store = useAuthStore();
 
-const { token, user, isLoggedIn } = storeToRefs(store);
+const { token, user } = storeToRefs(store);
 
 // custom setup for gradient area chart
 

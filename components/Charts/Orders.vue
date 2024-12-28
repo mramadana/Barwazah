@@ -61,10 +61,6 @@
   // Chart instance and data
   const chart = ref(null);
   
-  setTimeout(() => {
-    dataReady.value = true;
-  }, 10);
-  
   // Data for the chart
   const option = ref({
     legend: {
@@ -233,6 +229,7 @@
   
   
   onBeforeMount(() => {
+    dataReady.value = true;
     option.value.xAxis.data = Allmonths.value;
     option.value.series[0].data = [40, 50, 60, 70, 65, 75, 85, 80, 90, 95, 110, 115];
   })

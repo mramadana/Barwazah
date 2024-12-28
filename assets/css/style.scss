@@ -1350,3 +1350,59 @@ input.p-inputtext.p-component {
   transform: rotate(45deg); /* Rotate the square to make it a diamond */
   border-radius: 12px; /* Slight curve on the corners */
 }
+
+.info-box {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.info-box-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 15px;
+  border-radius: 15px;
+  background-color: #f0f0f0;
+
+  &.market-size {
+      background-color: #333;
+      color: #fff;
+  }
+
+  &.store-clients {
+      background-color: #fff;
+      color: #f75c5c;
+  }
+
+  &.market-clients {
+      background-color: #fff;
+      color: #333;
+  }
+
+  img {
+      width: 45px;
+      height: 70px;
+  }
+
+  .info-content {
+      span {
+          display: block;
+          font-size: 1em;
+          margin-bottom: 10px;
+      }
+
+      h2 {
+          font-size: 2em;
+          margin: 0;
+      }
+
+      small {
+          font-size: 0.8em;
+      }
+  }
+}
+
+.transparent {
+  background-color: transparent;
+}
