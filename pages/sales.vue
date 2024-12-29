@@ -15,35 +15,34 @@
                     <h1 class="main-title bold cl-red"> Home page</h1>
                 </div>
 
-                <div class="info-box">
-                    <div class="info-box-item market-size">
-                        <div class="info-content">
-                            <span>حجم السوق</span>
-                            <h2>10.8</h2>
-                            <small>مليون</small>
-                        </div>
-                        <img src="@/assets/images/attach_money.svg" alt="Dollar Icon">
-                    </div>
-                    <div class="info-box-item store-clients">
-                        <div class="info-content">
-                            <span>عملاء المتجر</span>
-                            <h2>1.03</h2>
-                            <small>ألف</small>
-                        </div>
-                        <img src="@/assets/images/Store.svg" alt="Store Icon">
-                    </div>
-                    <div class="info-box-item market-clients">
-                        <div class="info-content">
-                            <span>متوسط عملاء السوق</span>
-                            <h2>3.95</h2>
-                            <small>ألف</small>
-                        </div>
-                        <img src="@/assets/images/Customer.svg" alt="User Icon">
-                    </div>
-                </div>
-
                 <div class="row">
+                
+                    <div class="col-12 col-md-6 mb-4 info-box">
+                        <div class="info-box-item info-box-item align-items-end store-clients gap-3 flex-wrap">
+                            <div class="d-flex gap-3">
+                                <img src="@/assets/images/Sell_products.svg" alt="Store Icon">
+                                <div class="info-content">
+                                    <span class="main-cl bold mb-2">معدل بيع منتجات للمتجر</span>
+                                    <h2>26.86 %</h2>
+                                </div>
+                            </div>
+                            <h4 class="hint-card">نسبة بيع المنتج الواحد من الكمية الكلية المتوفرة ترجمة الرقم: أنه اذا كانت الكمية الكلية للمنتج هي 100 اذن تم بيع 27 تقريبا</h4>
+                        </div>
+                    </div>
 
+                    <div class="col-12 col-md-6 mb-4 info-box">
+                        <div class="info-box-item cart-clients gap-3 flex-wrap">
+                            <div class="d-flex gap-3">
+                                <img src="@/assets/images/cart.svg" alt="User Icon">
+                                <div class="info-content">
+                                    <span>متوسط عملاء السوق</span>
+                                    <h2>3.95 ألف</h2>
+                                </div>
+
+                            </div>
+                            <font-awesome-icon class="fa-2x" :icon="['fas', 'angle-left']" />
+                        </div>
+                    </div>
 
 
                     <div class="col-12 mb-5">

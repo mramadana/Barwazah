@@ -4,9 +4,9 @@
         <div class="sidebar" :class="{ 'active': isActive }">
 
             <!-- ***** close icon to close sidebar ***** -->
-            <!-- <div class="colse-icon" @click="$emit('toggle-active')"><i class="fas fa-times"></i></div>
-              -->
+             
             <div class="colse-icon" @click="closeSiderbar"><i class="fas fa-times"></i></div>
+            <div class="colse-icon" v-if="isActive" @click="closeSiderbar"><font-awesome-icon :icon="['fas', 'bars']" /></div>
 
             <!-- ***** sidebar logo ***** -->
             <div class="sidebar-logo">
@@ -110,12 +110,19 @@ const props = defineProps({
   isActive: Boolean,
 });
 
+const isActive = ref(false);
+
 const logoutDialog = ref(false);
 
 const scrollPosition = ref(0);
 const linksList = ref(null);
 const router = useRouter();
 const route = useRoute();
+
+const closeSiderbar = () => {
+  emit('toggle-active');
+  isActive.value = !isActive.value;
+};
 
 const isActiveLink = (path) => {
   if (path === '/') {
@@ -124,7 +131,7 @@ const isActiveLink = (path) => {
   return route.path.startsWith(path);
 };
 
-const emit = defineEmits(['toggle-active']);
+    const emit = defineEmits(['toggle-active']);
 
     // Toast
     const { successToast, errorToast } = toastMsg();
