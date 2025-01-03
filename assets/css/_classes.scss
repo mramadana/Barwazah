@@ -495,7 +495,9 @@ margin: 0;
 
 }
 .main-content {
-  margin: 0 30px;
+  // margin: 0 30px;
+  width: calc(100% - 30px);
+  margin: 0 auto;
   padding-inline-start: calc(250px + 50px);
   padding-top: 35px;
   transition: all 0.8s cubic-bezier(0.68, -0.3, 0.265, 1.3);

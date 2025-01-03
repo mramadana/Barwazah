@@ -31,29 +31,29 @@
                    <span> {{ $t('Sidebar.sales') }}</span>
                 </nuxt-link>
 
-                <nuxt-link class="link" to="/myorders" :class="{ 'active': isActiveLink('/myorders') }">
+                <nuxt-link class="link" to="/businessGrowth" :class="{ 'active': isActiveLink('/businessGrowth') }">
                     <div class="hint-img">
                         <img src="@/assets/images/Growth.svg" alt="hint-img">
-                    </div>
-                   <span> {{ $t('Sidebar.sales') }}</span>
-                </nuxt-link>
-
-
-                <nuxt-link class="link" to="/employees" :class="{ 'active': isActiveLink('/employees') }">
-                    <div class="hint-img">
-                        <img src="@/assets/images/Suggestions.svg" alt="hint-img">
                     </div>
                    <span> {{ $t('Sidebar.business_growth') }}</span>
                 </nuxt-link>
 
-                <nuxt-link class="link" to="/privacyPolicy" :class="{ 'active': isActiveLink('/privacypolicy') }">
+
+                <nuxt-link class="link" to="/Recommendations" :class="{ 'active': isActiveLink('/Recommendations') }">
                     <div class="hint-img">
-                        <img src="@/assets/images/AI Assestant.svg" alt="hint-img">
+                        <img src="@/assets/images/Suggestions.svg" alt="hint-img">
                     </div>
                    <span> {{ $t('Sidebar.recommendations') }}</span>
                 </nuxt-link>
 
-                <nuxt-link class="link" to="/terms" :class="{ 'active': isActiveLink('/terms') }">
+                <nuxt-link class="link" to="/chat" :class="{ 'active': isActiveLink('/chat') }">
+                    <div class="hint-img">
+                        <img src="@/assets/images/AI Assestant.svg" alt="hint-img">
+                    </div>
+                    <span> {{ $t('Sidebar.marketing_assistant') }}</span>
+                </nuxt-link>
+
+                <nuxt-link class="link" to="/settings" :class="{ 'active': isActiveLink('/settings') }">
                     <div class="hint-img">
                         <img src="@/assets/images/Settings.svg" alt="hint-img">
                     </div>

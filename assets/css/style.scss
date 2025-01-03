@@ -11,6 +11,7 @@
     --b: #000;
     --soft-gary: #fcfaff;
     --space-gray: #a2a2a2;
+    --red : #e5254a;
 }
 
 html {
@@ -687,7 +688,7 @@ input.p-inputtext.p-component {
   &.sm {
     min-width: 150px;
     padding: 10px 9px;
-    min-height: 45px;
+    min-height: 40px;
   }
   &.lg {
     min-width: 550px;
@@ -802,12 +803,15 @@ input.p-inputtext.p-component {
   font-size: 17px;
   margin-bottom: 10px;
   color: #000;
+
   @media (max-width: $screen-xs) {
     font-size: 15px;
   }
+
   &.normal {
     font-size: 15px;
   }
+
   &.bold {
     font-weight: bold;
   }
@@ -825,6 +829,10 @@ input.p-inputtext.p-component {
   
   &.sm {
     font-size: 14px;
+  }
+
+  &.md {
+    font-size: 16px;
   }
 }
 

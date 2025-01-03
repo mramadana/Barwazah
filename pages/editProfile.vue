@@ -39,7 +39,7 @@
 
         <Dialog v-model:visible="successfullyChange" modal class="custum_dialog_width without-close" :draggable="false" >
             <div class="text-center">
-                <img src="@/assets/images/check.png" alt="check-img" class="check-img">
+                <!-- <img src="@/assets/images/check.png" alt="check-img" class="check-img"> -->
                 <h3 class="main-title bold mb-4">{{ $t('Global.Saving_changes_success') }}</h3>
             </div>
         </Dialog>

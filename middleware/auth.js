@@ -16,8 +16,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
   
     if (isLoggedIn.value === false && to.meta.middleware == "auth") {
 
-      errorToast(t("validation.requiresAuth"));
+      // errorToast(t("validation.requiresAuth"));
 
-      return navigateTo("/")
+      // return navigateTo("/")
     }
 })
