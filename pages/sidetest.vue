@@ -1,17 +1,17 @@
 <template>
     <div>
 
-        <div class="sidebar" id="mySidebar" :class="{ 'active': isActive, 'mini': mini }" @mouseover="toggleSidebar" @mouseout="toggleSidebar">
+        <div class="sidebar" :class="{ 'active': isActive }">
 
             <!-- ***** close icon to close sidebar ***** -->
              
-            <!-- <div class="colse-icon" @click="closeSiderbar"><i class="fas fa-times"></i></div>
-            <div class="colse-icon" v-if="isActive" @click="closeSiderbar"><font-awesome-icon :icon="['fas', 'bars']" /></div> -->
+            <div class="colse-icon" @click="closeSiderbar"><i class="fas fa-times"></i></div>
+            <div class="colse-icon" v-if="isActive" @click="closeSiderbar"><font-awesome-icon :icon="['fas', 'bars']" /></div>
 
             <!-- ***** sidebar logo ***** -->
             <div class="sidebar-logo">
                 <nuxt-link to="/" class="logo">
-                    <!-- <img src="@/assets/images/logo.svg" alt=""> -->
+                    <img src="@/assets/images/logo.svg" alt="">
                 </nuxt-link>
             </div>
             
@@ -77,10 +77,10 @@
 
         </div>
 
-        <div id="main" class="overlay-sidebar" @click="$emit('toggle-active')" :class="{ 'show': isActive }"></div>
+        <div class="overlay-sidebar" @click="$emit('toggle-active')" :class="{ 'show': isActive }"></div>
 
         <!-- start to close Dialog -->
-        
+
         <Dialog v-model:visible="logoutDialog" modal class="custum_dialog_width auth-daialog"
             :draggable="false">
             <div class="text-center">
@@ -118,7 +118,6 @@ const scrollPosition = ref(0);
 const linksList = ref(null);
 const router = useRouter();
 const route = useRoute();
-const mini = ref(true);
 
 const closeSiderbar = () => {
   emit('toggle-active');
@@ -134,20 +133,21 @@ const isActiveLink = (path) => {
 
     const emit = defineEmits(['toggle-active']);
 
-    // store
-    const store = useAuthStore();
-
     // Toast
     const { successToast, errorToast } = toastMsg();
 
     // Axios
     const axios = useApi();
     
-    const { token } = storeToRefs(store);
+    // store
+    const store = useAuthStore();
 
-    const config = {
-        headers: { Authorization: `Bearer ${token?.value || ''}` }
-    };
+
+  const { token } = storeToRefs(store);
+
+  const config = {
+      headers: { Authorization: `Bearer ${token.value}` }
+  };
 
     const { response } = responseApi();
 
@@ -156,7 +156,7 @@ const isActiveLink = (path) => {
           const res = await logoutHandler();
           res.status == "success" ? successToast(res.msg) : errorToast(res.msg);
           localStorage.clear();
-    }
+      }
 
 
 
@@ -209,25 +209,11 @@ const handleRouteChange = () => {
 watch(router, handleRouteChange);
 
 router.afterEach((to, from) => {
-    if (window.innerWidth <= 1250) {
-      emit('toggle-active');
-      handleResize();
-    }
+        if (window.innerWidth <= 1250) {
+          emit('toggle-active');
+          handleResize();
+        }
 });
-
-const toggleSidebar = () => {
-    mini.value = !mini.value;
-    const sidebar = document.getElementById("mySidebar");
-    const main = document.getElementById("main");
-  
-    if (!mini.value) {
-      sidebar.style.width = "230px";
-      main.style.marginLeft = "230px";
-    } else {
-      sidebar.style.width = "85px";
-      main.style.marginLeft = "85px";
-    }
-  };
 
 onMounted(() => {
   restoreScrollPosition();
@@ -237,67 +223,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.sidebar {
-  // position: fixed;
-  // top: 0;
-  // left: 0;
-  // height: 100%;
-  // width: 250px;
-  // background-color: #fff;
-  transition: all 0.5s ease;
-  // z-index: 1000;
-  // box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
-  &.mini {
-    width: 85px;
-    
-    .link span {
-      opacity: 0;
-      visibility: hidden;
-      width: 0;
-      height: 0;
-      overflow: hidden;
-    }
-    
-    .hint-img {
-      margin-right: 0;
-    }
-  }
-}
-
-#main {
-  transition: margin-left 0.3s ease;
-}
-
-.links {
-  // padding: 20px 0;
-  // overflow-y: auto;
-  // height: calc(100% - 80px);
-}
-
-.link {
-  display: flex;
-  align-items: center;
-  padding: 12px 20px;
-  text-decoration: none;
-  color: #333;
-  transition: all 0.3s ease;
-
-  .hint-img {
-    width: 24px;
-    height: 24px;
-    margin-right: 15px;
-    transition: margin 0.3s ease;
-    
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-  }
-
-  span {
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-  }
-}
 </style>
+
