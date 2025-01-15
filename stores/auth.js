@@ -23,7 +23,7 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     // Sign In
     async signInHandler(formData) {
-      const resData = await axios.post("sign-in", formData);
+      const resData = await axios.post("Login", formData);
       console.log(resData.data.key);
       if (resData.data.key == "needActive") {
         navigateTo("/Auth/activateAccount");

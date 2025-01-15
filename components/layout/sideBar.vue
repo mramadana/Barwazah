@@ -11,7 +11,8 @@
             <!-- ***** sidebar logo ***** -->
             <div class="sidebar-logo">
                 <nuxt-link to="/" class="logo">
-                    <!-- <img src="@/assets/images/logo.svg" alt=""> -->
+                    <img src="@/assets/images/logo.svg" alt="logo" class="main-logo">
+                    <img src="@/assets/images/layer1.svg" alt="logo" class="mini-logo">
                 </nuxt-link>
             </div>
             
@@ -251,12 +252,16 @@ onMounted(() => {
   &.mini {
     width: 85px;
     
-    .link span {
+    .link {
+      gap: 0;
+      justify-content: center;
+      span {
       opacity: 0;
       visibility: hidden;
       width: 0;
       height: 0;
       overflow: hidden;
+    }
     }
     
     .hint-img {

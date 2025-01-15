@@ -121,19 +121,6 @@
     const login = async () => {
         loading.value = true;
         const fd = new FormData(loginForm.value);
-        fd.append('country_code', selectedCountry.value.key);
-        fd.append('device_id', 111);
-        fd.append('device_type', 'web');
-
-        if(phone.value) {
-            fd.append('phone_email', phone.value);
-            console.log(phone.value, "phone");
-        } else if(email.value) {
-            fd.append('phone_email', email.value);
-            console.log(email.value, "email");
-        };
-
-        // fd.append('device_id', notificationToken.value);
 
         validate();
 

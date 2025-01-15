@@ -226,26 +226,29 @@ margin: 0;
   border-radius: 15px;
   top: 40px;
   z-index: 1000;
-  padding: 25px 0 20px;
+  // padding: 25px 0 20px;
   overflow: hidden;
-  transition: all 0.8s cubic-bezier(0.68, -0.3, 0.265, 1.3);
+  // transition: all 0.8s cubic-bezier(0.68, -0.3, 0.265, 1.3);
+  transition: all 0.5s ease;
   display: flex;
   flex-direction: column;
   @include dir-left(40px);
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 10%);
   overflow: hidden;
-  // @media (max-width: $screen-xl) {
-  //   #{$ltr} & {
-  //     transform: translateX(-100%);
-  //   }
-  //   #{$rtl} & {
-  //     transform: translateX(100%);
-  //   }
-  // }
 
-  // @media (max-width: $screen-xs) {
-  //   width: 185px;
-  // }
+  .mini-logo {
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+    transition: width 0.3s ease-out, height 0.5s ease-out, opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
+  .main-logo {
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+    transition: width 0.3s ease-out, height 0.5s ease-out, opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
 
   .sidebar-logo {
     display: flex;
@@ -281,7 +284,8 @@ margin: 0;
     justify-content: space-between;
     flex-grow: 1;
     overflow-y: auto;
-    transition: all 0.8s cubic-bezier(0.5, -0.7, 0.15, 1.55);
+    // transition: all 0.8s cubic-bezier(0.5, -0.7, 0.15, 1.55);
+    transition: all 0.5s ease;
     background-color: #fff !important;
     padding: 0px 10px  20px;
 
@@ -327,8 +331,7 @@ margin: 0;
       color: #000;
       transition: .6s, background-position 0s;
       font-size: 13.5px;
-      // overflow: hidden;
-      border-radius: 12px;
+      border-radius: 6px;
 
       &::before {
         content: '';
@@ -344,9 +347,11 @@ margin: 0;
         transition: .6s, background-position 0s;
       }
 
+      &:hover {
+        background-color: rgba(146, 198, 240, 50%);
+      }
+
       &.active {
-        // background-color: rgba(229, 37, 74, 1);
-        // color: #fff;
         --p: 100%;
       }
 
@@ -429,23 +434,30 @@ margin: 0;
       overflow: auto;
     }
   }
-
-  // .links .link {
-  //   transition: all 0.5s ease;
-  // }
-  // .link span {
-  //   opacity: 1;
-  //   transform: translateX(0);
-  //   transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth fade and move */
-  // }
-  // &:hover {
-  //   width: 80px;
-  //   .link span {
-  //     width: 0; /* تصغير عرض النص */
-  //     opacity: 0; 
-  //   }
-  // }
   
+  &.mini {
+    .mini-logo {
+      width: 40px;
+      height: 40px;
+      opacity: 1;
+      visibility: visible;
+      transition: width 0.3s ease-out, height 0.5s ease-out, opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+
+    .main-logo {
+      opacity: 0;
+      visibility: hidden;
+      width: 0;
+      height: 0;
+    }
+    .link {
+      &::before {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+      }
+    }
+  }
 }
 
 .custum_dialog_width {

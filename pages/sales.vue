@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="col-12 col-md-6 mb-4 info-box">
-                        <div class="info-box-item cart-clients gap-3 flex-wrap">
+                        <NuxtLink to="/totalCart" class="info-box-item cart-clients gap-3 flex-wrap">
                             <div class="d-flex gap-3">
                                 <img src="@/assets/images/cart.svg" alt="User Icon">
                                 <div class="info-content">
@@ -41,7 +41,7 @@
 
                             </div>
                             <font-awesome-icon class="fa-2x" :icon="['fas', 'angle-left']" />
-                        </div>
+                        </NuxtLink>
                     </div>
 
 
