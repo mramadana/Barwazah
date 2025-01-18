@@ -803,7 +803,9 @@ input.p-inputtext.p-component {
   font-size: 17px;
   margin-bottom: 10px;
   color: #000;
-
+  &.blue {
+    color:#013660;
+  }
   @media (max-width: $screen-xs) {
     font-size: 15px;
   }
@@ -1394,8 +1396,8 @@ input.p-inputtext.p-component {
   }
 
   img {
-      width: 45px;
-      height: 70px;
+      width: 88px;
+      height: 102px;
   }
 
   .info-content {

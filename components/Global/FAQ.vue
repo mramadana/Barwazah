@@ -118,7 +118,7 @@ const FAQ_2 = ref([
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 .accordion-button {
     background-color: rgba(238, 246, 254, 1);

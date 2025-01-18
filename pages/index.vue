@@ -71,7 +71,10 @@
                         <div class="layout-form chart_layout">
                             <h3 class="main-title bold text-center mb-3">{{ $t("Global.commercial_Products") }}</h3>
                             <h3 class="main-title sm text-center mb-0">{{ $t("Global.highest_Sales") }}</h3>
-                            <ChartsProducts />
+                            <ChartsProducts 
+                              :data-ready="dataReady"
+                              :products-data="productsData"
+                            />
                         </div>
                     </div>
 
@@ -97,9 +100,11 @@ const { token, user } = storeToRefs(store);
 </script> -->
 
 <script setup>
-definePageMeta({
-    name: "Titles.home",
-});
+
+    definePageMeta({
+        name: "Titles.home",
+        middleware: 'auth'
+    });
 
 import * as echarts from 'echarts/core';
 import { LineChart } from 'echarts/charts';
@@ -107,11 +112,9 @@ import { TooltipComponent, GridComponent, LegendComponent } from 'echarts/compon
 import { CanvasRenderer } from 'echarts/renderers';
 
 // Register ECharts modules
-echarts.use([LineChart, TooltipComponent, GridComponent, CanvasRenderer, LegendComponent]);
+// echarts.use([LineChart, TooltipComponent, GridComponent, CanvasRenderer, LegendComponent]);
 
-definePageMeta({
-  name: "Titles.home",
-});
+// Data readiness flag
 
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
@@ -119,6 +122,24 @@ const { t } = useI18n();
 const store = useAuthStore();
 
 const { token, user, isLoggedIn } = storeToRefs(store);
+
+// custom setup for ChartsProducts chart
+
+const dataReady = ref(false);
+
+const productsData = ref({
+  labels: [
+    { id: 1303, text: 'منتج 1', image: "https://dashboard.awamer-store.4hoste.com/public/storage/images/products_files/1731314993_9381.png" },
+    { id: 1304, text: 'منتج 2', image: "https://dashboard.awamer-store.4hoste.com/public/storage/images/products_files/1731314993_2573.jpg" },
+    { id: 1305, text: 'منتج 3', image: "https://dashboard.awamer-store.4hoste.com/public/storage/images/products_files/1731314993_9843.png" },
+    { id: 1306, text: 'منتج 4', image: "https://dashboard.awamer-store.4hoste.com/public/storage/images/products_files/1731314993_6201.png" },
+  ],
+  series: [12.32, 11.7, 10.38, 9.32],
+  colors: {
+    bar: '#f75c5c',
+    text: '#ffffff'
+  }
+});
 
 // custom setup for gradient area chart
 
@@ -292,5 +313,7 @@ const sourceData = ref([
 //     }
 // }
 
-
+onBeforeMount(() => {
+  dataReady.value = true;
+});
 </script>

@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+
         <div class="auth-layout flex-column">
             <h1 class="main-title bold lg mb-5">{{ $t("Auth.welcome") }}</h1>
             <div class="layout-form md custom-width">
@@ -38,7 +39,7 @@
                                             aria-hidden="true"></span>
                                 </button>
 
-                                <nuxt-link class="custom-btn red-bg sm" to="/Auth/register" >{{ $t('Auth.create_account') }}</nuxt-link>
+                                <button type="button" class="custom-btn red-bg sm" @click="checkType = true">{{ $t('Auth.create_account') }}</button>
                             </div>
     
                             <div class="new-sign mt-4 text-start">
@@ -53,6 +54,30 @@
                 </form>
             </div>
         </div>
+
+        <!-- dialog for check if it Salla or zid -->
+
+        <Dialog v-model:visible="checkType" modal class="custum_dialog_width without-close auth-daialog"
+            :draggable="false">
+            <div class="text-center">
+                <h5 class="main-title sm blue mb-4"> يمكنك ربط متجرك مع تطبيق بروزه من خلال سوق تطبيقات سله و زد </h5>
+                <h4 class="main-title bold mb-5">
+                    متجرك على أي منصة؟
+                </h4>
+                <div class="section-btns mt-4 mb-5">
+                  
+                    <label class="typeSection salla">
+                        <input type="radio" value="1" name="checkType" v-model="checkTypeNum" class="d-none" @change="handleTypeChange('salla')">
+                        <img src="@/assets/images/salla.svg" alt="">
+                    </label>
+
+                    <label class="typeSection zid">
+                        <input type="radio" value="0" name="checkType" v-model="checkTypeNum" class="d-none" @change="handleTypeChange('zid')">
+                        <img src="@/assets/images/zid.svg" alt="">
+                    </label>
+                </div>
+            </div>
+        </Dialog>
     </div>
 </template>
 
@@ -66,6 +91,8 @@
 
     const { t } = useI18n();
 
+    const checkType = ref(false);
+    const checkTypeNum = ref(null);
 
     // success response
     const { response } = responseApi();
@@ -84,9 +111,6 @@
     const loading = ref(false);
     const errors = ref([]);
     
-    // countries
-    const selectedCountry = ref({})
-    const countries = ref([]);
     const loginForm = ref(null);
     const phone = ref('');
     const email = ref('');
@@ -103,24 +127,19 @@
         }
     }
 
-    const checkPhone = () => {
-        if(phone.value !== '') {
-           email.value = null
-        }
+    const handleTypeChange = (type) => {
+        console.log('Selected type:', checkTypeNum.value);
+        checkType.value = false; // Close dialog after selection
     };
-
-    const checkEmail = () => {
-        if(email.value !== '') {
-           phone.value = null
-        }
-    };
-
 
     // login Function
 
     const login = async () => {
         loading.value = true;
         const fd = new FormData(loginForm.value);
+
+        console.log('Email type:', typeof email.value);
+        console.log('Password type:', typeof password.value);
 
         validate();
 
@@ -129,13 +148,9 @@
             loading.value = false;
             errors.value = [];
         } else {
-
-            loading.value = true;
-
             // Get Returned Data From Store
             const res = await signInHandler(fd);
             res.status == "success" ? successToast(res.msg) : errorToast(res.msg);
-
             loading.value = false;
         }
     }
@@ -160,67 +175,20 @@
 
 
 <style lang="scss">
-    .login-text {
-        position: relative;
-        z-index: 1;
-    }
-    .login-shape {
-        width: 200px;
-        padding: 6px 10px;
-        text-align: center;
-        border: 1px solid var(--main);
-        color: var(--main);
+    .typeSection {
+        padding: 20px;
         border-radius: 10px;
-        transition: all 0.5s ease-in-out;
-        overflow: hidden;
-        position: relative;
-        &::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            transition: all 0.5s linear;
-            background-color: var(--main) !important;
-            color: #fff !important;
-            top: 0px;
-            left: 0;
-            z-index: -1;
-            transform: scaleX(0);
-        }
-        &:hover {
-            color: #fff !important;
-            &::before {
-                transform: scaleX(1);
-                z-index: 1;
-            }
-        }
-        &.active {
-            color: #fff;
-            &::before {
-                transform: scale(1);
-                z-index: 1;
-            }
-        }
-    }
-
-    .tab-btns-login {
-        gap: 20px;
+        width: 133px;
+        height: 54px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
         justify-content: center;
-        flex-wrap: wrap;
-        .nav-link {
-        line-height: 20px;
-        padding: 10px;
-        width: auto;
-        min-width: 130px;
-        font-size: 14px;
-        &.active {
-            background-color: unset;
-            color: #fff;
-            &::before {
-            transform: scale(1);
-            color: #fff;
-            }
+        &.salla {
+            background-color: #004956;
         }
+        &.zid {
+            background-color: #802BE7;
         }
     }
 </style>

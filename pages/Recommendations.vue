@@ -27,7 +27,7 @@
                 <div class="layout-form chart_layout">
                     <h3 class="main-title bold text-center mb-3">{{ $t("Global.commercial_Products") }}</h3>
                     <h3 class="main-title sm text-center mb-0">{{ $t("Global.highest_Sales") }}</h3>
-                    <ChartsProducts />
+                    <ChartsProducts :data-ready="dataReady" :products-data="productsData"/>
                 </div>
             </div>
         </div>
@@ -42,4 +42,24 @@
     const store = useAuthStore();
 
     const { user } = storeToRefs(store);
+
+    const dataReady = ref(false);
+
+    const productsData = ref({
+        labels: [
+            { id: 1303, text: 'شباب' },
+            { id: 1304, text: 'حريمي' },
+            { id: 1305, text: 'أطفال' },
+            { id: 1306, text: 'رجالي' },
+        ],
+        series: [12.32, 11.7, 10.38, 9.32],
+        colors: {
+            bar: '#f75c5c',
+            text: '#ffffff'
+        }
+    });
+
+    onBeforeMount(() => {
+        dataReady.value = true;
+    });
 </script>

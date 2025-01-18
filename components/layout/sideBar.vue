@@ -239,15 +239,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .sidebar {
-  // position: fixed;
-  // top: 0;
-  // left: 0;
-  // height: 100%;
-  // width: 250px;
-  // background-color: #fff;
   transition: all 0.5s ease;
-  // z-index: 1000;
-  // box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
   &.mini {
     width: 85px;
@@ -272,12 +264,6 @@ onMounted(() => {
 
 #main {
   transition: margin-left 0.3s ease;
-}
-
-.links {
-  // padding: 20px 0;
-  // overflow-y: auto;
-  // height: calc(100% - 80px);
 }
 
 .link {
