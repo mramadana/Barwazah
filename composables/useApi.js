@@ -7,7 +7,12 @@ export const useApi = () => {
     axios.defaults.headers.lang = localStorage.getItem("locale") || "ar";
   }
 
+  let token = "";
+
   return axios.create({
     baseURL,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 };

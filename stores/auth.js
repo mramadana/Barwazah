@@ -22,22 +22,21 @@ export const useAuthStore = defineStore("auth", {
   }),
   actions: {
     // Sign In
-    async signInHandler(formData) {
-      const resData = await axios.post("Login", formData);
-      console.log(resData.data.key);
-      if (resData.data.key == "needActive") {
-        navigateTo("/Auth/activateAccount");
-      }
-      if (response(resData) == "success") {
-        this.user = resData.data.data;
-        this.token = resData.data.data.token;
+    async signInHandler(resData) {
+      if (resData.statusCode === 200 && resData.key === "success") {
+        // Store user data
+        this.user = resData.data;
+        this.token = resData.data.token;
         this.isLoggedIn = true;
-        navigateTo("/");
-        return { status: "success", msg: resData.data.msg };
-      } else {
-        return { status: "error", msg: resData.data.msg };
-      }
 
+        // Update axios token
+        const axios = useApi();
+        axios.defaults.headers.Authorization = `Bearer ${this.token}`;
+
+        return { status: "success", msg: resData.message };
+      } else {
+        return { status: "error", msg: resData.message };
+      }
     },
 
     // Sign Up

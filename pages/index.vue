@@ -106,16 +106,6 @@ const { token, user } = storeToRefs(store);
         middleware: 'auth'
     });
 
-import * as echarts from 'echarts/core';
-import { LineChart } from 'echarts/charts';
-import { TooltipComponent, GridComponent, LegendComponent } from 'echarts/components';
-import { CanvasRenderer } from 'echarts/renderers';
-
-// Register ECharts modules
-// echarts.use([LineChart, TooltipComponent, GridComponent, CanvasRenderer, LegendComponent]);
-
-// Data readiness flag
-
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 

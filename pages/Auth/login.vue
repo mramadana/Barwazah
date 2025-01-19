@@ -72,7 +72,7 @@
                     </label>
 
                     <label class="typeSection zid">
-                        <input type="radio" value="0" name="checkType" v-model="checkTypeNum" class="d-none" @change="handleTypeChange('zid')">
+                        <input type="radio" value="2" name="checkType" v-model="checkTypeNum" class="d-none" @change="handleTypeChange('zid')">
                         <img src="@/assets/images/zid.svg" alt="">
                     </label>
                 </div>
@@ -103,6 +103,11 @@
     // Axios
     const axios = useApi();
 
+    const device = ref({
+        "DeviceId" : "Test",
+        "DeviceType": "Test",
+        "ProjectName": "barwasah"
+    });
 
     // Store
     const store = useAuthStore();
@@ -136,24 +141,49 @@
 
     const login = async () => {
         loading.value = true;
-        const fd = new FormData(loginForm.value);
-
-        console.log('Email type:', typeof email.value);
-        console.log('Password type:', typeof password.value);
-
+        errors.value = [];
+        
         validate();
-
+        
         if (errors.value.length) {
-            errorToast(errors.value[0]);
             loading.value = false;
-            errors.value = [];
-        } else {
-            // Get Returned Data From Store
-            const res = await signInHandler(fd);
-            res.status == "success" ? successToast(res.msg) : errorToast(res.msg);
+            errorToast(errors.value[0]);
+            return;
+        }
+
+        try {
+            const requestData = {
+                email: email.value,
+                password: password.value,
+                device: {
+                    DeviceId: device.value.DeviceId,
+                    DeviceType: device.value.DeviceType,
+                    ProjectName: device.value.ProjectName
+                }
+            };
+
+            const response = await axios.post('/Login', requestData);
+            
+            if (response.data.statusCode == 200 && response.data.key == "success") {
+                successToast(response.data.message);
+                await signInHandler(response.data);
+                console.log(response.data.hasTwoAccounts, "hasTwoAccounts");
+                if (response.data.hasTwoAccounts) {
+                    checkType.value = true;
+                    return;
+                }
+                // navigateTo("/");
+                // successToast(response.data.message);
+            }
+        } catch (error) {
+            errorToast(error?.response?.data?.message || t('messages.something_wrong'));
+        } finally {
             loading.value = false;
         }
-    }
+    };
+
+
+
 
     // const login = async () => {
     //     navigateTo("/");
