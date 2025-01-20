@@ -39,7 +39,7 @@
                                             aria-hidden="true"></span>
                                 </button>
 
-                                <button type="button" class="custom-btn red-bg sm" @click="checkType = true">{{ $t('Auth.create_account') }}</button>
+                                <nuxt-link to="https://www.google.com/" class="custom-btn red-bg sm">{{ $t('Auth.create_account') }}</nuxt-link>
                             </div>
     
                             <div class="new-sign mt-4 text-start">
@@ -78,6 +78,37 @@
                 </div>
             </div>
         </Dialog>
+
+        <!-- select nich -->
+
+        <Dialog v-model:visible="checknich" modal class="custum_dialog_width without-close auth-daialog"
+            :draggable="false">
+            <div class="text-center">
+                <h4 class="main-title bold mb-5">
+                    قم بإختيار نوع القطاع اولا
+                </h4>
+
+            </div>
+            <div class="form-group">
+
+                <label class="label">القطاع</label>
+
+                <div class="card flex justify-content-center dropdown_card">
+
+                    <Dropdown v-if="stors?.length" v-model="selectedStore" display="chip" :options="stors" optionLabel="name" placeholder="اختر نوع القطاع"
+
+                    :maxSelectedLabels="stors?.length" class="custum-dropdown" />
+
+                    <Skeleton v-else width="100%" height="40px" />
+                </div>
+
+            </div>
+            <button :disabled="!stors?.length" type="button" class="custom-btn sm mr-auto mb-4" @click="sendNiche">
+                {{ $t("Auth.send") }}
+                <span class="spinner-border spinner-border-sm" v-if="loadingSpecialization" role="status" aria-hidden="true"></span>
+            </button>
+        </Dialog>
+
     </div>
 </template>
 
@@ -87,10 +118,11 @@
         name: "Auth.login",
         layout: false
     })
+
     import { useI18n } from 'vue-i18n';
 
     const { t } = useI18n();
-
+    const { user } = storeToRefs(useAuthStore());
     const checkType = ref(false);
     const checkTypeNum = ref(null);
 
@@ -108,6 +140,13 @@
         "DeviceType": "Test",
         "ProjectName": "barwasah"
     });
+
+    const selectedStore = ref(null);
+
+    const loadingSpecialization = ref(false);
+    const checknich = ref(false);
+
+    const stors = ref([]);
 
     // Store
     const store = useAuthStore();
@@ -132,62 +171,85 @@
         }
     }
 
-    const handleTypeChange = (type) => {
+    const handleTypeChange = async (type) => {
         console.log('Selected type:', checkTypeNum.value);
-        checkType.value = false; // Close dialog after selection
+        
+        try {
+            // Make the API call
+            const response = await axios.get(`/SelectPlatformAccount?email=${email.value}&account=${checkTypeNum.value}`);
+            const data = await response.data;
+            
+            if (response.status === 200) {
+                // Handle successful response
+                console.log('Platform account selected:', data);
+                checkType.value = false; // Close dialog after selection
+                successToast(data.message);
+                if(!data.hasTwoAccounts && data.hasNiche) {
+                    navigateTo("/");
+                }
+            } else {
+                // Handle error response
+                console.error('Error selecting platform account:', data);
+                errorToast(data.message);
+                console.log(data, "Dataaa");
+            }
+        } catch (error) {
+            console.error('Error making API call:', error);
+        }
     };
 
     // login Function
 
     const login = async () => {
-        loading.value = true;
-        errors.value = [];
-        
-        validate();
-        
-        if (errors.value.length) {
-            loading.value = false;
-            errorToast(errors.value[0]);
-            return;
-        }
+    loading.value = true;
+    errors.value = [];
+    
+    validate();
+    
+    if (errors.value.length) {
+        loading.value = false;
+        errorToast(errors.value[0]);
+        return;
+    }
 
-        try {
-            const requestData = {
-                email: email.value,
-                password: password.value,
-                device: {
-                    DeviceId: device.value.DeviceId,
-                    DeviceType: device.value.DeviceType,
-                    ProjectName: device.value.ProjectName
-                }
-            };
-
-            const response = await axios.post('/Login', requestData);
-            
-            if (response.data.statusCode == 200 && response.data.key == "success") {
-                successToast(response.data.message);
-                await signInHandler(response.data);
-                console.log(response.data.hasTwoAccounts, "hasTwoAccounts");
-                if (response.data.hasTwoAccounts) {
-                    checkType.value = true;
-                    return;
-                }
-                // navigateTo("/");
-                // successToast(response.data.message);
+    try {
+        const requestData = {
+            email: email.value,
+            password: password.value,
+            device: {
+                DeviceId: device.value.DeviceId,
+                DeviceType: device.value.DeviceType,
+                ProjectName: device.value.ProjectName
             }
-        } catch (error) {
-            errorToast(error?.response?.data?.message || t('messages.something_wrong'));
-        } finally {
-            loading.value = false;
+        };
+
+        const response = await axios.post('/Login', requestData);
+        
+        if (response.data.statusCode === 200 && response.data.key === "success") {
+            successToast(response.data.message);
+            await signInHandler(response.data);
+
+            // Check conditions based on response data
+            if (!response.data.hasTwoAccounts && response.data.hasNiche) {
+                // Navigate to home page if conditions are met
+                navigateTo("/");
+            }
+
+            // Set values based on conditions
+            if (response.data.hasTwoAccounts) {
+                checkType.value = true;
+            }
+            if (!response.data.hasNiche) {
+                checknich.value = true;
+            }
         }
+    } catch (error) {
+        errorToast(error?.response?.data?.message || t('messages.something_wrong'));
+    } finally {
+        loading.value = false;
+    }
     };
 
-
-
-
-    // const login = async () => {
-    //     navigateTo("/");
-    // }
 
     // toggle password
     const togglePasswordVisibility = () => {
@@ -200,6 +262,53 @@
     const inputType = computed(() => {
       return passwordVisible.value ? 'text' : 'password';
     });
+
+    watch(checknich, (newValue) => {
+        if (newValue) {
+            gentNiche();
+        }
+    });
+
+    // get niche
+    const gentNiche = async () => {
+        try {
+            const res = await axios.get(`/GetNiche`);
+            if (response(res) === "success") {
+                stors.value = res.data.data;
+            } else {
+                errorToast(res.data.msg);
+            }
+        } catch (err) {
+            console.error(err);
+            errorToast(t('messages.something_wrong'));
+        } finally {
+        }
+    };
+
+    // send niche
+    const sendNiche = async () => {
+        loadingSpecialization.value = true;
+        if (!selectedStore.value) {
+            loadingSpecialization.value = false;
+            errorToast(t('يرجى اختيار القطاع اولا'));
+            return;
+        }
+        try {
+            const res = await axios.post(`/SelectNiche?userId=${user.value.id}&nicheId=${selectedStore.value.id}`);
+            if (response(res) === "success") {
+                checknich.value = false;
+                successToast(res.data.message);
+                loadingSpecialization.value = false;
+            } else {
+                errorToast(res.data.message);
+            }
+        } catch (err) {
+            console.error(err);
+            errorToast(t('messages.something_wrong'));
+        } finally {
+            loadingSpecialization.value = false;
+        }
+    };
 </script>
 
 
