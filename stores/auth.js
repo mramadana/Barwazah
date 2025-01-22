@@ -11,6 +11,7 @@ export const useAuthStore = defineStore("auth", {
     user: {
       phone: "",
       country_code: "",
+      accountType: null
     },
     token: null,
     isLoggedIn: false,
@@ -110,7 +111,7 @@ export const useAuthStore = defineStore("auth", {
         headers: { Authorization: `Bearer ${this.token}` },
       };
 
-      const resData = await axios.delete("sign-out", config);
+      const resData = await axios.post("Logout", {}, config);
       if (
         response(resData) == "success" ||
         response(resData) == "blocked" ||

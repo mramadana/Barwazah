@@ -85,12 +85,6 @@
                 errors.value.push(t(`validation.${allInputs[i].name}`));
             }
         }
-
-        if (password.value !== confirmPassword.value) {
-            errors.value.push(t(`validation.confirmPassword`));
-            console.log(password.value, "password");
-            console.log(confirmPassword.value, "confirmPassword");
-        }
     }
 
     const inputType = (input) => {
@@ -102,27 +96,34 @@
     };
 
     const submitData = async () => {
-    const fd = new FormData(confirmPasswordForm.value);
-    fd.append('phone', user.value.phone);
-    fd.append('country_code', user.value.country_code);
-    fd.append('code', localStorage.getItem('newCode'));
-    validate();
-    if (errors.value.length) {
-        errorToast(errors.value[0]);
-        loading.value = false;
-        errors.value = [];
-    } else {
-        loading.value = true;
-        await axios.post("reset-password", fd).then(res => {
-        if (response(res) == "success") {
-            successToast(res.data.msg);
-            navigateTo('/Auth/passwordResets');
-        } else {
-            errorToast(res.data.msg)
+        validate();
+        if (errors.value.length) {
+            errorToast(errors.value[0]);
+            return;
         }
-        loading.value = false;
-    }).catch(err => console.log(err));
-    }
+        
+        loading.value = true;
+        try {
+            const data = {
+                accountType: user.value.accountType,
+                email: user.value.email,
+                oldPassword: password.value,
+                newPassword: confirmPassword.value
+            };
+            
+            const res = await axios.post("ChangePassword", data);
+            if (response(res) === "success") {
+                successToast(t('Auth.confirm_new_password'));
+                navigateTo('/Auth/passwordResets');
+            } else {
+                errorToast(res.data.message);
+            }
+        } catch (err) {
+            console.error(err);
+            errorToast('An error occurred. Please try again.');
+        } finally {
+            loading.value = false;
+        }
     };
 </script>
 

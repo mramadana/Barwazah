@@ -186,6 +186,7 @@
                 successToast(data.message);
                 if(!data.hasTwoAccounts && data.hasNiche) {
                     navigateTo("/");
+                    await signInHandler(response.data);
                 }
             } else {
                 // Handle error response

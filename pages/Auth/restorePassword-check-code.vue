@@ -115,37 +115,46 @@ const bindModal = ref("");
 // verificationCode Function
 const verificationCode = async () => {
     loading.value = true;
-    const fd = new FormData();
-    fd.append('code', bindModal.value);
-    fd.append('phone', user.value.phone);
-    fd.append('country_code', user.value.country_code);
+    const data = {
+        email: user.value.email,
+        code: parseInt(bindModal.value),
+        accountType: user.value.accountType
+    };
     if (!bindModal.value) {
-            errorToast(t(`validation.code`));
+        errorToast(t(`validation.code`));
+        loading.value = false;
+    } else {
+        try {
+            const res = await axios.post("ConfirmCode", data);
+            if (response(res) === "success") {
+                navigateTo('/Auth/confirmPassword');
+                localStorage.setItem('newCode', bindModal.value);
+            } else {
+                errorToast(res.data.msg);
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
             loading.value = false;
-        } else {
-            await axios.post("forget-password-check-code", fd).then(res => {
-                if (response(res) == "success") {
-                      navigateTo('/Auth/confirmPassword');
-                      localStorage.setItem('newCode', bindModal.value);
-                } else {
-                    errorToast(res.data.msg)
-                }
-                loading.value = false;
-            }).catch(err => console.log(err));
         }
+    }
 }
 
 //  resendCode Function
 const resendCode = async () => {
-    await axios.get(`forget-password-resend-code?country_code=${user.value.country_code}&phone=${user.value.phone}`).then(res => {
-        if (response(res) == "success") {
-            successToast(res.data.msg);
+    try {
+        const res = await axios.post(`SendCode?email=${user.value.email}&accountType=${user.value.accountType}`);
+        if (response(res) === "success") {
+            successToast(res.data.message);
             countStatus.value = true;
             countDownTimer();
         } else {
-            errorToast(res.data.msg);
+            errorToast(res.data.message);
         }
-    }).catch(err => console.log(err));
+    } catch (err) {
+        console.error(err);
+        errorToast(t('Global.error_occurred'));
+    }
 }
 
 onMounted(() => {
