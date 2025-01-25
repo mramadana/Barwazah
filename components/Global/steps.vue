@@ -1,33 +1,4 @@
 <template>
-    <!-- <div>
-        <ul class="col-12 col-md-10 steps mr-auto mb-5">
-                                
-            <li :class="{ 'step-item': true }">
-                <div class="icon-done">
-                    <i class="fas fa-check icon"></i>
-                </div>
-            </li>
-            
-            <li :class="{ 'step-item': true}">
-                <div class="icon-done">
-                    <i class="fas fa-check icon"></i>
-                </div>
-            </li>
-            <li :class="{ 'step-item': true}">
-                <div class="icon-done">
-                    <i class="fas fa-check icon"></i>
-                </div>
-            </li>
-            <li :class="{ 'step-item ': true}">
-                <div class="icon-done">
-                    1
-                </div>
-            </li>
-
-        </ul>
-    </div> -->
-
-
     <div>
         <ul class="col-12 col-md-10 steps mr-auto mb-5">
             <li 
@@ -45,21 +16,23 @@
 </template>
 
 <script setup>
+import { ref, computed } from 'vue';
 
 const props = defineProps({
     activeSteps: {
         type: Array,
         required: true,
         default: () => []
+    },
+    stepsCount: {
+        type: Number,
+        default: 4
     }
-})
+});
 
-const stepsData = ref([
-    { label: "4" },
-    { label: "3" },
-    { label: "2" },
-    { label: "1" },
-])
-
-// console.log("Active Steps:", props.activeSteps);
+const stepsData = computed(() => {
+    return Array.from({ length: props.stepsCount }, (_, i) => ({
+        label: (props.stepsCount - i).toString()
+    }));
+});
 </script>

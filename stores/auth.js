@@ -20,6 +20,8 @@ export const useAuthStore = defineStore("auth", {
     test: 'test key',
     currentemail: null,
     currentPasword: null,
+    hasTwoAccount: null,
+    newemail: null
   }),
   actions: {
     // Sign In
@@ -111,24 +113,23 @@ export const useAuthStore = defineStore("auth", {
         headers: { Authorization: `Bearer ${this.token}` },
       };
 
-      const resData = await axios.post("Logout", {}, config);
-      if (
-        response(resData) == "success" ||
-        response(resData) == "blocked" ||
-        response(resData) == "unauthenticated"
-      ) {
-        this.token = null;
-        this.user = {
-          phone: "",
-          country_code: "",
-        };
-        this.isLoggedIn = false;
-        navigateTo("/Auth/login");
-        return { status: "success", msg: resData.data.msg };
-      } else {
-        return { status: "error", msg: resData.data.msg };
+      try {
+        const { data: resData } = await axios.post("Logout", {}, config);
+        if (resData.key === "success") {
+          this.token = null;
+          this.user = {
+            phone: "",
+            country_code: "",
+          };
+          this.isLoggedIn = false;
+          navigateTo("/Auth/login");
+          return { status: "success", msg: resData.message };
+        } else {
+          return { status: "error", msg: resData.message };
+        }
+      } catch (error) {
+        return { status: "error", msg: error.response?.data?.message || "An error occurred" };
       }
-
     },
 
     // delete account

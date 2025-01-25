@@ -106,7 +106,7 @@ import { useAuthStore } from '~/stores/auth';
 // Store
 const store = useAuthStore();
 
-const {user} = storeToRefs(store);
+const {user, hasTwoAccount} = storeToRefs(store);
 
 const loading = ref(false);
 
@@ -118,7 +118,10 @@ const verificationCode = async () => {
     const data = {
         email: user.value.email,
         code: parseInt(bindModal.value),
-        accountType: user.value.accountType
+
+        // accountType: user.value.accountType
+
+        accountType: user.value.accountType ? user.value.accountType : 0
     };
     if (!bindModal.value) {
         errorToast(t(`validation.code`));

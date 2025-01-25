@@ -21,7 +21,7 @@
                                 <label class="label">
                                     {{ $t('Auth.email') }}
                                 </label>
-                                <input type="email" class="main_input validInputs" valid="email" name="email" v-model="email" @input="checkEmail" :placeholder="$t('Auth.enter_email')">
+                                <input type="email" class="main_input validInputs" valid="email" name="email" v-model="email" :placeholder="$t('Auth.enter_email')">
                             </div>
 
                             <button type="submit" class="custom-btn mr-auto"> 
@@ -94,7 +94,7 @@ import { useAuthStore } from '~/stores/auth';
 
 // Store
 const store = useAuthStore();
-const { user } = storeToRefs(store);
+const { user, hasTwoAccount } = storeToRefs(store);
 
 // success response
 
@@ -113,8 +113,6 @@ const countries = ref([]);
 /******************* Props *******************/
 
 /******************* Methods *******************/
-
-// Get All countries
 
 
     // validate Func
@@ -144,6 +142,7 @@ const countries = ref([]);
             if (response(res) === "success") {
                 user.value.email = fd.get('email');
                 successToast(res.data.message);
+                hasTwoAccount.value = res.data.hasTwoAccounts;
                 if (res.data.hasTwoAccounts) {
                     checkType.value = true;
                 } else {
@@ -172,8 +171,8 @@ const countries = ref([]);
             if (response(res) === "success") {
                 successToast(res.data.message);
                 checkType.value = false;
-                navigateTo('/Auth/restorepassword-check-code');
                 user.value.accountType = accountType;
+                navigateTo('/Auth/restorepassword-check-code');
                 console.log(user.value, "new user");
             } else {
                 errorToast(res.data.msg);

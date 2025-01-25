@@ -157,6 +157,7 @@ const isActiveLink = (path) => {
           const res = await logoutHandler();
           res.status == "success" ? successToast(res.msg) : errorToast(res.msg);
           localStorage.clear();
+          console.log(res.msg, "resss")
     }
 
 

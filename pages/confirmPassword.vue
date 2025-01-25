@@ -8,7 +8,7 @@
                 
                 <!-- start to steps component -->
     
-                <GlobalSteps :activeSteps="[3, 2, 1]" />
+                <GlobalSteps :activeSteps="[2, 1]" :stepsCount="3" />
     
                 <form @submit.prevent="submitData" ref="confirmPasswordForm">
                     <div class="row">
@@ -56,7 +56,6 @@
 
 <script setup>
     definePageMeta({
-        name: "Auth.new_password",
         layout: false
     });
 
@@ -84,6 +83,10 @@
         for (let i = 0; i < allInputs.length; i++) {
             if (allInputs[i].value === '') {
                 errors.value.push(t(`validation.${allInputs[i].name}`));
+            };
+
+            if (password.value !== confirmPassword.value) {
+                errors.value.push(t(`validation.confirmPassword`));
             }
         }
     }
@@ -105,18 +108,17 @@
         
         loading.value = true;
         try {
-
             const data = {
-                accountType: user.value.accountType,
+                accountType: user.value.platformType,
                 email: user.value.email,
-                oldPassword: password.value,
-                newPassword: confirmPassword.value
+                newPassword: password.value,
+                confirmPassword: confirmPassword.value
             };
             
             const res = await axios.post("ChangePassword", data);
             if (response(res) === "success") {
                 successToast(t('Auth.confirm_new_password'));
-                navigateTo('/Auth/passwordResets');
+                navigateTo('/changesuccessful');
             } else {
                 errorToast(res.data.message);
             }

@@ -131,6 +131,21 @@
     }
   };
   
+
+// get the data from api
+const getData = async () => {
+    try {
+        const res = await axios.get('GetYearLimit'); 
+        if (response(res) === "success") {
+            yearlyData.value = res.data.data;
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+
+
   onMounted(() => {
     dataReady.value = true;
     option.value.xAxis.data = Object.keys(yearlyData);

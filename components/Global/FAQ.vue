@@ -61,6 +61,8 @@ const { response } = responseApi();
 
 const axios = useApi();
 
+const Recommendations = ref([]);
+
 const FAQ = ref([
     {
         id: 1,
@@ -100,20 +102,21 @@ const FAQ_2 = ref([
 ]);
 
 
-// const getData = async () => {
-//   loading.value = true;
-//   await axios.get('fqss').then(res => {
-//     if (response(res) == "success") {
-//       FAQ.value = res.data.data;
-//     }
-//     loading.value = false;
-//   }).catch(err => console.log(err));
-// };
+const getData = async () => {
+  loading.value = true;
+  await axios.get('RecommendationsHome').then(res => {
+    if (response(res) == "success") {
+        Recommendations.value = res.data.data;
+        console.log(Recommendations.value, "Recommendations");
+    }
+    loading.value = false;
+  }).catch(err => console.log(err));
+};
 
 
-// onMounted(() => {
-//     getData();
-// });
+onMounted(() => {
+    getData();
+});
 
 </script>
 

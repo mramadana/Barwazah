@@ -99,6 +99,22 @@
                         </div>
                     </div>
 
+                    <!-- متوسط حجم سلة الشراء -->
+
+                    <div class="col-12 mb-5">
+                        <div class="layout-form chart_layout">
+                        <h3 class="main-title bold lg text-center mb-4">متوسط حجم سلة الشراء</h3>
+                        <ChartsGradientArea
+                            :initialMonths="months"
+                            :initialAllMonths="allMonths"
+                            :initialOption="chartOptions"
+                            :initialMonthlyData="manualMonthlyData"
+                            @rental-type-change="handleRentalTypeChange"
+                            :initialSeriesData="seriesData"
+                        />
+                        </div>
+                    </div>
+
                 </div>
             </div>
     
@@ -121,13 +137,28 @@ const { token, user } = storeToRefs(store);
 </script> -->
 
 <script setup>
+
 import { ref, onBeforeMount } from 'vue';
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
 
 definePageMeta({
     name: "Titles.sales",
 });
+
+const { t } = useI18n();
+
+// **************** Data ******************//
+
+const { response } = responseApi();
+const { successToast, errorToast } = toastMsg();
+const axios = useApi();
+
+const salesData = ref([]);
+// config
+const config = computed(()=> {
+    return { headers: { Authorization: `Bearer ${token.value}` } }
+});
+
 
 import * as echarts from 'echarts/core';
 import { LineChart } from 'echarts/charts';
@@ -237,6 +268,23 @@ const productsData = ref({
     bar: '#f75c5c',
     text: '#ffffff'
   }
+});
+
+// ******************** method ********************//
+
+const getSalesData = async () => {
+    await axios.get(`AverageShoppingCartSize`, config.value).then(res => {
+    if (response(res) == "success") {
+        salesData.value = res.data.data;
+        console.log(salesData.value, "salesData");
+    }   
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
+onMounted( async () => {
+    await getSalesData();
 });
 
 onBeforeMount(() => {

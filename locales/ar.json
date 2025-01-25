@@ -11,7 +11,8 @@
         "email": "من فضلك أدخل البريد الإلكترونى",
         "password": "من فضلك أدخل كلمة المرور",
         "confirmPassword": "كلمة المرور غير متطابقة",
-        "code": "كود التفعيل مطلوب."
+        "code": "كود التفعيل مطلوب.",
+        "invalid_email": "البريد الإلكترونى غير صالح"
       },
 
     "Auth": {
@@ -49,7 +50,9 @@
         "change_sector" : "تغيير القطاع",
         "enter_sector" : "ادخل القطاع",
         "current_password" : "كلمة المرور الحالية",
-        "enter_current_password" : "ادخل كلمة المرور الحالية"
+        "enter_current_password" : "ادخل كلمة المرور الحالية",
+        "confirm_new_password" : "تم تغيير كلمة المرور بنجاح",
+        "password_match" : "كلمة المرور متطابقة"
     },
 
     "Global": {

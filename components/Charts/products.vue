@@ -1,6 +1,24 @@
 <template>
-  <div v-if="dataReady" class="w-100">
-    <VChart ref="chart" :option="option" style="height: 300px; width: 100%; display: block" />
+  <div>
+    <div class="skeleton-chart" v-if="loading">
+    <div class="skeleton-bars">
+      <div class="d-flex align-items-center gap-3 justify-content-end">
+        <Skeleton width="5rem" height=".5rem"></Skeleton>
+        <div class="skeleton-bar" style="width: 80%;"></div>
+      </div>
+      <div class="d-flex align-items-center gap-3 justify-content-end">
+        <Skeleton width="5rem" height=".5rem"></Skeleton>
+        <div class="skeleton-bar" style="width: 60%;"></div>
+      </div>
+      <div class="d-flex align-items-center gap-3 justify-content-end">
+        <Skeleton width="5rem" height=".5rem"></Skeleton>
+        <div class="skeleton-bar" style="width: 40%;"></div>
+      </div>
+    </div>
+    </div>
+    <div v-if="dataReady && !loading" class="w-100">
+      <VChart ref="chart" :option="option" style="height: 300px; width: 100%; display: block" />
+    </div>
   </div>
 </template>
   
@@ -41,7 +59,11 @@ const props = defineProps({
         text: '#ffffff'
       }
     })
-  }
+  },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const chart = ref(null);
@@ -156,3 +178,52 @@ onMounted(() => {
   option.value.series[0].data = props.productsData.series;
 });
 </script>
+
+<style scoped>
+.skeleton-chart {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+}
+
+.skeleton-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex-grow: 1;
+}
+
+.skeleton-bar {
+  height: 40px;
+  background-color: #f75c5c;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite;
+}
+
+.skeleton-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 50px;
+}
+
+.skeleton-label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #666;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+</style>

@@ -8,12 +8,9 @@
 
                 <div v-if="isLoggedIn" class="mb-4">
                     <h1 class="main-title bold cl-red">{{ $t("Global.welcome") }} &nbsp; {{ user.name }}</h1>
-                    <h3 class="main-title normal main-cl">{{ user.email }}</h3>
+                    <h3 class="main-title normal main-cl">{{ user?.fullName }}</h3>
                 </div>
-                
-                <div v-else>
-                    <h1 class="main-title bold cl-red mb-4"> Home page</h1>
-                </div>
+            
 
                 <div class="row">
 
@@ -23,8 +20,8 @@
                                 <div class="info-content">
                                     <span>حجم السوق</span>
                                     <div class="d-flex align-items-baseline gap-2">
-                                        <h2>10.8</h2>
-                                        <small>مليون</small>
+                                        <h2 v-if="!HomeData?.length && !loading">{{ HomeData?.marketSize }}</h2>
+                                        <Skeleton class="mt-2" v-if="HomeData?.length || loading" width="5rem" height=".5rem"></Skeleton>
                                     </div>
                                 </div>
                                 <img src="@/assets/images/attach_money.svg" alt="Dollar Icon">
@@ -43,8 +40,8 @@
                                 <div class="info-content">
                                     <span>متوسط عملاء السوق</span>
                                     <div class="d-flex align-items-baseline gap-2">
-                                        <h2>3.95</h2>
-                                        <small>ألف</small>
+                                        <h2 v-if="!HomeData?.length && !loading">{{ HomeData?.marketClientAverage }}</h2>
+                                        <Skeleton class="mt-2" v-if="HomeData?.length || loading" width="5rem" height=".5rem"></Skeleton>
                                     </div>
                                 </div>
                                 <img src="@/assets/images/Customer.svg" alt="User Icon">
@@ -74,6 +71,7 @@
                             <ChartsProducts 
                               :data-ready="dataReady"
                               :products-data="productsData"
+                              :loading="loading"
                             />
                         </div>
                     </div>
@@ -101,34 +99,53 @@ const { token, user } = storeToRefs(store);
 
 <script setup>
 
-    definePageMeta({
-        name: "Titles.home",
-        middleware: 'auth'
-    });
+definePageMeta({
+    name: "Titles.home",
+    middleware: 'auth'
+});
 
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
-const store = useAuthStore();
+// **************** Data ******************//
 
-const { token, user, isLoggedIn } = storeToRefs(store);
+const loading = ref(true);
+const { token, user, isLoggedIn } = storeToRefs(useAuthStore());
+const { response } = responseApi();
+const { successToast, errorToast } = toastMsg();
+const axios = useApi();
 
+const HomeData = ref(null);
+// config
+const config = computed(()=> {
+    return { headers: { Authorization: `Bearer ${token.value}` } }
+});
 // custom setup for ChartsProducts chart
 
 const dataReady = ref(false);
 
-const productsData = ref({
-  labels: [
-    { id: 1303, text: 'منتج 1', image: "https://dashboard.awamer-store.4hoste.com/public/storage/images/products_files/1731314993_9381.png" },
-    { id: 1304, text: 'منتج 2', image: "https://dashboard.awamer-store.4hoste.com/public/storage/images/products_files/1731314993_2573.jpg" },
-    { id: 1305, text: 'منتج 3', image: "https://dashboard.awamer-store.4hoste.com/public/storage/images/products_files/1731314993_9843.png" },
-    { id: 1306, text: 'منتج 4', image: "https://dashboard.awamer-store.4hoste.com/public/storage/images/products_files/1731314993_6201.png" },
-  ],
-  series: [12.32, 11.7, 10.38, 9.32],
-  colors: {
-    bar: '#f75c5c',
-    text: '#ffffff'
-  }
+const productsData = computed(() => {
+  if (!HomeData.value?.competitors) return {
+    labels: [],
+    series: [],
+    colors: {
+      bar: '#f75c5c',
+      text: '#ffffff'
+    }
+  };
+
+  return {
+    labels: HomeData.value.competitors.map(competitor => ({
+      id: competitor.id,
+      text: competitor.competitorName,
+      image: competitor.logo
+    })),
+    series: HomeData.value.competitors.map(competitor => competitor.totalMarketVisitors),
+    colors: {
+      bar: '#f75c5c',
+      text: '#ffffff'
+    }
+  };
 });
 
 // custom setup for gradient area chart
@@ -303,7 +320,23 @@ const sourceData = ref([
 //     }
 // }
 
-onBeforeMount(() => {
-  dataReady.value = true;
+// ****************  method ************
+
+const getHome = async () => {
+    loading.value = true;
+    await axios.get(`GetHomeStaticData`, config.value).then(res => {
+    if (response(res) == "success") {
+        HomeData.value = res.data.data;
+        console.log(HomeData.value, "HomeData");
+    }   
+    loading.value = false;
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
+onBeforeMount( async () => {
+    await getHome();
+    dataReady.value = true;
 });
 </script>

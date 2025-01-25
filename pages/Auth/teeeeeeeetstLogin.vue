@@ -17,7 +17,7 @@
                                 <input type="email" class="main_input validInputs" valid="email" name="email" v-model="email" @input="checkEmail" :placeholder="$t('Auth.enter_email')">
                             </div>
 
-                            <div class="form-group" v-if="showPassword">
+                            <div class="form-group">
                                 <label class="label">
                                     {{ $t('Auth.password') }} 
                                 </label>
@@ -115,7 +115,6 @@
 <script setup>
 
     definePageMeta({
-        name: "Auth.login",
         layout: false
     })
 
@@ -160,7 +159,7 @@
     const email = ref('');
     const password = ref('');
     const passwordVisible = ref(false);
-    const showPassword = ref(false);
+
     // validation Function
     const validate = () => {
         let allInputs = document.querySelectorAll('.validInputs');
@@ -171,72 +170,52 @@
         }
     }
 
-    const handleTypeChange = () => {
+    const handleTypeChange = async (type) => {
         console.log('Selected type:', checkTypeNum.value);
-        checkType.value = false;  // Close dialog after selection
-        if (checkTypeNum.value) {
-            showPassword.value = true;  // Show password after selecting radio
-        }
-    };
-
-    const checkEmail = async () => {
-        errors.value = [];
         
-        validate();
-        
-        if (errors.value.length) {
-            loading.value = false;
-            errorToast(errors.value[0]);
-            return;
-        }
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email.value)) {
-            errorToast(t('validation.invalid_email'));
-            return;
-        }
-
         try {
-            const response = await axios.get(`/CheckEmail?email=${email.value}`);
-            if (response.data.key === 'success') {
-                if (response.data.hasTwoAccounts) {
-                    checkType.value = true;
-                    checkTypeNum.value = null;
-                } else {
-                    showPassword.value = true;
+            // Make the API call
+            const response = await axios.get(`/SelectPlatformAccount?email=${email.value}&account=${checkTypeNum.value}&password=${password.value}`);
+            const data = await response.data;
+            
+            if (response.status === 200) {
+                // Handle successful response
+                console.log('Platform account selected:', data);
+                checkType.value = false; // Close dialog after selection
+                successToast(data.message);
+                if(!data.hasTwoAccounts && data.hasNiche) {
+                    navigateTo("/");
+                    await signInHandler(response.data);
                 }
             } else {
-                errorToast(response.data.message);
+                // Handle error response
+                console.error('Error selecting platform account:', data);
+                errorToast(data.message);
+                console.log(data, "Dataaa");
             }
         } catch (error) {
-            if (error.response && error.response.status === 400) {
-                errorToast(error.response.data.message);
-            } else {
-                errorToast(t('messages.something_wrong'));
-            }
+            console.error('Error making API call:', error);
         }
     };
 
     // login Function
 
     const login = async () => {
-        if (!showPassword.value) {
-            checkEmail();  // Run CheckEmail first
-            return;
-        }
         loading.value = true;
         errors.value = [];
+        
         validate();
+        
         if (errors.value.length) {
             loading.value = false;
             errorToast(errors.value[0]);
             return;
         }
+
         try {
             const requestData = {
                 email: email.value,
                 password: password.value,
-                accountType: checkTypeNum.value || 0,
                 device: {
                     DeviceId: device.value.DeviceId,
                     DeviceType: device.value.DeviceType,
@@ -246,15 +225,22 @@
 
             const response = await axios.post('/Login', requestData);
             
-            if (response.data.statusCode === 200 && response.data.key === 'success') {
+            if (response.data.statusCode === 200 && response.data.key === "success") {
                 successToast(response.data.message);
                 await signInHandler(response.data);
 
                 // Check conditions based on response data
+                if (!response.data.hasTwoAccounts && response.data.hasNiche) {
+                    // Navigate to home page if conditions are met
+                    navigateTo("/");
+                }
+
+                // Set values based on conditions
+                if (response.data.hasTwoAccounts) {
+                    checkType.value = true;
+                }
                 if (!response.data.hasNiche) {
-                    checknich.value = true;  // Show niche selection if not present
-                } else {
-                    navigateTo('/');  // Navigate to home if niche exists
+                    checknich.value = true;
                 }
             }
         } catch (error) {

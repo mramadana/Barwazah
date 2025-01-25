@@ -1,6 +1,6 @@
 <template>
   <div v-if="dataReady" class="w-100">
-    <div class="radio-container">
+    <!-- <div class="radio-container">
       <input type="radio" id="radio1" name="slider" value="1" @change="handleRentalTypeChange">
       <label for="radio1" class="main-cl">للمتجر</label>
 
@@ -9,6 +9,20 @@
 
       <input type="radio" id="radio3" name="slider" value="2" @change="handleRentalTypeChange">
       <label for="radio3" class="cl-red">للسوق</label>
+
+      <div class="marker"></div>
+    </div> -->
+
+
+    <div class="radio-container">
+      <input type="radio" :id="`radio1-${uniqueId}`" :name="`slider-${uniqueId}`" value="1" @change="handleRentalTypeChange">
+      <label :for="`radio1-${uniqueId}`" class="main-cl">للمتجر</label>
+
+      <input type="radio" :id="`radio2-${uniqueId}`" :name="`slider-${uniqueId}`" value="0" @change="handleRentalTypeChange" checked>
+      <label :for="`radio2-${uniqueId}`">الكل</label>
+
+      <input type="radio" :id="`radio3-${uniqueId}`" :name="`slider-${uniqueId}`" value="2" @change="handleRentalTypeChange">
+      <label :for="`radio3-${uniqueId}`" class="cl-red">للسوق</label>
 
       <div class="marker"></div>
     </div>
@@ -48,6 +62,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['rental-type-change']);
+const uniqueId = ref(Math.random().toString(36).substr(2, 9));
 
 const { t } = useI18n();
 
@@ -284,16 +299,20 @@ onBeforeMount(() => {
 }
 
 
-#radio1:checked ~ .marker {
+.radio-container input[type="radio"]:checked ~ .marker {
+  transition: left 0.3s ease-in-out;
+}
+
+.radio-container input[type="radio"]:nth-of-type(1):checked ~ .marker {
   left: calc(100% - 40px);
 }
 
-#radio2:checked ~ .marker {
-  left: 50%; 
+.radio-container input[type="radio"]:nth-of-type(2):checked ~ .marker {
+  left: 50%;
 }
 
-#radio3:checked ~ .marker {
-  left: calc(10% - 10px); /* تحريك إلى اليمين */
+.radio-container input[type="radio"]:nth-of-type(3):checked ~ .marker {
+  left: calc(10% - 10px);
 }
 
 /* تغيير لون النص عند التحديد */

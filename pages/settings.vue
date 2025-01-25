@@ -13,8 +13,13 @@
                 <img src="@/assets/images/Rectangle.svg" alt="Store Logo" />
               </div>
               <div class="store-info">
-                <div class="store-name mb-2">المتجر: متجر البدري</div>
-                <div class="store-category">الفئة: B</div>
+                <div class="store-name mb-2">المتجر: {{ settingsData?.storeName }}</div>
+
+                <Skeleton class="mt-2" v-if="settingsData?.length || loading" width="5rem" height=".5rem"></Skeleton>
+
+                <div class="store-category">الفئة: {{ settingsData?.store_category }}</div>
+
+                <Skeleton class="mt-2" v-if="settingsData?.length || loading" width="5rem" height=".5rem"></Skeleton>
               </div>
             </div>
           </div>
@@ -23,17 +28,17 @@
           <div class="col-12 col-md-6 mb-4">
             <div class="settings-card black">
               <div class="store-image">
-                <img src="@/assets/images/Ramadan.jpg" alt="Store Logo" />
+                <img :src="settingsData?.userImage" alt="Store Logo" />
               </div>
               <div class="store-info">
-                <div class="store-name mb-2">المتجر: متجر البدري</div>
+                <div class="store-name mb-2">التاجر: {{ settingsData?.userName }}</div>
                 <div class="social-icons">
-                  <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-                  <a href="https://twitter.com" target="_blank">
+                  <a :href="settingsData?.instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                  <a :href="settingsData?.twitter" target="_blank">
                     <img src="@/assets/images/x-twitter.svg" alt="twitter">
                   </a>
-                  <a href="https://snapchat.com" target="_blank"><i class="fab fa-snapchat-ghost"></i></a>
-                  <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                  <a :href="settingsData?.snapchat" target="_blank"><i class="fab fa-snapchat-ghost"></i></a>
+                  <a :href="settingsData?.facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
                 </div>
               </div>
             </div>
@@ -54,7 +59,7 @@
                 </h2>
                 <div :id="'flush-collapseOne'" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
-                        0123456789
+                        {{ settingsData?.phoneNumber }}
                     </div>
                 </div>
              </div>
@@ -71,7 +76,7 @@
               </h2>
               <div id="flush-collapseSector" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                 <div class="accordion-body">
-                  [القطاع الخاص بك هنا]
+                  {{ settingsData?.nisheName }}
                 </div>
               </div>
             </div>
@@ -87,7 +92,7 @@
               </h2>
               <div id="flush-collapseEmail" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                 <div class="accordion-body">
-                  [البريد الإلكتروني هنا]
+                  {{ settingsData?.email }}
                 </div>
               </div>
             </div>
@@ -110,14 +115,17 @@
               <h1 class="main-title bold mb-5">
                   {{ $t("Auth.change_password") }}
               </h1>
-              <form @submit.prevent="changePassword" ref="changePasswordForm">
+              <form @submit.prevent="forgetPassword" ref="forgetForm">
                   <div class="form-group">
-                      <label class="label">{{ $t('Auth.current_password') }}</label>
-                      <input type="password" class="main_input" v-model="currentPassword" :placeholder="$t('Auth.enter_current_password')">
+                    <label class="label">
+                        {{ $t('Auth.email') }}
+                    </label>
+                    <input type="email" class="main_input validInputs" valid="email" name="email" v-model="email" :placeholder="$t('Auth.enter_email')">
                   </div>
                   <div class="section-btns mt-4">
                       <button type="submit" class="custom-btn sm d-inline-flex">
                           {{ $t("Auth.confirmation") }}
+                          <span class="spinner-border spinner-border-sm" v-if="formloading" role="status" aria-hidden="true"></span>
                       </button>
                   </div>
               </form>
@@ -152,18 +160,90 @@
   
   // Pinia store
   import { useAuthStore } from "~/stores/auth";
-  
+  const { token, user, newemail } = storeToRefs(useAuthStore());
   const { response } = responseApi();
   const { successToast, errorToast } = toastMsg();
   const axios = useApi();
   const store = useAuthStore();
   const { deleteAccountHandler } = store;
-  
+
+  // ******************** Data ********************
+  import { useI18n } from 'vue-i18n';
+  const { t } = useI18n({ useScope: 'global' });
+  const email = ref("");
+  const forgetForm = ref(null);
+  const formloading = ref(false);
+  const errors = ref([]);
+  const loading = ref(true);
   const delete_Successfully = ref(false);
   const deleteAcount = ref(false);
+  const settingsData = ref({});
 
   // start to make variables of dialogs
   const changePassword_dialog = ref(false);
+
+  // config
+  const config = computed(()=> {
+      return { headers: { Authorization: `Bearer ${token.value}` } }
+  });
+
+  //  ************************** method **************************
+
+  // validate Func
+  function validate() {
+      let allInputs = document.querySelectorAll('.validInputs');
+      for (let i = 0; i < allInputs.length; i++) {
+          if (allInputs[i].value === '') {
+              errors.value.push(t(`validation.${allInputs[i].name}`));
+          }
+      }
+  }
+
+  const getSettings = async () => {
+    loading.value = true;
+    await axios.get(`SettingHome`, config.value).then(res => {
+    if (response(res) == "success") {
+        settingsData.value = res.data.data;
+        console.log(settingsData.value, "settingsData");
+    }   
+    loading.value = false;
+    }).catch(err => {
+        console.error(err);
+    });
+  };
+
+  const forgetPassword = async () => {
+        try {
+            formloading.value = true;
+            const fd = new FormData(forgetForm.value);
+            validate();
+
+            if (errors.value.length) {
+                errorToast(errors.value[0]);
+                return;
+            }
+
+            const res = await axios.post(`SendCode?email=${email.value}&accountType=${user.value.platformType}`);
+            if (response(res) === "success") {
+                successToast(res.data.message);
+                navigateTo('/emailActivateCode');
+                newemail.value = email.value;
+            } else {
+                errorToast(res.data.msg);
+            }
+        } catch (err) {
+            console.error(err);
+            formloading.value = true;
+            errorToast('An error occurred. Please try again.');
+        } finally {
+            formloading.value = false;
+            errors.value = [];
+        }
+  }
+
+  onBeforeMount( async () => {
+      await getSettings();
+  });
   
   const deletedAcount = async () => {
     delete_Successfully.value = true;

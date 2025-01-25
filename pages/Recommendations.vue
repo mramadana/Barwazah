@@ -43,7 +43,13 @@
 
     const { user } = storeToRefs(store);
 
+    const { response } = responseApi();
+
+    const axios = useApi();
+
     const dataReady = ref(false);
+
+    const loading = ref(true);
 
     const productsData = ref({
         labels: [
