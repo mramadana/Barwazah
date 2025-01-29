@@ -90,6 +90,6 @@ const handleMonthChange = async (monthId) => {
 
 
 onMounted(async () => {
-  await getData(0); // تحميل بيانات جميع الشهور عند بدء التطبيق
+  await getData(0);
 });
 </script>

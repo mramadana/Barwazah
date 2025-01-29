@@ -1,18 +1,5 @@
 <template>
   <div v-if="dataReady" class="w-100">
-    <!-- <div class="radio-container">
-      <input type="radio" id="radio1" name="slider" value="1" @change="handleRentalTypeChange">
-      <label for="radio1" class="main-cl">للمتجر</label>
-
-      <input type="radio" id="radio2" name="slider" value="0" @change="handleRentalTypeChange" checked>
-      <label for="radio2">الكل</label>
-
-      <input type="radio" id="radio3" name="slider" value="2" @change="handleRentalTypeChange">
-      <label for="radio3" class="cl-red">للسوق</label>
-
-      <div class="marker"></div>
-    </div> -->
-
 
     <div class="radio-container">
       <input type="radio" :id="`radio1-${uniqueId}`" :name="`slider-${uniqueId}`" value="1" @change="handleRentalTypeChange">
@@ -48,7 +35,7 @@
 </template>
 
 <script setup>
-
+import { ref, onMounted, onBeforeMount, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 const echarts = await import('echarts/core');
 
@@ -57,42 +44,41 @@ const props = defineProps({
   initialAllMonths: { type: Array, required: true },
   initialOption: { type: Object, required: true },
   initialMonthlyData: { type: Object, required: true },
-  // first data render
   initialSeriesData: { type: Array, required: true },
 });
 
-const emit = defineEmits(['rental-type-change']);
+const emit = defineEmits(['rental_change']);
 const uniqueId = ref(Math.random().toString(36).substr(2, 9));
-
 const { t } = useI18n();
 
-// State
 const dataReady = ref(false);
 const selectedMonth = ref({ id: 0 });
 const months = ref(props.initialMonths);
 const Allmonths = ref(props.initialAllMonths);
-// const option = ref(props.initialOption);
 const manualMonthlyData = ref(props.initialMonthlyData);
 
-// Ref for the chart instance
 const chart = ref(null);
 
+const generateDailyData = (days) => {
+  return Array.from({ length: days }, () => 0);
+};
+
 const handleMonthChange = () => {
-  // Validate selected month
+  console.log("handleMonthChange triggered", selectedMonth.value);
   if (!selectedMonth.value || typeof selectedMonth.value.id === "undefined") {
     console.error("Invalid selected month: ", selectedMonth.value);
     return;
   }
+  emit('rental_change', selectedMonth.value.id);
+  console.log("Emitted rental_change with ID:", selectedMonth.value.id);
 
   const monthId = selectedMonth.value.id;
 
   if (monthId === 0) {
-    // Handle "عرض كل البيانات" (Show All Data)
     option.value.xAxis.data = Allmonths.value;
     option.value.series[0].data = props.initialSeriesData[0] || [];
     option.value.series[1].data = props.initialSeriesData[1] || [];
   } else {
-    // Retrieve the selected month data
     const selectedMonthData = months.value.find((month) => month.id === monthId);
 
     if (!selectedMonthData) {
@@ -103,33 +89,26 @@ const handleMonthChange = () => {
     const days = selectedMonthData.days;
     const dailyLabels = Array.from({ length: days }, (_, i) => `اليوم ${i + 1}`);
 
-    // Update xAxis configuration
     option.value.xAxis = {
       type: 'category',
       boundaryGap: false,
       data: dailyLabels,
       axisLabel: {
-        interval: 0, // Show all days
-        rotate: 45,  // Rotate labels for better readability
+        interval: 0,
+        rotate: 45,
       },
     };
 
-    // Check for manual data for the month
     const customData = manualMonthlyData.value[monthId];
     if (customData) {
-      
-      // Use manual data if available
-      option.value.series[0].data = customData.store; // Females data
-      option.value.series[1].data = customData.market; // Males data
-      console.log("Custom Data:", customData.store, customData.market);
+      option.value.series[0].data = customData.store || [];
+      option.value.series[1].data = customData.market || [];
     } else {
-      // Generate random data if manual data is unavailable
-      option.value.series[0].data = generateDailyData(days); // Females
-      option.value.series[1].data = generateDailyData(days); // Males
+      option.value.series[0].data = generateDailyData(days);
+      option.value.series[1].data = generateDailyData(days);
     }
   }
 
-  // Update the chart instance with the new options
   if (chart.value?.chart) {
     chart.value.chart.setOption(option.value, true);
   } else {
@@ -138,14 +117,14 @@ const handleMonthChange = () => {
 };
 
 const option = ref({
-    legend: {
-      top: '5%',
-      show: false,
-      selected: {
-          [t('Global.females')]: true,
-          [t('Global.males')]: true,  
-        },
+  legend: {
+    top: '5%',
+    show: false,
+    selected: {
+      [t('Global.females')]: true,
+      [t('Global.males')]: true,
     },
+  },
   tooltip: {
     trigger: 'axis',
     axisPointer: { type: 'cross', label: { backgroundColor: '#6a7985' } },
@@ -155,7 +134,6 @@ const option = ref({
     right: '4%',
     bottom: '3%',
     containLabel: true,
-    
   },
   xAxis: {
     type: 'category',
@@ -168,7 +146,7 @@ const option = ref({
   },
   series: [
     {
-    name: t('Global.females'),
+      name: t('Global.females'),
       type: 'line',
       smooth: true,
       symbol: 'square',
@@ -185,7 +163,7 @@ const option = ref({
       data: [],
     },
     {
-    name: t('Global.males'),
+      name: t('Global.males'),
       type: 'line',
       smooth: true,
       symbol: 'square',
@@ -202,64 +180,78 @@ const option = ref({
       data: [],
     },
   ],
-})
+});
 
-// فى حالة ان method ها تتعمل ف الـ parent ، شغل دى 
-
-// const handleRentalTypeChange = (event) => {
-//   const rentalType = Number(event.target.value); // Get the selected value
-//   console.log('Rental Type Change in Child:', rentalType); // Debugging output
-
-//   // Emit the event to the parent
-//   emit('rental-type-change', rentalType);
-// };
-
-// Initialize data
-
-// فى حالة ان method ها تتعمل ف الـ child ، شغل دى
 const handleRentalTypeChange = (event) => {
-    console.log('Rental Type Change:', event.target.value); // Check value
-    const selectedRental = { id: Number(event.target.value) };
-  
-    if (selectedRental) {
-      const chartInstance = chart.value?.chart;
-      if (!chartInstance) return;
-  
-      switch (selectedRental.id) {
-        case 0: // Show All (both males and females)
-          option.value.legend.selected[t('Global.females')] = true;
-          option.value.legend.selected[t('Global.males')] = true;
-          break;
-        case 1: // Males Only
-          option.value.legend.selected[t('Global.females')] = false;
-          option.value.legend.selected[t('Global.males')] = true;
-          break;
-        case 2: // Females Only
-          option.value.legend.selected[t('Global.females')] = true;
-          option.value.legend.selected[t('Global.males')] = false;
-          break;
-      }
-      chartInstance.setOption(option.value, true);
+  const selectedRental = { id: Number(event.target.value) };
+
+  if (selectedRental) {
+    const chartInstance = chart.value?.chart;
+    if (!chartInstance) return;
+
+    switch (selectedRental.id) {
+      case 0:
+        option.value.legend.selected[t('Global.females')] = true;
+        option.value.legend.selected[t('Global.males')] = true;
+        break;
+      case 1:
+        option.value.legend.selected[t('Global.females')] = false;
+        option.value.legend.selected[t('Global.males')] = true;
+        break;
+      case 2:
+        option.value.legend.selected[t('Global.females')] = true;
+        option.value.legend.selected[t('Global.males')] = false;
+        break;
     }
-  };
+    chartInstance.setOption(option.value, true);
+  }
+};
 
+// مراقبة التغييرات في البيانات الشهرية
+watch(() => props.initialMonthlyData, (newData) => {
+  if (selectedMonth.value && selectedMonth.value.id !== 0) {
+    const monthId = selectedMonth.value.id;
+    const monthData = newData[monthId];
+    if (monthData) {
+      option.value.series[0].data = monthData.store || [];
+      option.value.series[1].data = monthData.market || [];
+      if (chart.value?.chart) {
+        chart.value.chart.setOption(option.value, true);
+      }
+    }
+  }
+}, { deep: true });
 
+// مراقبة التغييرات في البيانات الأولية
+watch(() => props.initialSeriesData, (newValue) => {
+  if (newValue && Array.isArray(newValue) && newValue.length > 0) {
+    option.value.series[0].data = newValue[0] || [];
+    option.value.series[1].data = newValue[1] || [];
+    if (chart.value?.chart) {
+      chart.value.chart.setOption(option.value, true);
+    }
+  }
+}, { deep: true, immediate: true });
 
 onBeforeMount(() => {
   dataReady.value = true;
   option.value.xAxis.data = Allmonths.value;
-  // Use series data from props
-  option.value.series[0].data = props.initialSeriesData[0] || [];
-  option.value.series[1].data = props.initialSeriesData[1] || [];
+  
+  // Set initial data
+  if (Array.isArray(props.initialSeriesData) && props.initialSeriesData.length >= 2) {
+    option.value.series[0].data = props.initialSeriesData[0] || [];
+    option.value.series[1].data = props.initialSeriesData[1] || [];
+  }
 });
 
-
+onMounted(() => {
+  if (chart.value?.chart) {
+    chart.value.chart.setOption(option.value, true);
+  }
+});
 </script>
 
-
 <style>
-
-
 .radio-container {
   position: relative;
   width: 500px;
@@ -274,50 +266,18 @@ onBeforeMount(() => {
 }
 
 .radio-container label {
-  position: relative;
-  z-index: 2;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
-  transition: color 0.3s;
 }
 
 .marker {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
-  border-radius: 15px;
+  transform: translate(-50%, -50%);
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #e63950, #1e1a3c); 
-  transition: all 0.5s cubic-bezier(0.42, 0, 0.58, 1); 
+  background: linear-gradient(135deg, #e63950, #1e1a3c);
 }
-
-.radio-container input[type="radio"] {
-  display: none; 
-}
-
-
-.radio-container input[type="radio"]:checked ~ .marker {
-  transition: left 0.3s ease-in-out;
-}
-
-.radio-container input[type="radio"]:nth-of-type(1):checked ~ .marker {
-  left: calc(100% - 40px);
-}
-
-.radio-container input[type="radio"]:nth-of-type(2):checked ~ .marker {
-  left: 50%;
-}
-
-.radio-container input[type="radio"]:nth-of-type(3):checked ~ .marker {
-  left: calc(10% - 10px);
-}
-
-/* تغيير لون النص عند التحديد */
-.radio-container input[type="radio"]:checked + label {
-  color: white !important;
-}
-
 </style>

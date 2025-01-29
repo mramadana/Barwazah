@@ -1,92 +1,102 @@
 <template>
+  <div v-if="dataReady" class="w-100">
+    <VChart ref="chart" :option="option" style="height: 300px; width: 100%; display: block" />
+  </div>
+</template>
 
-    <div v-if="dataReady" class="w-100">
+<script setup>
+import * as echarts from 'echarts/core';
+import { GridComponent, TooltipComponent } from 'echarts/components';
+import { BarChart } from 'echarts/charts';
+import { CanvasRenderer } from 'echarts/renderers';
 
-      <VChart ref="chart" :option="option" style="height: 300px; width: 100%; display: block" />
+echarts.use([GridComponent, TooltipComponent, BarChart, CanvasRenderer]);
 
-    </div>
+const dataReady = ref(false);
+const chart = ref(null);
+const { token } = storeToRefs(useAuthStore());
+const axios = useApi();
+const { response } = responseApi();
+const visitorsData = ref({
+  data: [] // Initialize with empty array
+});
 
-  </template>
-  
-  <script setup>
+const config = computed(() => ({
+  headers: { Authorization: `Bearer ${token.value}` }
+}));
 
-    import * as echarts from 'echarts/core';
-    import { GridComponent } from 'echarts/components';
-    import { BarChart } from 'echarts/charts';
-    import { CanvasRenderer } from 'echarts/renderers';
-
-    echarts.use([GridComponent, BarChart, CanvasRenderer]);
-
-    const dataReady = ref(false);
-    const chart = ref(null);
-
-    const option = ref({
-        grid: {
-            left: '5%',
-            right: '5%',
-            top: '10%',
-            bottom: '10%',
-            containLabel: true,
+const option = computed(() => ({
+  grid: {
+    left: '5%',
+    right: '5%',
+    top: '10%',
+    bottom: '10%',
+    containLabel: true,
+  },
+  xAxis: {
+    type: 'category',
+    data: visitorsData.value.data?.map(item => item.name) || [],
+    axisLabel: {
+      interval: 0,
+      rotate: -45,
+    },
+  },
+  yAxis: {
+    type: 'value',
+    axisLabel: {
+      formatter: '{value} %',
+    },
+  },
+  tooltip: {
+    trigger: 'item',
+    formatter: '{b}: {c}%',
+  },
+  series: [
+    {
+      data: visitorsData.value.data?.map(item => item.value) || [],
+      type: 'bar',
+      barWidth: '50%',
+      itemStyle: {
+        color: (params) => {
+          const colors = [
+            '#c1c1c1',
+            '#c1c1c1',
+            '#c1c1c1',
+            '#d9534f',
+            '#c1c1c1',
+            '#d9534f',
+          ];
+          return colors[params.dataIndex];
         },
-        xAxis: {
-            type: 'category',
-            data: [
-            'البريد الإلكتروني',
-            'التواصل الاجتماعي',
-            'بحث مدفوع',
-            'الظهور المحلي',
-            'إحالة',
-            'مباشر',
-            ],
-            axisLabel: {
-            interval: 0,
-            rotate: -45,
-            
-             // Rotate labels for readability
-            },
-        },
-        yAxis: {
-            type: 'value',
-            axisLabel: {
-            formatter: '{value} %', // Add percentage sign
-            },
-        },
-        tooltip: {
-            trigger: 'item',
-            formatter: '{b}: {c}%',
-        },
-        series: [
-            {
-            data: [0.28, 0.48, 0.8, 17.18, 5.89, 75.28],
-            type: 'bar',
-            barWidth: '50%',
-            itemStyle: {
-                color: (params) => {
-                const colors = [
-                    '#c1c1c1',
-                    '#c1c1c1',
-                    '#c1c1c1',
-                    '#d9534f',
-                    '#c1c1c1',
-                    '#d9534f',
-                ];
-                return colors[params.dataIndex];
-                },
-                borderRadius: [5, 5, 0, 0], // Rounded top corners
-            },
-            label: {
-                show: true,
-                position: 'top',
-                formatter: '{c}%',
-                fontSize: 12,
-                color: '#000',
-            },
-            },
-        ],
-    });
-    
-    onMounted(() => {
-        dataReady.value = true;
-    })
-  </script>
+        borderRadius: [5, 5, 0, 0],
+      },
+      label: {
+        show: true,
+        position: 'top',
+        formatter: '{c}%',
+        fontSize: 12,
+        color: '#000',
+      },
+    },
+  ],
+}));
 
+const getVisitors = async () => {
+  try {
+    const res = await axios.get('VisitorMovement', config.value);
+    if (response(res) === "success") {
+      visitorsData.value = res.data;
+      console.log(visitorsData.value, "visitorsData");
+      if (chart.value?.chart) {
+        chart.value.chart.setOption(option.value);
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  } finally {
+    dataReady.value = true;
+  }
+};
+
+onMounted(getVisitors);
+</script>

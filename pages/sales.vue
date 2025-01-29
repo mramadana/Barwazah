@@ -77,7 +77,7 @@
                             :data-ready="dataReady"
                             :months="months"
                             :all-months="allMonths"
-                            :manual-data="manualMonthlyData"
+                            :manual-data="manualMonthlyDataOrder"
                             :initial-data="initialData"/>
                         </div>
                     </div>
@@ -107,10 +107,10 @@
                         <ChartsGradientArea
                             :initialMonths="months"
                             :initialAllMonths="allMonths"
-                            :initialOption="chartOptions"
                             :initialMonthlyData="manualMonthlyData"
-                            @rental-type-change="handleRentalTypeChange"
-                            :initialSeriesData="seriesData"
+                            :initialSeriesData="SalesseriesData"
+                            :loading="loading"
+                            @rental_change="handleMonthChange"
                         />
                         </div>
                     </div>
@@ -131,14 +131,12 @@ definePageMeta({
 const store = useAuthStore();
 
 
-const { token, user } = storeToRefs(store);
 
 
 </script> -->
 
 <script setup>
 
-import { ref, onBeforeMount } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 definePageMeta({
@@ -206,7 +204,7 @@ const initialData = ref({
 });
 
 // Manual monthly data
-const manualMonthlyData = {
+const manualMonthlyDataOrder = {
     1: { 
         store: [10, 20, 15, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160]
     },
@@ -245,6 +243,11 @@ const manualMonthlyData = {
     },
 };
 
+const loading = ref(true);
+const backendData = ref(null);
+const SalesseriesData = ref([[], []]);
+const manualMonthlyData = ref({});
+
 // data for chart bar (Bar chart)
 
 const sourceData = ref([
@@ -272,20 +275,63 @@ const productsData = ref({
 
 // ******************** method ********************//
 
-const getSalesData = async () => {
-    await axios.get(`AverageShoppingCartSize`, config.value).then(res => {
-    if (response(res) == "success") {
-        salesData.value = res.data.data;
-        console.log(salesData.value, "salesData");
-    }   
-    }).catch(err => {
-        console.error(err);
-    });
-}
+// const getSalesData = async () => {
+//     await axios.get(`AverageShoppingCartSize`, config.value).then(res => {
+//     if (response(res) == "success") {
+//         salesData.value = res.data.data;
+//         console.log(salesData.value, "salesData");
+//     }   
+//     }).catch(err => {
+//         console.error(err);
+//     });
+// }
 
-onMounted( async () => {
-    await getSalesData();
+// get sales chart Data 
+
+// تحميل البيانات من API
+const getData = async (monthId = 0) => {
+  loading.value = true;
+  try {
+    console.log(`Fetching data for monthId: ${monthId}`);
+    const res = await axios.get(`AverageShoppingCartSize?type=0&filterByMonth=${monthId}`, config.value);
+    if (response(res) === "success") {
+      const data = res.data.data;
+      if (monthId === 0) {
+        SalesseriesData.value = [
+          data.marketData.map(item => item.value),
+          data.storeDataData.map(item => item.value)
+        ];
+      } else {
+        const dailyData = {
+          market: data.marketData.map(item => item.value),
+          store: data.storeDataData.map(item => item.value)
+        };
+        manualMonthlyData.value[monthId] = dailyData;
+        console.log("Updated manualMonthlyData:", manualMonthlyData.value);
+      }
+      backendData.value = data;
+    }
+  } catch (err) {
+    console.error("Error fetching data:", err);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleMonthChange = async (monthId) => {
+  console.log(`Handling month change for monthId: ${monthId}`);
+  await getData(monthId);
+  console.log("manualMonthlyData.value after update:", manualMonthlyData.value);
+};
+
+
+onMounted(async () => {
+  await getData(0);
 });
+
+// onMounted( async () => {
+//     await getSalesData();
+// });
 
 onBeforeMount(() => {
   dataReady.value = true;
@@ -296,3 +342,69 @@ onBeforeMount(() => {
   };
 });
 </script>
+
+
+<style>
+
+
+.radio-container {
+  position: relative;
+  width: 500px;
+  background-color: #f4f9fd;
+  border-radius: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  margin: 0 auto 35px;
+  max-width: 100%;
+}
+
+.radio-container label {
+  position: relative;
+  z-index: 2;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-radius: 15px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #e63950, #1e1a3c); 
+  transition: all 0.5s cubic-bezier(0.42, 0, 0.58, 1); 
+}
+
+.radio-container input[type="radio"] {
+  display: none; 
+}
+
+
+.radio-container input[type="radio"]:checked ~ .marker {
+  transition: left 0.3s ease-in-out;
+}
+
+.radio-container input[type="radio"]:nth-of-type(1):checked ~ .marker {
+  left: calc(100% - 40px);
+}
+
+.radio-container input[type="radio"]:nth-of-type(2):checked ~ .marker {
+  left: 50%;
+}
+
+.radio-container input[type="radio"]:nth-of-type(3):checked ~ .marker {
+  left: calc(10% - 10px);
+}
+
+/* تغيير لون النص عند التحديد */
+.radio-container input[type="radio"]:checked + label {
+  color: white !important;
+}
+
+</style>
