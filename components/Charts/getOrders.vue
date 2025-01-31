@@ -105,12 +105,12 @@ const option = ref({
       symbol: 'square',
       symbolSize: 7,
       showSymbol: true,
-      lineStyle: { width: 2, color: '#4681f4' },
-      itemStyle: { color: '#013660' },
+      lineStyle: { width: 2, color: '#e5254a' },
+      itemStyle: { color: '#e5254a' },
       areaStyle: {
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: 'rgba(70, 129, 244, 0.6)' },
-          { offset: 1, color: 'rgba(70, 129, 244, 0.2)' },
+          { offset: 0, color: 'rgba(247, 92, 92, 0.6)' },
+          { offset: 1, color: 'rgba(247, 92, 92, 0.2)' },
         ]),
       },
       data: []
@@ -123,19 +123,20 @@ const getPeakTimeData = async (monthId = 0) => {
   loading.value = true;
   try {
     const res = await axios.get(`${props.apiEndpoint}${monthId ? `?filterByMonth=${monthId}` : ''}`, config.value);
-    console.log('API Response:', res.data); // طباعة البيانات المرجعة
+    console.log('API Response:', res.data);
 
     if (response(res) === "success") {
-      // التحقق من وجود البيانات
-      if (!res.data?.data?.peakTimeData) {
-        console.log('No peakTimeData found in response');
+      // التحقق من وجود البيانات في أي من الهيكلين
+      const data = res.data?.data?.peakTimeData || res.data?.data?.requestRateData;
+      
+      if (!data) {
+        console.log('No data found in response');
         option.value.xAxis.data = [];
         option.value.series[0].data = [];
         return;
       }
 
-      const data = res.data.data.peakTimeData;
-      console.log('Chart Data:', data); // طباعة بيانات الرسم البياني
+      console.log('Chart Data:', data);
       chartData.value = data;
       
       try {

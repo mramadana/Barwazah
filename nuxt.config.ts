@@ -1,4 +1,5 @@
 export default defineNuxtConfig({
+  ssr: true,
   performance: {
     gzip: true, // Enable Gzip compression
     brotli: true, // Enable Brotli compression

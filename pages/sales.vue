@@ -51,34 +51,11 @@
                         <ChartsGradientArea
                             :initialMonths="months"
                             :initialAllMonths="allMonths"
-                            :initialOption="chartOptions"
-                            :initialMonthlyData="manualMonthlyData"
-                            @rental-type-change="handleRentalTypeChange"
-                            :initialSeriesData="seriesData"
+                            :initialMonthlyData="manualMonthlyData_2"
+                            :initialSeriesData="SalesseriesData_2"
+                            @rental_change="handleSalesMonthChange"
+                            :loading="loading"
                         />
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                        <div class="layout-form">
-                            <ChartsBar :source-data="sourceData" />
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                        <div class="layout-form chart_layout">
-                            <ChartsTimeLimit />
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                        <div class="layout-form chart_layout">
-                            <ChartsOrders 
-                            :data-ready="dataReady"
-                            :months="months"
-                            :all-months="allMonths"
-                            :manual-data="manualMonthlyDataOrder"
-                            :initial-data="initialData"/>
                         </div>
                     </div>
 
@@ -93,9 +70,24 @@
                         </div>
                     </div>
 
-                    <div class="col-6">
+                    <div class="col-12 col-md-6">
                         <div class="layout-form chart_layout">
-                            <ChartsVisitors />
+                          <h3 class="main-title bold lg text-center mb-4">وقت الذروة</h3>
+                            <ChartsTimeLimit apiEndpoint="GetPeakTime" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <div class="layout-form chart_layout">
+                          <h3 class="main-title bold text-center mb-3">معدل الطلبات</h3>
+                            <ChartsGetOrders apiEndpoint="GetRequestRateChartData"/>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <div class="layout-form">
+                          <h3 class="main-title bold lg text-center mb-4">التحليل الديموغرافى</h3>
+                            <ChartsBar :source-data="sourceData" />
                         </div>
                     </div>
 
@@ -148,10 +140,11 @@ const { t } = useI18n();
 // **************** Data ******************//
 
 const { response } = responseApi();
-const { successToast, errorToast } = toastMsg();
 const axios = useApi();
 
-const salesData = ref([]);
+const HomeSalesData = ref([]);
+
+const CommonProducts = ref([]);
 // config
 const config = computed(()=> {
     return { headers: { Authorization: `Bearer ${token.value}` } }
@@ -246,49 +239,70 @@ const manualMonthlyDataOrder = {
 const loading = ref(true);
 const backendData = ref(null);
 const SalesseriesData = ref([[], []]);
+const SalesseriesData_2 = ref([[], []]);
 const manualMonthlyData = ref({});
-
+const manualMonthlyData_2 = ref({});
 // data for chart bar (Bar chart)
 
-const sourceData = ref([
-  ['label 1', 43.3, 85.8],
-  ['label 2', 83.1, 73.4],
-  ['label 3', 86.4, 65.2],
-  ['label 4', 72.4, 53.9],
-  ['label 5', 43.3, 85.8],
-  ['Ramadan', 83.1, 73.4],
-]);
-
-const productsData = ref({
-  labels: [
-    { id: 1303, text: 'منتج 1', image: "https://dashboard.awamer-store.4hoste.com/public/storage/images/products_files/1731314993_9381.png" },
-    { id: 1304, text: 'منتج 2', image: "https://dashboard.awamer-store.4hoste.com/public/storage/images/products_files/1731314993_2573.jpg" },
-    { id: 1305, text: 'منتج 3', image: "https://dashboard.awamer-store.4hoste.com/public/storage/images/products_files/1731314993_9843.png" },
-    { id: 1306, text: 'منتج 4', image: "https://dashboard.awamer-store.4hoste.com/public/storage/images/products_files/1731314993_6201.png" },
-  ],
-  series: [12.32, 11.7, 10.38, 9.32],
-  colors: {
-    bar: '#f75c5c',
-    text: '#ffffff'
-  }
-});
+const sourceData = ref([]);
 
 // ******************** method ********************//
 
-// const getSalesData = async () => {
-//     await axios.get(`AverageShoppingCartSize`, config.value).then(res => {
-//     if (response(res) == "success") {
-//         salesData.value = res.data.data;
-//         console.log(salesData.value, "salesData");
-//     }   
-//     }).catch(err => {
-//         console.error(err);
-//     });
-// }
+// Get Home Sales Data
 
-// get sales chart Data 
+const productsData = computed(() => {
+  if (!CommonProducts.value) return {
+    labels: [],
+    series: [],
+    colors: {
+      bar: '#f75c5c',
+      text: '#ffffff'
+    }
+  };
 
-// تحميل البيانات من API
+  return {
+    labels: CommonProducts.value.map(commonProduct => ({
+      id: commonProduct.id,
+      text: commonProduct.name,
+      image: commonProduct.logo
+    })),
+    series: CommonProducts.value.map(commonProduct => Number(commonProduct.saleRate.toFixed(2))),
+    colors: {
+      bar: '#f75c5c',
+      text: '#ffffff'
+    }
+  };
+});
+
+
+const getHomeSales = async () => {
+    loading.value = true;
+    await axios.get(`GetSalesHomeStaticData`, config.value).then(res => {
+    if (response(res) == "success") {
+        HomeSalesData.value = res.data.data;
+        console.log(HomeSalesData.value.commonProducts, "HomeData");
+    }   
+    loading.value = false;
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
+const GetCommonProducts = async () => {
+    loading.value = true;
+    await axios.get(`GetSalesCommonProductsData`, config.value).then(res => {
+    if (response(res) == "success") {
+        CommonProducts.value = res.data.data;
+        console.log(CommonProducts.value, "HomeData");
+    }   
+    loading.value = false;
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
+// get sales chart Data (شارت المبيعات)
+
 const getData = async (monthId = 0) => {
   loading.value = true;
   try {
@@ -318,15 +332,77 @@ const getData = async (monthId = 0) => {
   }
 };
 
+// get sales chart Data (شارت متوسط حجم شراء السلة)
+const getSalesData = async (monthId = 0) => {
+  loading.value = true;
+  try {
+    console.log(`Fetching data for monthId: ${monthId}`);
+    const res = await axios.get(`GetSalesChartData?type=0&filterByMonth=${monthId}`, config.value);
+    if (response(res) === "success") {
+      const data = res.data.data;
+      if (monthId === 0) {
+        SalesseriesData_2.value = [
+          data.marketData.map(item => item.value),
+          data.storeDataData.map(item => item.value)
+        ];
+      } else {
+        const dailyData = {
+          market: data.marketData.map(item => item.value),
+          store: data.storeDataData.map(item => item.value)
+        };
+        manualMonthlyData_2.value[monthId] = dailyData;
+        console.log("Updated manualMonthlyData:", manualMonthlyData_2.value);
+      }
+      backendData.value = data;
+    }
+  } catch (err) {
+    console.error("Error fetching data:", err);
+  } finally {
+    loading.value = false;
+  }
+};
+
+// get demographic data (تشارت التحليل الديموغرافي)
+const getDemographicData = async () => {
+  loading.value = true;
+  try {
+    const res = await axios.get(`DemographicDataChartData?GenderType=0`, config.value);
+    if (response(res) === "success") {
+      const demographicData = res.data.data;
+      if (Array.isArray(demographicData)) {
+        sourceData.value = demographicData;
+        console.log("Updated Source Data:", sourceData.value);
+        // نستخدم البيانات مباشرة كما هي من الـ API
+      } else {
+        console.error("demographicData is not an array:", demographicData);
+      }
+    }
+  } catch (err) {
+    console.error("Error fetching demographic data:", err);
+  } finally {
+    loading.value = false;
+  }
+};
+
 const handleMonthChange = async (monthId) => {
   console.log(`Handling month change for monthId: ${monthId}`);
   await getData(monthId);
   console.log("manualMonthlyData.value after update:", manualMonthlyData.value);
 };
 
+const handleSalesMonthChange = async (monthId) => {
+  console.log(`Handling month change for monthId: ${monthId}`);
+  await getSalesData(monthId);
+  console.log("manualMonthlyData.value after update:", manualMonthlyData.value);
+};
+
 
 onMounted(async () => {
   await getData(0);
+  await getSalesData(0);
+  await getDemographicData();
+  await getHomeSales();
+  await GetCommonProducts();
 });
 
 // onMounted( async () => {

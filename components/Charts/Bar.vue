@@ -7,14 +7,13 @@
               desc="SSR + client-side lazy loading"
               style="height: 300px; width: 100%; display: block"
             >
-
             <div class="d-flex align-items-center justify-content-center gap-4">
                 <label class="label mb-0">
-                    {{$t('Global.gender')}}
+                    <!-- {{$t('Global.gender')}} -->
                 </label>
                 <div class="with_cun_select custom-select">
                     <div class="flex justify-content-center dropdown_card">
-                        <Dropdown v-model="rentalType" @change="handleRentalTypeChange" :options="rentals" optionLabel="name" :placeholder="$t('Global.show_all')" class="w-full md:w-14rem custum-dropdown" />
+                        <Dropdown v-model="rentalType" @change="handleRentalTypeChange" :options="rentals" optionLabel="name" :placeholder="$t('Global.show_all')" class="custum-dropdown" />
                     </div>
                 </div>
             </div>
@@ -22,143 +21,167 @@
             </NExample>
         </div>
     </div>
-  </template>
+</template>
   
-  <script setup>
-  import { ref, onMounted, nextTick } from 'vue';
-  const echarts = await import('echarts/core');
-  import { LegendComponent, TooltipComponent, GridComponent, DatasetComponent } from 'echarts/components';
-  import { useI18n } from 'vue-i18n';
+<script setup>
+import { ref, onMounted, nextTick, watch } from 'vue';
+const echarts = await import('echarts/core');
+import { LegendComponent, TooltipComponent, GridComponent, DatasetComponent } from 'echarts/components';
+import { useI18n } from 'vue-i18n';
   
-  const { t } = useI18n();
+const { t } = useI18n();
   
-  echarts.use([
+echarts.use([
     LegendComponent,
     TooltipComponent,
     GridComponent,
     DatasetComponent,
-  ]);
+]);
   
-    // Define props
-  const props = defineProps({
-    sourceData: { type: Array, required: true }, // Source data passed from the parent
-  });
-  const chart = ref(null);
-  const toggleVisibility = ref(null);
-  const otherToggleVisibility = ref(null);
-  const rentalType = ref(null);
+const props = defineProps({
+    sourceData: { type: Array, required: true },
+});
+
+const chart = ref(null);
+const rentalType = ref(null);
   
-  const rentals = ref([
+const rentals = ref([
     { name: t('Global.show_all'), id: 0 },
     { name: t('Global.males'), id: 1 },
     { name: t('Global.females'), id: 2 },
-  ])
+]);
 
- 
-  const option = ref({
+const option = ref({
     animation: true,
     animationDuration: 1000,
     animationEasing: 'cubicOut',
     legend: {
-      top: '92%',
-      itemGap: 50,
-      selected: {
-        [t('Global.females')]: true,
-        [t('Global.males')]: true,  
-      },
+        top: '92%',
+        itemGap: 50,
+        selected: {
+            [t('Global.females')]: true,
+            [t('Global.males')]: true,
+        },
     },
-    tooltip: {},
-    dataset: {
-      source: props.sourceData
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
     },
-    xAxis: { type: 'category' },
-    yAxis: { show: false },
+    xAxis: {
+        type: 'category',
+        axisLabel: {
+            interval: 0,
+            rotate: 45
+        }
+    },
+    yAxis: {
+        type: 'value',
+        show: false
+    },
     series: [
-      {
-        name: t('Global.females'),
-        type: 'bar',
-        barGap: '0%',
-        barWidth: 20,
-        itemStyle: { color: '#013660' },
-        showBackground: true,
-        color: '#a9dfd8',
-        
-      },
-      {
-        name: t('Global.males'),
-        type: 'bar',
-        barGap: '0%',
-        barWidth: 20,
-        itemStyle: { color: '#e5254a' },
-        showBackground: true,
-        color: '#a9dfd8',
-        
-        // backgroundStyle: {
-        //     color: 'rgba(43, 43, 54, 1)',
-        // },
-      },
-      
-    ],
-    itemStyle: { borderRadius: [5, 5, 0, 0] },
-  });
-  
+        {
+            name: t('Global.males'),
+            type: 'bar',
+            barGap: '0%',
+            barWidth: 20,
+            itemStyle: {
+                color: '#e5254a',
+                borderRadius: [5, 5, 0, 0]
+            },
+            showBackground: true
+        },
+        {
+            name: t('Global.females'),
+            type: 'bar',
+            barGap: '0%',
+            barWidth: 20,
+            itemStyle: {
+                color: '#013660',
+                borderRadius: [5, 5, 0, 0]
+            },
+            showBackground: true
+        }
+    ]
+});
 
-  function toggleFemalesVisibility() {
-    const chartInstance = chart.value?.chart; 
+// مراقبة التغييرات في sourceData
+watch(() => props.sourceData, (newData) => {
+    if (Array.isArray(newData)) {
+        // تحديث البيانات في الرسم البياني
+        option.value.xAxis.data = newData.map(item => item.ageRange);
+        option.value.series[0].data = newData.map(item => item.maleCount);
+        option.value.series[1].data = newData.map(item => item.femaleCount);
+
+        // تحديث الرسم البياني
+        if (chart.value?.chart) {
+            chart.value.chart.setOption(option.value, true);
+        }
+    }
+}, { deep: true, immediate: true });
+
+function toggleFemalesVisibility() {
+    const chartInstance = chart.value?.chart;
     if (!chartInstance) return;
-  
-    const legendSelected = option.value.legend.selected[t('Global.females')];
+
     option.value.legend.selected[t('Global.females')] = false;
     option.value.legend.selected[t('Global.males')] = true;
-  
-    chartInstance.setOption(option.value, true); 
-  }
-  
-  function toggleMalesVisibility() {
-    const chartInstance = chart.value?.chart; 
+    chartInstance.setOption(option.value, true);
+}
+
+function toggleMalesVisibility() {
+    const chartInstance = chart.value?.chart;
     if (!chartInstance) return;
-  
-    const legendSelected = option.value.legend.selected[t('Global.males')];
+
     option.value.legend.selected[t('Global.males')] = false;
     option.value.legend.selected[t('Global.females')] = true;
-    chartInstance.setOption(option.value, true); 
-  }
-  
-  const showAllData = () => {
+    chartInstance.setOption(option.value, true);
+}
+
+function showAllData() {
+    const chartInstance = chart.value?.chart;
+    if (!chartInstance) return;
+
     option.value.legend.selected[t('Global.females')] = true;
     option.value.legend.selected[t('Global.males')] = true;
-  };
+    chartInstance.setOption(option.value, true);
+}
 
-  const handleRentalTypeChange = (event) => {
-  const selectedRental = event.value;
-
-  if (selectedRental) {
-    switch (selectedRental.id) {
-      case 0:
-        showAllData();
-        break;
-      case 1:
-        toggleMalesVisibility();
-        break;
-      case 2:
-        toggleFemalesVisibility();
-        break;
+const handleRentalTypeChange = (event) => {
+    const selectedRental = event.value;
+    if (selectedRental) {
+        switch (selectedRental.id) {
+            case 0:
+                showAllData();
+                break;
+            case 1:
+                toggleMalesVisibility();
+                break;
+            case 2:
+                toggleFemalesVisibility();
+                break;
+        }
     }
-  }
-  };
-  
-  onMounted(async () => {
+};
 
+onMounted(async () => {
     await nextTick();
-  
-    if (toggleVisibility.value) {
-      toggleVisibility.value.addEventListener('click', toggleFemalesVisibility);
+    if (Array.isArray(props.sourceData)) {
+        option.value.xAxis.data = props.sourceData.map(item => item.ageRange);
+        option.value.series[0].data = props.sourceData.map(item => item.maleCount);
+        option.value.series[1].data = props.sourceData.map(item => item.femaleCount);
+        
+        if (chart.value?.chart) {
+            chart.value.chart.setOption(option.value, true);
+        }
     }
-  
-    if (otherToggleVisibility.value) {
-      otherToggleVisibility.value.addEventListener('click', toggleMalesVisibility);
-    }
+});
+</script>
 
-  });
-  </script>
-  
+<style scoped>
+.label {
+    color: #013660;
+    font-weight: bold;
+}
+</style>

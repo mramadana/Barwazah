@@ -30,8 +30,8 @@
                                 <div class="info-content">
                                     <span>عملاء المتجر</span>
                                     <div class="d-flex align-items-baseline gap-2">
-                                        <h2>1.03</h2>
-                                        <small>ألف</small>
+                                        <h2 v-if="!StoreCustomers?.length && !loading">{{ StoreCustomers }}</h2>
+                                        <Skeleton class="mt-2" v-if="StoreCustomers?.length || loading" width="5rem" height=".5rem"></Skeleton>
                                     </div>
                                 </div>
                                 <img src="@/assets/images/Store.svg" alt="Store Icon">
@@ -116,6 +116,7 @@ const { successToast, errorToast } = toastMsg();
 const axios = useApi();
 
 const HomeData = ref(null);
+const StoreCustomers = ref(null);
 // config
 const config = computed(()=> {
     return { headers: { Authorization: `Bearer ${token.value}` } }
@@ -335,8 +336,21 @@ const getHome = async () => {
     });
 }
 
+const GetStoreCustomers = async () => {
+    loading.value = true;
+    await axios.get(`GetStoreCustomers`, config.value).then(res => {
+    if (response(res) == "success") {
+        StoreCustomers.value = res.data.data;
+    }   
+    loading.value = false;
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
 onBeforeMount( async () => {
     await getHome();
+    await GetStoreCustomers();
     dataReady.value = true;
 });
 </script>

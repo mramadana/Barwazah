@@ -1,29 +1,31 @@
 <template>
   <div>
     <div class="skeleton-chart" v-if="loading">
-    <div class="skeleton-bars">
-      <div class="d-flex align-items-center gap-3 justify-content-end">
-        <Skeleton width="5rem" height=".5rem"></Skeleton>
-        <div class="skeleton-bar" style="width: 80%;"></div>
-      </div>
-      <div class="d-flex align-items-center gap-3 justify-content-end">
-        <Skeleton width="5rem" height=".5rem"></Skeleton>
-        <div class="skeleton-bar" style="width: 60%;"></div>
-      </div>
-      <div class="d-flex align-items-center gap-3 justify-content-end">
-        <Skeleton width="5rem" height=".5rem"></Skeleton>
-        <div class="skeleton-bar" style="width: 40%;"></div>
+      <div class="skeleton-bars">
+        <div class="d-flex align-items-center gap-3 justify-content-end">
+          <Skeleton width="5rem" height=".5rem"></Skeleton>
+          <div class="skeleton-bar" style="width: 80%;"></div>
+        </div>
+        <div class="d-flex align-items-center gap-3 justify-content-end">
+          <Skeleton width="5rem" height=".5rem"></Skeleton>
+          <div class="skeleton-bar" style="width: 60%;"></div>
+        </div>
+        <div class="d-flex align-items-center gap-3 justify-content-end">
+          <Skeleton width="5rem" height=".5rem"></Skeleton>
+          <div class="skeleton-bar" style="width: 40%;"></div>
+        </div>
       </div>
     </div>
-    </div>
-    <div v-if="dataReady && !loading" class="w-100">
-      <VChart ref="chart" :option="option" style="height: 300px; width: 100%; display: block" />
-    </div>
+    <ClientOnly>
+      <div v-if="dataReady && !loading" class="w-100">
+        <VChart ref="chart" :option="option" style="height: 300px; width: 100%; display: block" />
+      </div>
+    </ClientOnly>
   </div>
 </template>
   
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, nextTick } from 'vue';
 import * as echarts from 'echarts/core';
 import {
   TitleComponent,
@@ -45,7 +47,6 @@ echarts.use([
   GraphicComponent
 ]);
 
-// Props from parent
 const props = defineProps({
   dataReady: Boolean,
   productsData: {
@@ -67,13 +68,12 @@ const props = defineProps({
 });
 
 const chart = ref(null);
+const localDataReady = ref(false);
 
-// Preprocess data to generate `rich` object and yAxis labels
 const getRichAndLabels = () => {
   const rich = {};
   const yAxisLabels = props.productsData.labels.map((item) => {
     const key = `img_${item.id}`;
-    // Only add image configuration if image exists
     if (item.image) {
       rich[key] = {
         height: 20,
@@ -91,7 +91,6 @@ const getRichAndLabels = () => {
   return { rich, yAxisLabels };
 };
 
-// ECharts Option
 const option = ref({
   tooltip: {
     trigger: 'axis',
@@ -127,7 +126,6 @@ const option = ref({
       padding: [0, 15, 0, 0],
       formatter: (value, index) => {
         const item = props.productsData.labels[index];
-        // Only add image placeholder if image exists
         return item?.image ? `{img_${item.id}|} ${value}` : value;
       },
       rich: {},
@@ -156,26 +154,37 @@ const option = ref({
   ],
 });
 
-// Watch for changes in productsData
-watch(() => props.productsData, (newData) => {
-  if (newData) {
-    const { rich, yAxisLabels } = getRichAndLabels();
-    option.value.yAxis.data = yAxisLabels;
-    option.value.yAxis.axisLabel.rich = rich;
-    option.value.series[0].data = newData.series;
-    
-    if (chart.value?.chart) {
-      chart.value.chart.setOption(option.value);
-    }
-  }
-}, { deep: true });
+const updateChartData = async () => {
+  if (!props.productsData?.labels?.length) return;
 
-// Initialize chart data on mount
-onMounted(() => {
   const { rich, yAxisLabels } = getRichAndLabels();
   option.value.yAxis.data = yAxisLabels;
   option.value.yAxis.axisLabel.rich = rich;
   option.value.series[0].data = props.productsData.series;
+
+  await nextTick();
+  if (chart.value?.chart) {
+    chart.value.chart.clear();
+    chart.value.chart.setOption(option.value, true);
+  }
+};
+
+watch(() => props.productsData, async () => {
+  if (props.dataReady && !props.loading) {
+    await updateChartData();
+  }
+}, { deep: true, immediate: true });
+
+watch(() => props.dataReady, async (newVal) => {
+  if (newVal && !props.loading) {
+    await updateChartData();
+  }
+});
+
+onMounted(async () => {
+  if (props.dataReady && !props.loading) {
+    await updateChartData();
+  }
 });
 </script>
 
@@ -201,26 +210,12 @@ onMounted(() => {
   animation: pulse 1.5s infinite;
 }
 
-.skeleton-labels {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-width: 50px;
-}
-
-.skeleton-label {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  color: #666;
-}
-
 @keyframes pulse {
   0% {
     opacity: 1;
   }
   50% {
-    opacity: 0.7;
+    opacity: 0.5;
   }
   100% {
     opacity: 1;
