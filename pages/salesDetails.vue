@@ -31,8 +31,8 @@
         </div>
 
         <div class="layout-form">
-            <h2 class="main-title bold text-center mb-5">التحليل الديموغرافي</h2>
-            <ChartsBar :source-data="sourceData" />
+            <!-- <h2 class="main-title bold text-center mb-5">التحليل الديموغرافي</h2> -->
+            <ChartsBar :rental-names="rentalNames" :source-data="sourceData" />
         </div>
 
     </div>
@@ -54,6 +54,12 @@
     // config
     const config = computed(()=> {
         return { headers: { Authorization: `Bearer ${token.value}` } }
+    });
+
+    const rentalNames = ref({
+        showAll: 'معدل الترك',
+        males: 'الاقسام',
+        females: 'المنتجات'
     });
 
     // Data for the products chart

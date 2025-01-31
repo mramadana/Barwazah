@@ -87,7 +87,7 @@
                     <div class="col-12 col-md-6">
                         <div class="layout-form">
                           <h3 class="main-title bold lg text-center mb-4">التحليل الديموغرافى</h3>
-                            <ChartsBar :source-data="sourceData" />
+                            <ChartsBar :rental-names="rentalNames" :source-data="sourceData" />
                         </div>
                     </div>
 
@@ -141,7 +141,11 @@ const { t } = useI18n();
 
 const { response } = responseApi();
 const axios = useApi();
-
+const rentalNames = ref({
+    showAll: 'تحديد الجنس',
+    males: 'الذكور',
+    females: 'الإناث'
+});
 const HomeSalesData = ref([]);
 
 const CommonProducts = ref([]);

@@ -13,7 +13,7 @@
                 </label>
                 <div class="with_cun_select custom-select">
                     <div class="flex justify-content-center dropdown_card">
-                        <Dropdown v-model="rentalType" @change="handleRentalTypeChange" :options="rentals" optionLabel="name" :placeholder="$t('Global.show_all')" class="custum-dropdown" />
+                        <Dropdown v-model="rentalType" @change="handleRentalTypeChange" :options="rentals" optionLabel="name" :placeholder="$t(props.rentalNames.showAll)" class="custum-dropdown" />
                     </div>
                 </div>
             </div>
@@ -40,15 +40,23 @@ echarts.use([
   
 const props = defineProps({
     sourceData: { type: Array, required: true },
+    rentalNames: {
+        type: Object,
+        default: () => ({
+            showAll: 'Global.show_all',
+            males: 'Global.males',
+            females: 'Global.females'
+        })
+    }
 });
 
 const chart = ref(null);
 const rentalType = ref(null);
   
 const rentals = ref([
-    { name: t('Global.show_all'), id: 0 },
-    { name: t('Global.males'), id: 1 },
-    { name: t('Global.females'), id: 2 },
+    { name: t(props.rentalNames.showAll), id: 0 },
+    { name: t(props.rentalNames.males), id: 1 },
+    { name: t(props.rentalNames.females), id: 2 },
 ]);
 
 const option = ref({
@@ -59,8 +67,8 @@ const option = ref({
         top: '92%',
         itemGap: 50,
         selected: {
-            [t('Global.females')]: true,
-            [t('Global.males')]: true,
+            [t(props.rentalNames.females)]: true,
+            [t(props.rentalNames.males)]: true,
         },
     },
     tooltip: {
@@ -82,7 +90,7 @@ const option = ref({
     },
     series: [
         {
-            name: t('Global.males'),
+            name: t(props.rentalNames.males),
             type: 'bar',
             barGap: '0%',
             barWidth: 20,
@@ -93,7 +101,7 @@ const option = ref({
             showBackground: true
         },
         {
-            name: t('Global.females'),
+            name: t(props.rentalNames.females),
             type: 'bar',
             barGap: '0%',
             barWidth: 20,
@@ -125,8 +133,8 @@ function toggleFemalesVisibility() {
     const chartInstance = chart.value?.chart;
     if (!chartInstance) return;
 
-    option.value.legend.selected[t('Global.females')] = false;
-    option.value.legend.selected[t('Global.males')] = true;
+    option.value.legend.selected[t(props.rentalNames.females)] = false;
+    option.value.legend.selected[t(props.rentalNames.males)] = true;
     chartInstance.setOption(option.value, true);
 }
 
@@ -134,8 +142,8 @@ function toggleMalesVisibility() {
     const chartInstance = chart.value?.chart;
     if (!chartInstance) return;
 
-    option.value.legend.selected[t('Global.males')] = false;
-    option.value.legend.selected[t('Global.females')] = true;
+    option.value.legend.selected[t(props.rentalNames.males)] = false;
+    option.value.legend.selected[t(props.rentalNames.females)] = true;
     chartInstance.setOption(option.value, true);
 }
 
@@ -143,8 +151,8 @@ function showAllData() {
     const chartInstance = chart.value?.chart;
     if (!chartInstance) return;
 
-    option.value.legend.selected[t('Global.females')] = true;
-    option.value.legend.selected[t('Global.males')] = true;
+    option.value.legend.selected[t(props.rentalNames.females)] = true;
+    option.value.legend.selected[t(props.rentalNames.males)] = true;
     chartInstance.setOption(option.value, true);
 }
 
