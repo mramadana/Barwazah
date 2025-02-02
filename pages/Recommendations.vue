@@ -1,10 +1,5 @@
 <template>
     <div class="container">
-        
-        <div v-if="user" class="mb-4">
-            <h1 class="main-title bold cl-red">{{ $t("Global.welcome") }} &nbsp; {{ user.name }}</h1>
-            <h3 class="main-title normal main-cl">{{ user.email }}</h3>
-        </div>
 
         <GlobalFAQ />
 
@@ -39,17 +34,7 @@
         name: "Sidebar.recommendations",
     });
 
-    const store = useAuthStore();
-
-    const { user } = storeToRefs(store);
-
-    const { response } = responseApi();
-
-    const axios = useApi();
-
     const dataReady = ref(false);
-
-    const loading = ref(true);
 
     const productsData = ref({
         labels: [

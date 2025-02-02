@@ -48,7 +48,7 @@
 
         <Dialog v-model:visible="successfullySent" modal class="custum_dialog_width without-close" :draggable="false" >
             <div class="text-center">
-                <img src="@/assets/images/check.png" loading="lazy" alt="check-img" class="check-img">
+                <!-- <img src="@/assets/images/check.png" loading="lazy" alt="check-img" class="check-img"> -->
                 <h3 class="main-title bold mb-4">{{ $t('Global.mobile_changed_successfully') }}</h3>
             </div>
         </Dialog>

@@ -22,7 +22,7 @@
                     <div class="hint-img">
                         <img src="@/assets/images/Conversion.svg" alt="hint-img">
                     </div>
-                   <span> {{ $t('Sidebar.conversion') }}</span>
+                   <span> {{ $t('Titles.home') }}</span>
                 </nuxt-link>
 
                 <nuxt-link class="link" to="/sales" :class="{ 'active': isActiveLink('/sales') }">
@@ -61,12 +61,12 @@
                    <span> {{ $t('Sidebar.settings') }}</span>
                 </nuxt-link>
 
-                <nuxt-link class="link" to="/whoarewe" :class="{ 'active': isActiveLink('/whoarewe') }">
+                <div class="link">
                     <div class="hint-img">
                         <img src="@/assets/images/Rectangle.svg" alt="hint-img">
                     </div>
                    <span> {{ $t('Sidebar.store') }}</span>
-                </nuxt-link>
+                  </div>
 
                 <button class="link w-100 transparent" @click="logoutDialog = true">
                     <div class="hint-img">
@@ -77,8 +77,6 @@
             </div>
 
         </div>
-
-        <div id="main" class="overlay-sidebar" @click="$emit('toggle-active')" :class="{ 'show': isActive }"></div>
 
         <!-- start to close Dialog -->
         
@@ -110,8 +108,6 @@
 const props = defineProps({
   isActive: Boolean,
 });
-
-const isActive = ref(false);
 
 const logoutDialog = ref(false);
 
@@ -224,10 +220,8 @@ const toggleSidebar = () => {
   
     if (!mini.value) {
       sidebar.style.width = "230px";
-      main.style.marginLeft = "230px";
     } else {
       sidebar.style.width = "85px";
-      main.style.marginLeft = "85px";
     }
   };
 

@@ -1,0 +1,1 @@
+import{u as r}from"./CVjljgFj.js";import{aB as s,s as u,K as i,l as n}from"./CDjVABWN.js";import{t as p}from"./CsKsy3XR.js";import"./Bwfks3Mu.js";const g=s((t,l)=>{const{token:o}=u(r()),{errorToast:e}=p(),a=i().vueApp.config.globalProperties.$t;if(o.value===null&&t.meta.middleware=="auth")return e(a("validation.requiresAuth")),n("/Auth/login")});export{g as default};

@@ -48,13 +48,15 @@
   definePageMeta({
     layout: 'default'
   })
+
+  const { user } = storeToRefs(useAuthStore());
   </script>
   
   <style scoped>
   .chat-container {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 150px);
     background-color: #fff;
     border-radius: 12px;
     overflow: hidden;

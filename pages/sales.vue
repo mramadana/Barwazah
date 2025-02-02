@@ -6,15 +6,6 @@
 
             <div class="container">
 
-                <div v-if="user">
-                    <h1 class="main-title bold cl-red">{{ $t("Global.welcome") }} &nbsp; {{ user.name }}</h1>
-                    <h3 class="main-title normal main-cl">{{ user.email }}</h3>
-                </div>
-                
-                <div v-else>
-                    <h1 class="main-title bold cl-red"> Home page</h1>
-                </div>
-
                 <div class="row">
                 
                     <div class="col-12 col-md-6 mb-4 info-box">
@@ -23,7 +14,8 @@
                                 <img src="@/assets/images/Sell_products.svg" alt="Store Icon">
                                 <div class="info-content">
                                     <span class="main-cl bold mb-2">معدل بيع منتجات للمتجر</span>
-                                    <h2>26.86 %</h2>
+                                    <h2 v-if="!HomeSalesData?.length && !loading">{{ HomeSalesData?.storeSalesPercent }} %</h2>
+                                    <Skeleton class="mt-3" v-if="HomeSalesData?.length || loading" width="5rem" height=".5rem"></Skeleton>
                                 </div>
                             </div>
                             <h4 class="hint-card">نسبة بيع المنتج الواحد من الكمية الكلية المتوفرة ترجمة الرقم: أنه اذا كانت الكمية الكلية للمنتج هي 100 اذن تم بيع 27 تقريبا</h4>
@@ -36,7 +28,8 @@
                                 <img src="@/assets/images/cart.svg" alt="User Icon">
                                 <div class="info-content">
                                     <span>متوسط عملاء السوق</span>
-                                    <h2>3.95 ألف</h2>
+                                    <h2 v-if="!HomeSalesData?.length && !loading">{{ HomeSalesData?.abondendCartAverage }} </h2>
+                                    <Skeleton class="mt-2" v-if="HomeSalesData?.length || loading" width="5rem" height=".5rem"></Skeleton>
                                 </div>
 
                             </div>
@@ -87,7 +80,7 @@
                     <div class="col-12 col-md-6">
                         <div class="layout-form">
                           <h3 class="main-title bold lg text-center mb-4">التحليل الديموغرافى</h3>
-                            <ChartsBar :rental-names="rentalNames" :source-data="sourceData" />
+                            <ChartsBar :rental-names="rentalNames" :placeholder-text="placeholderText" :source-data="sourceData" />
                         </div>
                     </div>
 
@@ -133,6 +126,7 @@ import { useI18n } from 'vue-i18n';
 
 definePageMeta({
     name: "Titles.sales",
+    middleware: 'auth'
 });
 
 const { t } = useI18n();
@@ -141,8 +135,9 @@ const { t } = useI18n();
 
 const { response } = responseApi();
 const axios = useApi();
+const placeholderText = ref('تحديد الجنس');
 const rentalNames = ref({
-    showAll: 'تحديد الجنس',
+    showAll: 'الكل',
     males: 'الذكور',
     females: 'الإناث'
 });
@@ -284,7 +279,7 @@ const getHomeSales = async () => {
     await axios.get(`GetSalesHomeStaticData`, config.value).then(res => {
     if (response(res) == "success") {
         HomeSalesData.value = res.data.data;
-        console.log(HomeSalesData.value.commonProducts, "HomeData");
+        console.log(HomeSalesData.value, "HomeSalesData");
     }   
     loading.value = false;
     }).catch(err => {

@@ -5,10 +5,10 @@
       <div class="with_cun_select custom-select">
         <div class="flex justify-content-center dropdown_card">
           <Dropdown 
-            v-model="selectedYear" 
-            @change="handleYearChange" 
+            v-model="selectedYear"
             :options="years" 
             optionLabel="name" 
+            @change="handleYearChange($event.value)"
             :placeholder="'اختر السنة'" 
             class="w-full md:w-14rem custum-dropdown" 
           />
@@ -37,18 +37,21 @@
           {{ year }}
         </div>
       </div>
+      <div class="year-text">
+        <h3 class="main-title bold main-cl mb-3">تقرير نمو</h3>
+        <h5>{{ YearText }}</h5>
+      </div>
     </div>
 
-    <!-- Dialog for Year Data -->
-    <Dialog v-model:visible="dialogVisible" modal>
+    <!-- Dialog for Year Data (Business Growth) -->
+    <Dialog v-model:visible="dialogVisible" class="auth-daialog custum_dialog_width" modal>
       <div class="dialog-content">
-        <h3>مؤشرات سنة {{ selectedYearName }}</h3>
+        <h3 class="main-title bold text-center mb-3">مؤشرات سنة {{ selectedYearName }}</h3>
         <ul>
-          <li>مبيعات السنة: <span class="value">{{ yearData.sales }} ريال</span></li>
-          <li>الحصة السوقية للمتجر: <span class="value">{{ yearData.market }}%</span></li>
-          <li>نسبة تكرار الشراء: <span class="value">{{ yearData.repeatRate || 'غير متوفرة' }}%</span></li>
+          <li class="mb-2 d-flex gap-2 justify-content-center mb-3">مبيعات السنة: <span class="value">{{ DialogyearData?.salesYear }}</span></li>
+          <li class="mb-2 d-flex gap-2 justify-content-center mb-3">الحصة السوقية للمتجر: <span class="value">{{ DialogyearData?.storeMarketShare }}</span></li>
+          <li class="mb-2 d-flex gap-2 justify-content-center mb-3">نسبة تكرار الشراء: <span class="value">{{ DialogyearData?.repeatPurchaseRate }}</span></li>
         </ul>
-        <button @click="closeDialog">إغلاق النافذة</button>
       </div>
     </Dialog>
   </div>
@@ -57,6 +60,13 @@
 <script setup>
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
+const axios = useApi();
+const { response } = responseApi();
+const { token } = storeToRefs(useAuthStore());
+const config = computed(() => ({
+  headers: { Authorization: `Bearer ${token.value}` }
+}));
+
 const echarts = await import('echarts/core');
 import { LineChart } from 'echarts/charts';
 import { TooltipComponent, GridComponent, LegendComponent } from 'echarts/components';
@@ -66,49 +76,64 @@ echarts.use([LineChart, TooltipComponent, GridComponent, CanvasRenderer, LegendC
 
 // Data readiness flag
 const dataReady = ref(false);
+const loading = ref(false);
 
+// Chart data from API
+const chartData = ref({
+  marketData: [],
+  storeDataData: []
+});
+
+// Chart instance
+const chart = ref(null);
+const DialogyearData = ref({});
 // Dropdown selections
 const selectedYear = ref(null);
-
 const years = ref([
   { name: 'عرض الكل', id: 0 },
+  { name: '2018', id: 2018 },
+  { name: '2019', id: 2019 },
   { name: '2020', id: 2020 },
   { name: '2021', id: 2021 },
   { name: '2022', id: 2022 },
   { name: '2023', id: 2023 },
   { name: '2024', id: 2024 },
+  { name: '2025', id: 2025 }
 ]);
 
-// Chart instance and data
-const chart = ref(null);
-
-// Sample data for years
-const yearlyData = {
-  2020: {
-    sales: 85,
-    market: 90,
-    repeatRate: 10
-  },
-  2021: {
-    sales: 91,
-    market: 110,
-    repeatRate: 15
-  },
-  2022: {
-    sales: 102,
-    market: 140,
-    repeatRate: 5
-  },
-  2023: {
-    sales: 108,
-    market: 105,
-    repeatRate: 20
-  },
-  2024: {
-    sales: 115,
-    market: 150,
-    repeatRate: 18
+// Fetch chart data from API
+const fetchChartData = async (year = 0) => {
+  try {
+    loading.value = true;
+    const res = await axios.get(`BusinessGrowthChart?year=${year}`, config.value);
+    if (response(res) === "success") {
+      chartData.value = res.data.data;
+      updateChartData();
+    }
+  } catch (error) {
+    console.error('Error fetching chart data:', error);
+  } finally {
+    loading.value = false;
   }
+};
+
+// Update chart with new data
+const updateChartData = () => {
+  const years = chartData.value.marketData.map(item => item.year);
+  option.value.xAxis.data = years;
+  option.value.series[0].data = chartData.value.marketData.map(item => item.value);
+  option.value.series[1].data = chartData.value.storeDataData.map(item => item.value);
+
+  if (chart.value && chart.value.chart) {
+    chart.value.chart.setOption(option.value, true);
+  }
+};
+
+// Handle year change from dropdown
+const handleYearChange = async (newYear) => {
+  if (!newYear) return;
+  selectedYear.value = newYear;
+  await fetchChartData(newYear.id);
 };
 
 // Dialog visibility and selected year data
@@ -122,21 +147,49 @@ const closeDialog = () => {
 };
 
 // Handle chart click event
-const handleChartClick = (params) => {
+const handleChartClick = async (params) => {
   if (params.componentType === 'xAxis') {
     const year = parseInt(params.value, 10);
-    if (yearlyData[year]) {
-      selectedYearName.value = year;
-      yearData.value = yearlyData[year];
-      dialogVisible.value = true;
+    selectedYearName.value = year;
+    
+    try {
+      const res = await axios.get(`YearIndicators?year=${year}`, config.value);
+      if (response(res) === "success") {
+        DialogyearData.value = res.data.data;
+        dialogVisible.value = true;
+      }
+    } catch (error) {
+      console.error('Error fetching year indicators:', error);
     }
   } else if (params && params.name) {
     const year = parseInt(params.name, 10);
-    if (yearlyData[year]) {
-      selectedYearName.value = year;
-      yearData.value = yearlyData[year];
+    selectedYearName.value = year;
+    
+    try {
+      const res = await axios.get(`YearIndicators?year=${year}`, config.value);
+      if (response(res) === "success") {
+        DialogyearData.value = res.data.data;
+        dialogVisible.value = true;
+      }
+    } catch (error) {
+      console.error('Error fetching year indicators:', error);
+    }
+  }
+};
+
+// Handle year label click
+const handleYearLabelClick = async (year) => {
+  const yearNum = parseInt(year, 10);
+  selectedYearName.value = yearNum;
+  
+  try {
+    const res = await axios.get(`YearIndicators?year=${yearNum}`, config.value);
+    if (response(res) === "success") {
+      DialogyearData.value = res.data.data;
       dialogVisible.value = true;
     }
+  } catch (error) {
+    console.error('Error fetching year indicators:', error);
   }
 };
 
@@ -212,7 +265,7 @@ const option = ref({
   },
   yAxis: {
     type: 'value',
-    show: true,
+    show: false,
     splitLine: {
       lineStyle: {
         color: '#E2E8F0',
@@ -294,59 +347,66 @@ const displayedYears = computed(() => {
   return years;
 });
 
-// Handle year label click
-const handleYearLabelClick = (year) => {
-  const yearNum = parseInt(year, 10);
-  if (yearlyData[yearNum]) {
-    selectedYearName.value = yearNum;
-    yearData.value = yearlyData[yearNum];
-    dialogVisible.value = true;
+// Keep the existing yearlyData for dialog
+const yearlyData = {
+  2018: {
+    sales: 85,
+    market: 90,
+    repeatRate: 10
+  },
+  2019: {
+    sales: 91,
+    market: 110,
+    repeatRate: 15
+  },
+  2020: {
+    sales: 91,
+    market: 110,
+    repeatRate: 15
+  },
+  2023: {
+    sales: 102,
+    market: 140,
+    repeatRate: 5
+  },
+  2024: {
+    sales: 108,
+    market: 105,
+    repeatRate: 20
+  },
+  2025: {
+    sales: 115,
+    market: 150,
+    repeatRate: 18
   }
 };
 
-// Update chart based on the selected year
-const handleYearChange = () => {
-  if (!selectedYear.value) return;
-  
-  const yearId = selectedYear.value.id;
+// Year text from API
+const YearText = ref('');
 
-  if (yearId === 0) {
-    const years = Object.keys(yearlyData);
-    option.value.xAxis.data = years;
-    option.value.series[0].data = years.map(year => yearlyData[year].sales);
-    option.value.series[1].data = years.map(year => yearlyData[year].market);
-  } else {
-    const allYears = Object.keys(yearlyData).map(Number);
-    const latestYear = Math.max(...allYears);
-    const selectedYears = [];
-    
-    for (let year = yearId; year <= latestYear; year++) {
-      if (yearlyData[year]) {
-        selectedYears.push(year);
-      }
+// Fetch year text from API
+const fetchGrowthReport = async () => {
+  try {
+    const res = await axios.get('GetGrowthReport', config.value);
+    if (response(res) === "success") {
+      YearText.value = res.data.data;
     }
-
-    option.value.xAxis.data = selectedYears.map(year => year.toString());
-    option.value.series[0].data = selectedYears.map(year => yearlyData[year].sales);
-    option.value.series[1].data = selectedYears.map(year => yearlyData[year].market);
-  }
-
-  if (chart.value && chart.value.chart) {
-    chart.value.chart.setOption(option.value, true);
+  } catch (error) {
+    console.error('Error fetching growth report:', error);
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
+  const initialYear = years.value[0];
+  selectedYear.value = initialYear;
+  await fetchChartData(initialYear.id);
+  await fetchGrowthReport(); // Fetch the report text
   dataReady.value = true;
-  selectedYear.value = years.value[0];
-  handleYearChange();
 
   if (chart.value && chart.value.chart) {
     chart.value.chart.on('click', handleChartClick);
   }
 });
-
-watch(() => selectedYear.value, handleYearChange);
 </script>
 
 <style lang="scss">
@@ -407,6 +467,16 @@ watch(() => selectedYear.value, handleYearChange);
   &.active {
     color: #FF647C;
     font-weight: bold;
+  }
+}
+
+.year-text {
+  margin-inline-start: 20px;
+  margin-top: 30px;
+  h5 {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.5;
   }
 }
 </style>

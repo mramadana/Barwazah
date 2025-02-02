@@ -4,8 +4,8 @@ import { useAuthStore } from "~/stores/auth";
 export default defineNuxtRouteMiddleware((to, from) => {
 
     // Store
-    const store = useAuthStore();
-    const { isLoggedIn } = storeToRefs(store);
+    // const store = useAuthStore();
+    const { token } = storeToRefs(useAuthStore());
   
     // Toast
     const { errorToast } = toastMsg();
@@ -14,10 +14,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
     const nuxtApp = useNuxtApp();
     const t = nuxtApp.vueApp.config.globalProperties.$t;
   
-    if (isLoggedIn.value === false && to.meta.middleware == "auth") {
+    if (token.value === null && to.meta.middleware == "auth") {
 
-      // errorToast(t("validation.requiresAuth"));
+      errorToast(t("validation.requiresAuth"));
 
-      // return navigateTo("/")
+      return navigateTo("/Auth/login");
     }
 })

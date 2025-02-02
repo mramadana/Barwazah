@@ -9,6 +9,10 @@
                 </div>
     
             </div>
+
+            <nuxt-link to="/sales">
+                <i class="fas fa-chevron-right sales-icon"></i>
+            </nuxt-link>
         </div>
 
         <div class="layout-form chart_layout">
@@ -32,13 +36,18 @@
 
         <div class="layout-form">
             <!-- <h2 class="main-title bold text-center mb-5">التحليل الديموغرافي</h2> -->
-            <ChartsBar :rental-names="rentalNames" :source-data="sourceData" />
+            <ChartsBar :rental-names="rentalNames" :placeholder-text="placeholderText" :source-data="sourceData" />
         </div>
 
     </div>
 </template>
 
 <script setup>
+
+    definePageMeta({
+        middleware: 'auth'
+    });
+
     import * as echarts from 'echarts/core';
     import { LineChart } from 'echarts/charts';
     echarts.use([LineChart]);
@@ -56,10 +65,12 @@
         return { headers: { Authorization: `Bearer ${token.value}` } }
     });
 
+    const placeholderText = ref('تحديد الجنس');
+    
     const rentalNames = ref({
-        showAll: 'معدل الترك',
-        males: 'الاقسام',
-        females: 'المنتجات'
+        showAll: 'الكل',
+        males: 'الذكور',
+        females: 'الإناث'
     });
 
     // Data for the products chart
@@ -136,3 +147,11 @@
         dataReady.value = true;
     });
 </script>
+
+<style lang="scss" scoped>
+    .sales-icon {
+        font-size: 30px;
+        margin-inline-end: 20px;
+        color: #fff;
+    }
+</style>

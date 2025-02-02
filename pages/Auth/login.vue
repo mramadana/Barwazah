@@ -39,7 +39,7 @@
                                             aria-hidden="true"></span>
                                 </button>
 
-                                <nuxt-link to="https://www.google.com/" target="_blank" class="custom-btn red-bg sm">{{ $t('Auth.create_account') }}</nuxt-link>
+                                <button type="button" @click="signUp_dialog = true" class="custom-btn red-bg sm">{{ $t('Auth.create_account') }}</button>
                             </div>
     
                             <div class="new-sign mt-4 text-start">
@@ -54,6 +54,25 @@
                 </form>
             </div>
         </div>
+
+        <!-- signUp dialog -->
+
+        <Dialog v-model:visible="signUp_dialog" modal class="custum_dialog_width auth-daialog"
+            :draggable="false">
+            <div class="text-center">
+                <h5 class="main-title sm blue mb-4"> اختر المنصة التي ترغب في ربط متجرك بها عبر تطبيق بروزه من خلال سوق تطبيقات سلة وزد.</h5>
+                <div class="section-btns mt-4 mb-4">
+                  
+                    <button @click="() => { navigateToUrl('https://salla.com/'); signUp_dialog = false; }" class="typeSection salla">
+                        <img src="@/assets/images/salla.svg" alt="">
+                    </button>
+
+                    <button @click="() => { navigateToUrl('https://zid.sa/'); signUp_dialog = false; }" class="typeSection zid">
+                        <img src="@/assets/images/zid.svg" alt="">
+                    </button>
+                </div>
+            </div>
+        </Dialog>
 
         <!-- dialog for check if it Salla or zid -->
 
@@ -125,7 +144,7 @@
     const { user } = storeToRefs(useAuthStore());
     const checkType = ref(false);
     const checkTypeNum = ref(null);
-
+    const signUp_dialog = ref(false);
     // success response
     const { response } = responseApi();
 
@@ -322,6 +341,10 @@
         } finally {
             loadingSpecialization.value = false;
         }
+    };
+
+    const navigateToUrl = (url) => {
+        window?.open(url, '_blank');
     };
 </script>
 

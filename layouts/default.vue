@@ -1,13 +1,12 @@
 <template>
-    <div>
-
-        <LayoutSideBar @toggle-active="toggleActive" :isActive="isActive"/>
-
-        <div class="main-content" :class="{ 'active': isActive }">
-            <slot />
-        </div>
-
+  <div>
+    <LayoutSideBar @toggle-active="toggleActive" :isActive="isActive"/>
+    <div class="main-content">
+      <LayoutHeader @toggle-active="toggleActive"/>
+      <slot />
     </div>
+    <div class="overlay-sidebar" :class="{ 'show': isActive }" @click="toggleActive"></div>
+  </div>
 </template>
 
 <script setup>
@@ -60,7 +59,6 @@
   height: 100vh;
   background-color: #000;
 }
+
+
 </style>
-
-
-

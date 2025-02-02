@@ -13,7 +13,14 @@
                 </label>
                 <div class="with_cun_select custom-select">
                     <div class="flex justify-content-center dropdown_card">
-                        <Dropdown v-model="rentalType" @change="handleRentalTypeChange" :options="rentals" optionLabel="name" :placeholder="$t(props.rentalNames.showAll)" class="custum-dropdown" />
+                        <Dropdown 
+                            v-model="rentalType" 
+                            @change="handleRentalTypeChange" 
+                            :options="rentals" 
+                            optionLabel="name" 
+                            :placeholder="placeholderText" 
+                            class="custum-dropdown" 
+                        />
                     </div>
                 </div>
             </div>
@@ -24,7 +31,7 @@
 </template>
   
 <script setup>
-import { ref, onMounted, nextTick, watch } from 'vue';
+import { ref, onMounted, nextTick, watch, computed } from 'vue';
 const echarts = await import('echarts/core');
 import { LegendComponent, TooltipComponent, GridComponent, DatasetComponent } from 'echarts/components';
 import { useI18n } from 'vue-i18n';
@@ -42,21 +49,21 @@ const props = defineProps({
     sourceData: { type: Array, required: true },
     rentalNames: {
         type: Object,
-        default: () => ({
-            showAll: 'Global.show_all',
-            males: 'Global.males',
-            females: 'Global.females'
-        })
+        required: true
+    },
+    placeholderText: {
+        type: String,
+        // default: 'اختر'
     }
 });
 
 const chart = ref(null);
 const rentalType = ref(null);
   
-const rentals = ref([
-    { name: t(props.rentalNames.showAll), id: 0 },
-    { name: t(props.rentalNames.males), id: 1 },
-    { name: t(props.rentalNames.females), id: 2 },
+const rentals = computed(() => [
+    { name: props.rentalNames.showAll, id: 0 },
+    { name: props.rentalNames.males, id: 1 },
+    { name: props.rentalNames.females, id: 2 },
 ]);
 
 const option = ref({

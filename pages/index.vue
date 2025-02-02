@@ -1,19 +1,9 @@
 <template>
     <div>
         <main>
-            
-            <nuxt-link to="/about"></nuxt-link>
 
             <div class="container">
-
-                <div v-if="isLoggedIn" class="mb-4">
-                    <h1 class="main-title bold cl-red">{{ $t("Global.welcome") }} &nbsp; {{ user.name }}</h1>
-                    <h3 class="main-title normal main-cl">{{ user?.fullName }}</h3>
-                </div>
-            
-
                 <div class="row">
-
                     <div class="col-12 col-md-3 mb-4">
                         <div class="info-box">
                             <div class="info-box-item market-size">

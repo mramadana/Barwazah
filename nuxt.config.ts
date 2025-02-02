@@ -1,52 +1,5 @@
 export default defineNuxtConfig({
-  ssr: true,
-  performance: {
-    gzip: true, // Enable Gzip compression
-    brotli: true, // Enable Brotli compression
-    prefetch: true, // Enable prefetching
-    preload: true, // Enable preloading
-  },
-
-  // Reduce JavaScript chunk size
-  vite: {
-    build: {
-      chunkSizeWarningLimit: 500, // Set maximum chunk size
-      rollupOptions: {
-        output: {
-          manualChunks: (id) => {
-            if (id.includes('node_modules')) {
-              return id.toString().split('node_modules/')[1].split('/')[0];
-            }
-          },
-        },
-      },
-      transpile: ['echarts']
-    },
-
-    resolve: {
-      alias: { 'echarts/lib/util/number': 'echarts/lib/util/number.js' },
-    },
-    
-    optimizeDeps: {
-      include: ['some-module', 'echarts'],
-    },
-  },
-
-  // Disable unnecessary features
-  experimental: {
-    payloadExtraction: true, // Improve performance by extracting payloads
-    inlineSSRStyles: false, // Disable inline SSR styles
-  },
-
-  // Optimize rendering
-  render: {
-    csp: true, // Enable Content Security Policy
-    etag: true, // Enable ETag for caching
-    static: {
-      cacheControl: true, // Enable cache control headers
-    },
-  },
-
+  // ssr: true,
   // Image optimization
   image: {
     // domains: ['localhost:3000'], // Add your allowed domains for images
@@ -55,21 +8,11 @@ export default defineNuxtConfig({
     format: ['webp', 'jpeg'], // Use modern formats
   },
 
-  // Reduce prefetching/prefetch links
-  // Tree shaking and module optimization
-  router: {
-    prefetchLinks: false, // Disable automatic link prefetching
-  },
-
-  build: {
-    analyze: false, // Disable build analysis
-    extractCSS: true, // Extract CSS to separate files
-    optimizeCSS: true, // Optimize CSS
-    splitChunks: {
-      layouts: true, // Separate layouts into their own chunks
-      pages: true, // Separate pages into their own chunks
-      commons: true, // Separate shared modules
-    },
+  devServer: {
+    https: {
+      key: '../../../../Windows/System32/localhost-key.pem',
+      cert: '../../../../Windows/System32/localhost.pem'
+    }
   },
 
   devtools: { enabled: true },

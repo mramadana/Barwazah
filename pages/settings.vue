@@ -2,8 +2,6 @@
     <div>
       <div class="container">
 
-        <h1 class="main-title bold lg mb-5">{{ $t("Home.settings") }}</h1>
-
         <div class="row">
 
           <!-- First Card -->
