@@ -4,7 +4,7 @@
         <div class="row accordion accordion-flush mb-5" id="accordionFlushExample" v-if="!loading">
             
             <div class="col-12 col-md-6 mb-4" v-for="item in Recommendations" :key="item.id">
-                <div class="chart_layout">
+                <div class="chart_layout layout-form">
                     <!-- <h2 class="main-title md bold text-center mb-4">{{ item.title }}</h2> -->
                     <div class="accordion-item" >
                         <h2 class="accordion-header">
