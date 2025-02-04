@@ -259,6 +259,10 @@ margin: 0;
       transform: translateX(150%);
     }
   }
+  @media (max-width: $screen-xs) {
+    @include dir-left(20px);
+    top: 30px;
+  }
   .mini-logo {
     opacity: 0;
     visibility: hidden;
@@ -279,9 +283,8 @@ margin: 0;
     text-align: start;
     margin: 25px 0;
     transition: width 0.3s ease-out, height 0.5s ease-out, opacity 0.5s ease-out, transform 0.5s ease-out;
-
     @media (max-width: $screen-xs) {
-      padding: 20px 10px;
+      margin: 15px 0;
     }
     .logo {
       width: 100%;
@@ -385,10 +388,6 @@ margin: 0;
         }
       }
 
-      @media (max-width: $screen-xs) {
-        padding: 8px 10px;
-      }
-
       span{
         transition: width 0.3s ease-out, height 0.5s ease-out, opacity 0.5s ease-out, transform 0.5s ease-out;
       }
@@ -405,6 +404,7 @@ margin: 0;
             transition: 0.2s all ease-in-out;
             @media (max-width: $screen-xs) {
               max-width: 30px;
+              height: 30px;
             }
         }
       }

@@ -1,7 +1,10 @@
 <template>
     <div class="container">
 
-        <GlobalFAQ />
+        <GlobalFAQ 
+            :loading="loading" 
+            :Recommendations="RecommendationsHome?.data || []" 
+        />
 
         <div class="row">
             
@@ -34,20 +37,76 @@
         name: "Sidebar.recommendations",
     });
 
+    
+    const axios = useApi();
+    const { token } = storeToRefs(useAuthStore());
+    // config
+    const config = computed(()=> {
+        return { headers: { Authorization: `Bearer ${token.value}` } }
+    });
+    const { response } = responseApi();
+    
+    const loading = ref(true);
+    const RecommendationsHome = ref([]);
     const dataReady = ref(false);
 
-    const productsData = ref({
-        labels: [
-            { id: 1303, text: 'شباب' },
-            { id: 1304, text: 'حريمي' },
-            { id: 1305, text: 'أطفال' },
-            { id: 1306, text: 'رجالي' },
-        ],
-        series: [12.32, 11.7, 10.38, 9.32],
-        colors: {
+    // const productsData = ref({
+    //     labels: [
+    //         { id: 1303, text: 'شباب 3333' },
+    //         { id: 1304, text: 'حريمي' },
+    //         { id: 1305, text: 'أطفال' },
+    //         { id: 1306, text: 'رجالي' },
+    //     ],
+    //     series: [12.32, 11.7, 10.38, 9.32],
+    //     colors: {
+    //         bar: '#f75c5c',
+    //         text: '#ffffff'
+    //     }
+    // });
+
+    const productsData = computed(() => {
+        if (!RecommendationsHome.value?.keywords) return {
+            labels: [],
+            series: [],
+            colors: {
             bar: '#f75c5c',
             text: '#ffffff'
-        }
+            }
+        };
+
+        return {
+            labels: RecommendationsHome.value.keywords.map(competitor => ({
+            id: competitor.id,
+            text: competitor.keyword,
+            image: competitor.logo
+            })),
+            series: RecommendationsHome.value.keywords.map(competitor => {
+                // Remove 'k' suffix and convert to number
+                return parseFloat(competitor.precentage.replace('k', ''));
+            }),
+            colors: {
+            bar: '#f75c5c',
+            text: '#ffffff'
+            }
+        };
+    });
+
+    const getRecommendations = async () => {
+        loading.value = true;
+        await axios.get(`RecommendationsHome`, config.value).then(res => {
+        if (response(res) == "success") {
+            RecommendationsHome.value = res.data.data;
+            console.log(RecommendationsHome.value, "RecommendationsHome");
+        }   
+        }).catch(err => {
+            console.error(err);
+        }).finally(() => {
+            loading.value = false;
+        });
+    }
+
+    onMounted( async() => {
+        await getRecommendations();
     });
 
     onBeforeMount(() => {

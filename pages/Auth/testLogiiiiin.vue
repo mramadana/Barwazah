@@ -14,7 +14,7 @@
                                 <label class="label">
                                     {{ $t('Auth.email') }}
                                 </label>
-                                <input type="email" class="main_input validInputs" valid="email" name="email" v-model="email" :placeholder="$t('Auth.enter_email')">
+                                <input type="email" class="main_input validInputs" valid="email" name="email" v-model="email" @input="checkEmail" :placeholder="$t('Auth.enter_email')">
                             </div>
 
                             <div class="form-group" v-if="showPassword">
@@ -134,7 +134,7 @@
 <script setup>
 
     definePageMeta({
-        name: "Auth.login",
+        // name: "Auth.login",
         layout: false
     })
 
@@ -209,16 +209,15 @@
             return;
         }
 
-        // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        // if (!emailRegex.test(email.value)) {
-        //     errorToast(t('validation.invalid_email'));
-        //     return;
-        // }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email.value)) {
+            errorToast(t('validation.invalid_email'));
+            return;
+        }
 
         try {
             const response = await axios.get(`/CheckEmail?email=${email.value}`);
             if (response.data.key === 'success') {
-                successToast(t('validation.right_email'));
                 if (response.data.hasTwoAccounts) {
                     checkType.value = true;
                     checkTypeNum.value = null;

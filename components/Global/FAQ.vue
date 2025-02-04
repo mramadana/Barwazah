@@ -1,10 +1,10 @@
 <template>
     <section>
 
-        <div class="row accordion accordion-flush" id="accordionFlushExample" v-if="!loading">
+        <div class="row accordion accordion-flush mb-5" id="accordionFlushExample" v-if="!loading">
             
-            <div class="col-12 col-md-6" v-for="item in Recommendations" :key="item.id">
-                <div class="layout-form chart_layout">
+            <div class="col-12 col-md-6 mb-4" v-for="item in Recommendations" :key="item.id">
+                <div class="chart_layout">
                     <!-- <h2 class="main-title md bold text-center mb-4">{{ item.title }}</h2> -->
                     <div class="accordion-item" >
                         <h2 class="accordion-header">
@@ -21,11 +21,12 @@
                 </div>
             </div>
 
-            <div class="accordFaq justify-content-between mt-5" v-if="loading && !Recommendations.length">
-                <div class="mb-4 d-flex alighn-items-center justify-content-between layout-Faq" v-for="i in 4" :key="i">
-                    <Skeleton width="70%" height=".7rem" class="small"></Skeleton>
-                    <Skeleton width="5%" height=".4rem" class="small"></Skeleton>
-                </div>
+        </div>
+        
+        <div class="accordFaq justify-content-between mt-5" v-if="loading && !Recommendations.length">
+            <div class="mb-4 d-flex alighn-items-center justify-content-between layout-Faq" v-for="i in 4" :key="i">
+                <Skeleton width="70%" height=".7rem" class="small"></Skeleton>
+                <Skeleton width="5%" height=".4rem" class="small"></Skeleton>
             </div>
         </div>
 
@@ -34,30 +35,32 @@
 </template>
 
 <script setup>
-
-const loading = ref(true);
-
-const { response } = responseApi();
+defineProps({
+    loading: {
+        type: Boolean,
+        required: true
+    },
+    Recommendations: {
+        type: Array,
+        required: true,
+        default: () => []
+    }
+});
 
 const axios = useApi();
 
-const Recommendations = ref([]);
-
-const getData = async () => {
-  loading.value = true;
-  await axios.get('RecommendationsHome').then(res => {
-    if (response(res) == "success") {
-        Recommendations.value = res.data.data.data;
-    }
-    loading.value = false;
-  }).catch(err => console.log(err));
-};
+// const getData = async () => {
+//   await axios.get('RecommendationsHome').then(res => {
+//     if (response(res) == "success") {
+//         Recommendations = res.data.data.data;
+//     }
+//   }).catch(err => console.log(err));
+// };
 
 
-onMounted(() => {
-    getData();
-});
-
+// onMounted(() => {
+//     getData();
+// });
 </script>
 
 

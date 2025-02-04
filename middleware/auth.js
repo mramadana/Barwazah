@@ -1,23 +1,47 @@
 
 // pinia store
-import { useAuthStore } from "~/stores/auth";
-export default defineNuxtRouteMiddleware((to, from) => {
+// import { useAuthStore } from "~/stores/auth";
+// export default defineNuxtRouteMiddleware((to, from) => {
 
-    // Store
-    // const store = useAuthStore();
-    const { token } = storeToRefs(useAuthStore());
+//     // Store
+//     // const store = useAuthStore();
+//     const { token } = storeToRefs(useAuthStore());
   
+//     // Toast
+//     const { errorToast } = toastMsg();
+  
+//     // get i18n t
+//     const nuxtApp = useNuxtApp();
+//     const t = nuxtApp.vueApp.config.globalProperties.$t;
+  
+//     if (!token.value && to.meta.middleware == "auth") {
+
+//       errorToast(t("validation.requiresAuth"));
+
+//       return navigateTo("/Auth/login");
+//     }
+// })
+
+
+export default defineNuxtRouteMiddleware(async(to, from) => {
+    if(process.client){
+    
+    
+    
+    const { token } = storeToRefs(useAuthStore());
+    
     // Toast
     const { errorToast } = toastMsg();
-  
+    
     // get i18n t
     const nuxtApp = useNuxtApp();
     const t = nuxtApp.vueApp.config.globalProperties.$t;
-  
-    if (token.value === null && to.meta.middleware == "auth") {
-
+    
+    if (!token.value && to.meta.middleware == "auth") {
       errorToast(t("validation.requiresAuth"));
-
-      return navigateTo("/Auth/login");
+      return await navigateTo('/Auth/login');
     }
-})
+    }
+  });
+  
+  
