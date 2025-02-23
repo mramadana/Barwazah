@@ -200,7 +200,7 @@
 
     const checkEmail = async () => {
         errors.value = [];
-        
+        loading.value = true;
         validate();
         
         if (errors.value.length) {
@@ -234,6 +234,8 @@
             } else {
                 errorToast(t('messages.something_wrong'));
             }
+        } finally {
+            loading.value = false;
         }
     };
 

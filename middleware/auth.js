@@ -24,23 +24,21 @@
 
 
 export default defineNuxtRouteMiddleware(async(to, from) => {
-    if(process.client){
+    if(import.meta.client){
     
-    
-    
-    const { token } = storeToRefs(useAuthStore());
-    
-    // Toast
-    const { errorToast } = toastMsg();
-    
-    // get i18n t
-    const nuxtApp = useNuxtApp();
-    const t = nuxtApp.vueApp.config.globalProperties.$t;
-    
-    if (!token.value && to.meta.middleware == "auth") {
-      errorToast(t("validation.requiresAuth"));
-      return await navigateTo('/Auth/login');
-    }
+      const { token } = storeToRefs(useAuthStore());
+      
+      // Toast
+      const { errorToast } = toastMsg();
+      
+      // get i18n t
+      const nuxtApp = useNuxtApp();
+      const t = nuxtApp.vueApp.config.globalProperties.$t;
+      
+      if (!token.value && to.meta.middleware == "auth") {
+        errorToast(t("validation.requiresAuth"));
+        return await navigateTo('/Auth/login');
+      }
     }
   });
   

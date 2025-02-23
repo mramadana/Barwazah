@@ -29,14 +29,11 @@
           <!-- Chat Input Area -->
           <div class="chat-input-container">
             <div class="input-wrapper">
-              <button class="back-button">
-                <span class="arrow-left">←</span>
-              </button>
               <input type="text" class="chat-input" placeholder="Type your message...">
-              <button class="send-button">
-                <span class="send-icon">⚡</span>
-              </button>
             </div>
+            <button class="send-button">
+              <span class="send-icon"><i class="fa-solid fa-arrow-left"></i></span>
+            </button>
           </div>
         </div>
       </div>
@@ -126,12 +123,16 @@
     color: #333;
     line-height: 1.5;
     direction: rtl;
+    font-size: 14px;
   }
   
   .chat-input-container {
     padding: 1rem;
     background-color: #fff;
     border-top: 1px solid #e1e1e1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   
   .input-wrapper {
@@ -141,6 +142,7 @@
     background-color: #f5f5f5;
     border-radius: 24px;
     padding: 0.5rem;
+    flex: 1;
   }
   
   .chat-input {
@@ -152,30 +154,26 @@
     font-size: 1rem;
   }
   
-  .back-button,
-  .send-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
-  }
-  
   .arrow-left {
     font-size: 1.2rem;
   }
   
   .send-icon {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
-  
-  /* Add hover effects */
-  .back-button:hover,
-  .send-button:hover {
-    color: #333;
+
+  .send-button {
+    background-color: red;
+    margin-inline-start: 15px;
+    color: #fff;
+    height: 50px;
+    width: 50px;
+    border-radius: 6px;
+    font-size: 20px;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .input-wrapper:focus-within {

@@ -47,20 +47,6 @@ defineProps({
     }
 });
 
-const axios = useApi();
-
-// const getData = async () => {
-//   await axios.get('RecommendationsHome').then(res => {
-//     if (response(res) == "success") {
-//         Recommendations = res.data.data.data;
-//     }
-//   }).catch(err => console.log(err));
-// };
-
-
-// onMounted(() => {
-//     getData();
-// });
 </script>
 
 

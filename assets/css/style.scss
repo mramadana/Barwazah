@@ -1,4 +1,4 @@
-@import "variables", "dir-mixins", "settings", "classes", "all_6.css";
+@import "variables", "dir-mixins", "settings", "classes", "all_6.css", "substyle.scss";
 
 :root {
     --main: #013660;
@@ -39,14 +39,6 @@ body {
 
 .color-wh {
   color: #fff !important;
-}
-
-// .fade:not(.show) {
-//   display: none;
-// }
-
-.header {
-  background: var(--main); 
 }
 
 .drop-lang, .dropdown-profile {
@@ -199,137 +191,6 @@ body {
     }
 }
 
-.nav-header {
-  padding: 10px 0;
-  background-color: var(--main-bg);
-  @media (max-width: 550px) {
-    padding: 8px 0;
-  }
-  .inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .logo {
-    display: block;
-    img {
-      max-height: 50px;
-      object-fit: cover;
-      @media (max-width: $screen-xl) {
-        max-height: 50px;
-      }
-      @media (max-width: 550px) {
-        margin-inline-end: 0px;
-        max-height: 45px;
-      }
-
-      @media (max-width: $screen-xxs) {
-        max-height: 35px;
-      }
-    }
-  }
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 0 70px;
-    color: #fff;
-    @media (max-width: 1000px) {
-      position: fixed;
-      padding: 20px 0;
-      @include dir-left(0);
-      top: 0;
-      min-width: 140px;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 70%);
-      z-index: 4;
-      flex-direction: column;
-      transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      #{$ltr} & {
-        transform: translateX(-100%);
-      }
-      #{$rtl} & {
-        transform: translateX(100%);
-      }
-      &.active {
-        #{$ltr} & {
-          transform: translateX(0);
-        }
-        #{$rtl} & {
-          transform: translateX(0);
-        }
-      }
-
-      justify-content: flex-start;
-      flex-grow: 0;
-      overflow-y: auto;
-    }
-    .link {
-      display: block;
-      font-size: 15px;
-      color: #fff;
-      &.router-link-exact-active {
-        color: var(--main);
-      }
-    }
-    li:not(:last-child) {
-      @media (max-width: 1000px) {
-        margin-bottom: 35px;
-      }
-    }
-  }
-  .left {
-    display: flex;
-    align-items: center;
-
-    @media (max-width: $screen-md) {
-      display: flex;
-      align-items: center;
-    }
-    .lang {
-      display: none;
-      @media (max-width: $screen-md) {
-        display: block;
-        background: #f26523;
-        padding: 7px 6px;
-        border-radius: 10px;
-      }
-      span {
-        @media (max-width: $screen-md) {
-          display: none;
-        }
-      }
-      button {
-        &::after {
-          display: none;
-        }
-      }
-    }
-    .sign-link {
-      font-size: 14px;
-      color: #fff;
-      background: #f26523;
-      padding: 13px;
-      border-radius: 10px;
-      @media (max-width: $screen-md) {
-        padding: 8px 10px;
-        font-size: 18px;
-        @include dir-margin-left(10px);
-      }
-      span {
-        @media (max-width: $screen-md) {
-          display: none;
-        }
-      }
-      i {
-        display: none;
-        @media (max-width: $screen-md) {
-          display: block;
-        }
-      }
-    }
-  }
-}
-
 .nav-btn {
   background: transparent;
   width: 30px;
@@ -411,31 +272,6 @@ body {
       }
     }
   }
-}
-
-.btn-login {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  color: var(--wh);
-  background: var(--main);
-  padding: 10px 20px;
-  border-radius: 10px;
-  @media (max-width: $screen-xs) {
-     padding: 8px 10px;
-  }
-  .sign-icon {
-    display: none;
-    @media (max-width: $screen-xs) {
-       display: block;
-    }
-  }
-  .login-text {
-    @media (max-width: $screen-xs) {
-      display: none;
-    }
-   }
 }
 
 .p-dropdown-item-label {
@@ -838,6 +674,12 @@ input.p-inputtext.p-component {
   }
 }
 
+.desc {
+  font-size: 13px;
+  color: #7391a9;
+  font-weight: 300;
+}
+
 
 .form-group {
   margin-bottom: 30px;
@@ -1229,10 +1071,8 @@ input.p-inputtext.p-component {
   }
 }
 
-
-
 .main-cl {
-    color: var(--main) !important;
+    color: var(--main);
 }
 
 .red-cl {

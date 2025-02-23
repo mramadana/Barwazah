@@ -1,12 +1,7 @@
 <template>
     <div>
 
-        <div class="sidebar" id="mySidebar" :class="{ 'active': isActive, 'mini': mini }" @mouseover="toggleSidebar" @mouseout="toggleSidebar">
-
-            <!-- ***** close icon to close sidebar ***** -->
-             
-            <!-- <div class="colse-icon" @click="closeSiderbar"><i class="fas fa-times"></i></div>
-            <div class="colse-icon" v-if="isActive" @click="closeSiderbar"><font-awesome-icon :icon="['fas', 'bars']" /></div> -->
+        <div class="sidebar" id="mySidebar" :class="{ 'active': isActive, 'mini': mini }" v-if="!isHomePage" @mouseover="toggleSidebar" @mouseout="toggleSidebar">
 
             <!-- ***** sidebar logo ***** -->
             <div class="sidebar-logo">
@@ -18,9 +13,9 @@
             
             <div ref="linksList" class="links" @scroll="saveScrollPosition">
 
-                <nuxt-link class="link" to="/" :class="{ 'active': isActiveLink('/') }">
+                <nuxt-link class="link" to="/home" :class="{ 'active': isActiveLink('/home') }">
                     <div class="hint-img">
-                        <img src="@/assets/images/Conversion.svg" alt="hint-img">
+                        <img src="/sidebar/Conversion.svg" alt="hint-img">
                     </div>
                    <span> {{ $t('Titles.home') }}</span>
                 </nuxt-link>
@@ -224,6 +219,14 @@ const toggleSidebar = () => {
       sidebar.style.width = "85px";
     }
   };
+
+
+
+
+  const isHomePage = computed(() => {
+      return router.currentRoute.value.path === '/' || router.currentRoute.value.path === '' || router.currentRoute.value.path === 'index' || router.currentRoute.value.path === '/about' || router.currentRoute.value.path === '/privacy'; 
+    });
+
 
 onMounted(() => {
   restoreScrollPosition();

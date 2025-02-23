@@ -1,21 +1,30 @@
 <template>
   <div>
+    <LayoutHomeHeader :isHomePage="isIndexPage" />
     <LayoutSideBar @toggle-active="toggleActive" :isActive="isActive"/>
-    <div class="main-content">
+    <div :class="{ 'main-content': !isIndexPage }">
       <LayoutHeader @toggle-active="toggleActive"/>
       <slot />
     </div>
+    <LayoutHomeFooter :isHomePage="isIndexPage" />
     <div class="overlay-sidebar" :class="{ 'show': isActive }" @click="toggleActive"></div>
   </div>
 </template>
 
 <script setup>
+import LayoutHomeFooter from '@/components/layout/homefooter.vue';
+
   import { useI18n } from "vue-i18n";
-  import { useRoute } from "#vue-router";
+  import { useRoute, useRouter } from "#vue-router";
   const isActive = ref(false);
 
   const { t } = useI18n();
   const route = useRoute();
+  const router = useRouter();
+
+  const isIndexPage = computed(() => {
+    return route.path === "/" || route.path === "" || route.path === "index" || route.path === '/about' || route.path === '/privacy';
+  });
 
   watchEffect(() => {
         useHead({
@@ -59,6 +68,5 @@
   height: 100vh;
   background-color: #000;
 }
-
-
 </style>
+

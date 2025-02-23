@@ -1,15 +1,13 @@
 <template>
     <div>
         <main>
-            
-            <nuxt-link to="/about"></nuxt-link>
-
+          
             <div class="container">
 
                 <div class="row">
                 
                     <div class="col-12 col-md-6 mb-4 info-box">
-                        <div class="info-box-item info-box-item align-items-end store-clients gap-3 flex-wrap">
+                        <div class="info-box-item info-box-item align-items-center store-clients gap-3">
                             <div class="d-flex gap-3">
                                 <img src="@/assets/images/Sell_products.svg" alt="Store Icon">
                                 <div class="info-content">
@@ -27,7 +25,7 @@
                             <div class="d-flex align-items-center gap-3">
                                 <img src="@/assets/images/cart.svg" alt="User Icon">
                                 <div class="info-content">
-                                    <span>متوسط عملاء السوق</span>
+                                    <span>متوسط السلات المتروكة للمتجر</span>
                                     <h2 v-if="!HomeSalesData?.length && !loading">{{ HomeSalesData?.abondendCartAverage }} </h2>
                                     <Skeleton class="mt-2" v-if="HomeSalesData?.length || loading" width="5rem" height=".5rem"></Skeleton>
                                 </div>
@@ -106,19 +104,6 @@
         </main>
     </div>
 </template>
-
-<!-- <script setup>
-
-definePageMeta({
-    name: "Titles.home",
-});
-
-const store = useAuthStore();
-
-
-
-
-</script> -->
 
 <script setup>
 

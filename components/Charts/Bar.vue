@@ -140,8 +140,8 @@ function toggleFemalesVisibility() {
     const chartInstance = chart.value?.chart;
     if (!chartInstance) return;
 
-    option.value.legend.selected[t(props.rentalNames.females)] = false;
-    option.value.legend.selected[t(props.rentalNames.males)] = true;
+    option.value.legend.selected[t(props.rentalNames.females)] = true;
+    option.value.legend.selected[t(props.rentalNames.males)] = false;
     chartInstance.setOption(option.value, true);
 }
 
@@ -149,8 +149,8 @@ function toggleMalesVisibility() {
     const chartInstance = chart.value?.chart;
     if (!chartInstance) return;
 
-    option.value.legend.selected[t(props.rentalNames.males)] = false;
-    option.value.legend.selected[t(props.rentalNames.females)] = true;
+    option.value.legend.selected[t(props.rentalNames.males)] = true;
+    option.value.legend.selected[t(props.rentalNames.females)] = false;
     chartInstance.setOption(option.value, true);
 }
 
@@ -171,10 +171,10 @@ const handleRentalTypeChange = (event) => {
                 showAllData();
                 break;
             case 1:
-                toggleMalesVisibility();
-                break;
-            case 2:
                 toggleFemalesVisibility();
+                break;
+                case 2:
+                    toggleMalesVisibility();
                 break;
         }
     }

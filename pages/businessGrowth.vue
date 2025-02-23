@@ -8,3 +8,9 @@
 </template>
 
 
+<script setup>
+    definePageMeta({
+        name: "Titles.business_growth",
+        middleware: 'auth'
+    });
+</script>

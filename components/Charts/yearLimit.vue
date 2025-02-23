@@ -1,5 +1,5 @@
 <template>
-  <div v-if="dataReady" class="w-100">
+  <div v-if="dataReady && chartDataLoaded" class="w-100" style="height: 400px;">
     <div class="d-flex align-items-center justify-content-center gap-4">
       <label class="label mb-0">اختر السنة</label>
       <div class="with_cun_select custom-select">
@@ -16,13 +16,16 @@
       </div>
     </div>
 
-    <VChart ref="chart" class="custom-chart" :option="option" style="height: 300px; width: 100%; display: block" />
+    <VChart ref="chart" class="custom-chart" :option="option" style="height: 100%; width: 100%; display: block" />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/stores/auth'; // تأكد من المسار الصحيح; // تأكد من المسار الصحيح
+
 const axios = useApi();
 const { response } = responseApi();
 
@@ -35,6 +38,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 echarts.use([LineChart, TooltipComponent, GridComponent, CanvasRenderer, LegendComponent]);
 
 const dataReady = ref(false);
+const chartDataLoaded = ref(false); // متحكم في تحميل البيانات
 const selectedYear = ref(null);
 const years = ref([
   { name: '2020', id: 2020 },
@@ -52,8 +56,8 @@ const chart = ref(null);
 const { token } = storeToRefs(useAuthStore());
 
 // config
-const config = computed(()=> {
-    return { headers: { Authorization: `Bearer ${token.value}` } }
+const config = computed(() => {
+  return { headers: { Authorization: `Bearer ${token.value}` } };
 });
 
 const option = ref({
@@ -112,33 +116,30 @@ const handleYearChange = async () => {
 };
 
 const getData = async (year) => {
-  console.log(config.value, "res");
   try {
     const res = await axios.get(`AverageMarketVisits?year=${year}`, config.value);
     if (response(res) == "success") {
       const monthlyData = res.data.data;
       option.value.xAxis.data = Allmonths.value;
-      // Map the values from the API response
       option.value.series[0].data = monthlyData.map(item => Number(item.value));
-      console.log(monthlyData, "monthlyData");
+
+      await nextTick(); // الانتظار حتى يتم تحديث DOM
       if (chart.value && chart.value.chart) {
-        chart.value.chart.setOption(option.value, true);
-      } else {
-        console.error('Chart instance is not ready.');
+        chart.value.chart.resize(); // إعادة ضبط حجم الـ chart
       }
+      chartDataLoaded.value = true; // تم تحميل البيانات
     }
   } catch (err) {
     console.error(err);
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
   dataReady.value = true;
-  // Get current year
   const currentYear = new Date().getFullYear();
-  // Find and set the current year in the dropdown
   selectedYear.value = years.value.find(year => year.id === currentYear);
-  // Load data for current year
+
+  await nextTick(); // الانتظار حتى يتم تحديث DOM
   getData(currentYear);
 });
 </script>

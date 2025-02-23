@@ -8,12 +8,12 @@ export default defineNuxtConfig({
     format: ['webp', 'jpeg'], // Use modern formats
   },
 
-  devServer: {
-    https: {
-      key: '../../../../Windows/System32/localhost-key.pem',
-      cert: '../../../../Windows/System32/localhost.pem'
-    }
-  },
+  // devServer: {
+  //   https: {
+  //     key: '../../../../Windows/System32/localhost-key.pem',
+  //     cert: '../../../../Windows/System32/localhost.pem'
+  //   }
+  // },
 
   devtools: { enabled: true },
 

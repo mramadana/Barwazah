@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="auth-layout flex-column">
-            <h1 class="main-title bold lg mb-5">{{ $t("Auth.forgot_password") }}</h1>
+            <!-- <h1 class="main-title bold lg mb-5">{{ $t("Auth.forgot_password") }}</h1> -->
             <div class="layout-form md custom-width">
                 
                 <img src="@/assets/images/logo.svg" alt="logo" class="Auth-logo mb-5">
@@ -15,8 +15,8 @@
                 <p class="main-title blue mb-5">برجاء تسجيل الدخول لحسابك بكلمة المرور الجديدة</p>
 
                 <div class="d-flex">
-                    <NuxtLink class="custom-btn md mr-auto" to="/settings">
-                        {{ $t('Auth.save') }}
+                    <NuxtLink class="custom-btn md mr-auto" to="/Auth/login">
+                        العودة إلى حسابك
                     </NuxtLink>
                 </div>
 

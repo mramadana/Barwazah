@@ -23,7 +23,7 @@
 
             <div class="col-12 col-md-8 mb-4">
                 <div class="layout-form chart_layout">
-                    <h3 class="main-title bold text-center mb-3">{{ $t("Global.commercial_Products") }}</h3>
+                    <h3 class="main-title bold text-center mb-3">تحسين محركات البحث</h3>
                     <h3 class="main-title sm text-center mb-0">{{ $t("Global.highest_Sales") }}</h3>
                     <ChartsProducts :data-ready="dataReady" :products-data="productsData"/>
                 </div>
