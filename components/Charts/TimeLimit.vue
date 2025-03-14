@@ -26,7 +26,7 @@
           </div>
         </div>
 
-        <VChart ref="chart" class="custom-chart" :option="option" style="height: 300px; width: 100%; display: block" />
+        <VChart ref="chart" class="custom-chart" :option="option" style="height: 265px; width: 100%; display: block" />
       </div>
     </ClientOnly>
   </div>

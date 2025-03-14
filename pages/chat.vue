@@ -29,8 +29,15 @@
                 <div class="message-text" v-html="message.text"></div>
               </div>
             </div>
-            <div v-if="isLoading" class="loading-spinner">
+            <div v-if="isLoading && !messages.length" class="loading-spinner">
               <div class="spinner"></div>
+            </div>
+            <div v-if="isLoading && messages.length" class="chat-bubble">
+              <div class="typing">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
             </div>
           </div>
       
@@ -243,10 +250,6 @@ onMounted(() => {
   padding: 1rem;
   overflow-y: auto;
   scroll-behavior: smooth;
-  /* position: relative; */
-  /* align-items: center;
-  justify-content: center;
-  display: flex; */
 }
 
 .message {

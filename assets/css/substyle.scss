@@ -1145,77 +1145,80 @@
     }
   }
 }
-.links {
-  display: flex;
-  flex-direction: column;
+.footer-section {
+
+  .links {
+    display: flex;
+    flex-direction: column;
+    
+    @media (max-width: $screen-md) {
+      max-height: 0;
+      overflow: hidden;
+    }
   
-  @media (max-width: $screen-md) {
-    max-height: 0;
-    overflow: hidden;
-  }
-
-  @media (max-width: $screen-md) {
-    
-    &.active {
-      animation: expand 0.5s ease forwards;
-      overflow: visible;
-    }
-    
-    &:not(.active) {
-      animation: collapse 0.5s ease forwards;
-    }
-  }
-  
-  .link {
-    display: block;
-    color: var(--wh);
-    font-size: 14px;
-    
-    &:not(:last-child) {
-      margin-bottom: 13px;
-    }
-  }
-
-  @include dir-padding-left(15px);
-
-  .act-befor {
-    font-size: 17px;
-    color: #fff;
-    display: block;
-    position: relative;
-    transition: 0.5s;
-    
-    @media (max-width: 550px) {
-      font-size: 14px;
-    }
-    
-    span {
-      display: block;
-      transition: 0.5s;
+    @media (max-width: $screen-md) {
       
-      &:hover {
-        #{$ltr} & {
-          transform: translateX(15px);
-        }
-        #{$rtl} & {
-          transform: translateX(-15px);
-        }
+      &.active {
+        animation: expand 0.5s ease forwards;
+        overflow: visible;
+      }
+      
+      &:not(.active) {
+        animation: collapse 0.5s ease forwards;
       }
     }
-
-    &::before {
-      content: "";
-      position: absolute;
-      width: 5px;
-      height: 5px;
-      @include dir-left(-15px);
-      top: 50%;
-      transform: translatey(-50%);
-      background-color: #fff;
+    
+    .link {
+      display: block;
+      color: var(--wh);
+      font-size: 14px;
+      
+      &:not(:last-child) {
+        margin-bottom: 13px;
+      }
     }
-
-    &:not(:last-child) {
-      margin-bottom: 10px;
+  
+    @include dir-padding-left(15px);
+  
+    .act-befor {
+      font-size: 17px;
+      color: #fff;
+      display: block;
+      position: relative;
+      transition: 0.5s;
+      
+      @media (max-width: 550px) {
+        font-size: 14px;
+      }
+      
+      span {
+        display: block;
+        transition: 0.5s;
+        
+        &:hover {
+          #{$ltr} & {
+            transform: translateX(15px);
+          }
+          #{$rtl} & {
+            transform: translateX(-15px);
+          }
+        }
+      }
+  
+      &::before {
+        content: "";
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        @include dir-left(-15px);
+        top: 50%;
+        transform: translatey(-50%);
+        background-color: #fff;
+      }
+  
+      &:not(:last-child) {
+        margin-bottom: 10px;
+      }
     }
   }
 }

@@ -16,15 +16,15 @@
                         <h3 class="main-title bold text-center red-cl">طلب استشارة مع خبير</h3>
                     </div>
 
-                    <p class="desc text-center mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis velit fugit, nesciunt voluptas repellat</p>
-                    <nuxt-link to="#" class="custom-btn red-bg sm w-100">احجز مكالمتك الان</nuxt-link>
+                    <p class="desc text-center mb-4">احجز إستشارة مجانية مع خبراء التسويق لدينا لمساعدتـــك على تطوير خطة إستراتيجية ناجحة معتمدة على تحليل بياناتك الحالية</p>
+                    <nuxt-link to="https://calendly.com/barwazah-info/30min" target="_blank" class="custom-btn red-bg sm w-100">احجز مكالمتك الان</nuxt-link>
                 </div>
             </div>
 
             <div class="col-12 col-md-8 mb-4">
                 <div class="layout-form chart_layout">
-                    <h3 class="main-title bold text-center mb-3">تحسين محركات البحث</h3>
-                    <h3 class="main-title sm text-center mb-0">{{ $t("Global.highest_Sales") }}</h3>
+                    <h3 class="main-title fw-normal text-center mb-3">تحسين محركات البحث</h3>
+                    <h3 class="desc text-center mb-0">{{ $t("Global.highest_Sales") }}</h3>
                     <ChartsProducts :data-ready="dataReady" :products-data="productsData"/>
                 </div>
             </div>

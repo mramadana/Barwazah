@@ -1,6 +1,6 @@
 <template>
   <div v-if="dataReady" class="w-100">
-    <VChart ref="chart" :option="option" style="height: 300px; width: 100%; display: block" />
+    <VChart ref="chart" :option="option" style="height: 220px; width: 100%; display: block" />
   </div>
 </template>
 
@@ -46,6 +46,8 @@ const option = computed(() => ({
     axisLabel: {
       formatter: '{value} %',
     },
+    // hidden y axis
+    show: false,
   },
   tooltip: {
     trigger: 'item',

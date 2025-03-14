@@ -49,7 +49,7 @@
                         <div class="left">
                             
                             <NuxtLink to="/home" class="btn-login auth-user" v-if="token">
-                                <img :src="user.profilePicture" alt="user-img" class="user-img with-radios">
+                                <img :src="user?.profilePicture" alt="user-img" class="user-img with-radios">
                             </NuxtLink>
 
                             <div class="dropdown drop-lang cursor-pointer" :class="{ 'color-lang': colorLang }" v-if="!token">

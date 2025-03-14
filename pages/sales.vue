@@ -6,12 +6,12 @@
 
                 <div class="row">
                 
-                    <div class="col-12 col-md-6 mb-4 info-box">
-                        <div class="info-box-item info-box-item align-items-center store-clients gap-3">
-                            <div class="d-flex gap-3">
+                    <div class="col-12 col-lg-6 mb-3 info-box">
+                        <div class="info-box-item info-box-item align-items-center store-clients gap-3 flex-column-sm">
+                            <div class="d-flex">
                                 <img src="@/assets/images/Sell_products.svg" alt="Store Icon">
                                 <div class="info-content">
-                                    <span class="main-cl bold mb-2">معدل بيع منتجات للمتجر</span>
+                                    <span class="main-cl main-title bold mb-2">معدل بيع منتجات للمتجر</span>
                                     <h2 v-if="!HomeSalesData?.length && !loading">{{ HomeSalesData?.storeSalesPercent }} %</h2>
                                     <Skeleton class="mt-3" v-if="HomeSalesData?.length || loading" width="5rem" height=".5rem"></Skeleton>
                                 </div>
@@ -20,13 +20,13 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6 mb-4 info-box">
-                        <NuxtLink to="/salesDetails" class="info-box-item cart-clients gap-3 flex-wrap">
+                    <div class="col-12 col-lg-6 mb-3 info-box">
+                        <NuxtLink to="/salesDetails" class="info-box-item cart-clients gap-3 flex-wrap justify-content-between">
                             <div class="d-flex align-items-center gap-3">
                                 <img src="@/assets/images/cart.svg" alt="User Icon">
                                 <div class="info-content">
                                     <span>متوسط السلات المتروكة للمتجر</span>
-                                    <h2 v-if="!HomeSalesData?.length && !loading">{{ HomeSalesData?.abondendCartAverage }} </h2>
+                                    <h2 class="d-flex align-items-end" v-if="!HomeSalesData?.length && !loading">{{ HomeSalesData?.abondendCartAverage }} <div class="hint-span">سلة</div> </h2>
                                     <Skeleton class="mt-2" v-if="HomeSalesData?.length || loading" width="5rem" height=".5rem"></Skeleton>
                                 </div>
 
@@ -35,10 +35,9 @@
                         </NuxtLink>
                     </div>
 
-
-                    <div class="col-12 mb-5">
+                    <div class="col-12 mb-3">
                         <div class="layout-form chart_layout">
-                        <h3 class="main-title bold lg text-center mb-4">{{ $t("Global.sales") }}</h3>
+                        <h3 class="main-title text-center fw-normal mb-4">{{ $t("Global.sales") }}</h3>
                         <ChartsGradientArea
                             :initialMonths="months"
                             :initialAllMonths="allMonths"
@@ -50,10 +49,10 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-lg-6 mb-3">
                         <div class="layout-form chart_layout">
-                            <h3 class="main-title bold text-center mb-3">{{ $t("Global.commercial_Products") }}</h3>
-                            <h3 class="main-title sm text-center mb-0">{{ $t("Global.highest_Sales") }}</h3>
+                            <h3 class="main-title text-center fw-normal mb-3">{{ $t("Global.commercial_Products") }}</h3>
+                            <h3 class="desc text-center mb-0">{{ $t("Global.highest_Sales") }}</h3>
                             <ChartsProducts 
                               :data-ready="dataReady"
                               :products-data="productsData"
@@ -61,23 +60,23 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-lg-6 mb-3">
                         <div class="layout-form chart_layout">
-                          <h3 class="main-title bold lg text-center mb-4">وقت الذروة</h3>
+                          <h3 class="main-title text-center fw-normal mb-4">وقت الذروة</h3>
                             <ChartsTimeLimit apiEndpoint="GetPeakTime" />
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-lg-6 mb-3">
                         <div class="layout-form chart_layout">
-                          <h3 class="main-title bold text-center mb-3">معدل الطلبات</h3>
+                          <h3 class="main-title fw-normal text-center mb-3">معدل الطلبات</h3>
                             <ChartsGetOrders apiEndpoint="GetRequestRateChartData"/>
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-lg-6 mb-3">
                         <div class="layout-form">
-                          <h3 class="main-title bold lg text-center mb-4">التحليل الديموغرافى</h3>
+                          <h3 class="main-title text-center fw-normal mb-4">التحليل الديموغرافي</h3>
                             <ChartsBar :rental-names="rentalNames" :placeholder-text="placeholderText" :source-data="sourceData" />
                         </div>
                     </div>
@@ -86,7 +85,7 @@
 
                     <div class="col-12 mb-5">
                         <div class="layout-form chart_layout">
-                        <h3 class="main-title bold lg text-center mb-4">متوسط حجم سلة الشراء</h3>
+                        <h3 class="main-title fw-normal text-center mb-4">متوسط حجم سلة الشراء</h3>
                         <ChartsGradientArea
                             :initialMonths="months"
                             :initialAllMonths="allMonths"
@@ -264,7 +263,9 @@ const getHomeSales = async () => {
     await axios.get(`GetSalesHomeStaticData`, config.value).then(res => {
     if (response(res) == "success") {
         HomeSalesData.value = res.data.data;
-        console.log(HomeSalesData.value, "HomeSalesData");
+        // if(HomeSalesData?.value?.abondendCartAverage){
+        //     localStorage.setItem('abondendCartAverage', HomeSalesData.value.abondendCartAverage);
+        // }
     }   
     loading.value = false;
     }).catch(err => {
@@ -356,7 +357,6 @@ const getDemographicData = async () => {
       if (Array.isArray(demographicData)) {
         sourceData.value = demographicData;
         console.log("Updated Source Data:", sourceData.value);
-        // نستخدم البيانات مباشرة كما هي من الـ API
       } else {
         console.error("demographicData is not an array:", demographicData);
       }
@@ -389,10 +389,6 @@ onMounted(async () => {
   await GetCommonProducts();
 });
 
-// onMounted( async () => {
-//     await getSalesData();
-// });
-
 onBeforeMount(() => {
   dataReady.value = true;
   // Initialize the chart data for the Orders chart
@@ -424,7 +420,7 @@ onBeforeMount(() => {
   position: relative;
   z-index: 2;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: normal;
   cursor: pointer;
   transition: color 0.3s;
 }
@@ -467,4 +463,37 @@ onBeforeMount(() => {
   color: white !important;
 }
 
+</style>
+
+<style lang="scss" scoped>
+  .info-box {
+    margin-inline-end: 0;
+  }
+  .info-box-item {
+    padding: 22px 33px 22px 18px;
+    @media (max-width: 550px) {
+      padding: 15px;
+    }
+  }
+  .info-box-item img {
+    height: 65px;
+  }
+  .info-box-item.cart-clients {
+    color: #fff;
+    span {
+      color: #ff7c95;
+    }
+    .hint-span {
+      color: #fff;
+      font-size: 12px;
+      transform: translateY(-50%);
+      margin-inline-start: 5px;
+    }
+
+  } 
+  .flex-column-sm {
+    @media (max-width: 550px) {
+      flex-direction: column !important;
+    }
+  }
 </style>

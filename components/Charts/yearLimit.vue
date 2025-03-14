@@ -1,5 +1,5 @@
 <template>
-  <div v-if="dataReady && chartDataLoaded" class="w-100" style="height: 400px;">
+  <div v-if="dataReady && chartDataLoaded" class="w-100" style="height: 300px;">
     <div class="d-flex align-items-center justify-content-center gap-4">
       <label class="label mb-0">اختر السنة</label>
       <div class="with_cun_select custom-select">

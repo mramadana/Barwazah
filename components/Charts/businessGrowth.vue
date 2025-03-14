@@ -1,7 +1,7 @@
 <template>
   <div v-if="dataReady" class="w-100">
     <div class="d-flex align-items-center justify-content-center gap-4 mb-4">
-      <label class="label mb-0">اختر السنة</label>
+      <!-- <label class="label mb-0">اختر السنة</label> -->
       <div class="with_cun_select custom-select">
         <div class="flex justify-content-center dropdown_card">
           <Dropdown 
@@ -409,7 +409,7 @@ onMounted(async () => {
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .custom-chart {
   width: 100%;
   height: 300px !important;

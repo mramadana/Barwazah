@@ -1,7 +1,7 @@
 <template>
     <div class="container d-flex align-items-center justify-content-between gap-2 mb-4" v-if="!isHomePage">
         <div>
-            <h3 class="main-title normal cl-red">{{ user.fullName }}</h3>
+            <h3 class="main-title normal cl-red">{{ user?.fullName }}</h3>
             <h1 class="main-title bold main-cl">{{ $t("Auth.welcome") }}</h1>
         </div>
         <div class="navbar-btn"  @click="toggleActive">

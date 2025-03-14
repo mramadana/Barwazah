@@ -351,9 +351,9 @@ body {
 .label {
   display: block;
   font-size: 13px;
-  font-weight: bold;
+  font-weight: normal;
   margin-bottom: 15px;
-  color: #000;
+  color: var(--main);
   .hint-red {
     color: red;
     margin-inline-start: 3px;
@@ -577,7 +577,7 @@ input.p-inputtext.p-component {
   background-color: var(--wh);
   box-shadow: 0px 3px 30px #0000001A;
   border-radius: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 0;
   padding: 45px 15px;
   &.sm-radius {
     border-radius: 10px;
@@ -660,10 +660,6 @@ input.p-inputtext.p-component {
       font-size: 17px;
     }
   }
-
-  &.cl-red {
-    color: #e5254a;
-  }
   
   &.sm {
     font-size: 14px;
@@ -673,11 +669,21 @@ input.p-inputtext.p-component {
     font-size: 16px;
   }
 }
+.fw-normal {
+  font-weight: normal;
+}
+
+.cl-red {
+  color: #e5254a;
+}
 
 .desc {
-  font-size: 13px;
+  font-size: 14px;
   color: #7391a9;
   font-weight: 300;
+  @media (max-width: $screen-xs) {
+    font-size: 12.5px;
+  }
 }
 
 
@@ -1204,40 +1210,58 @@ input.p-inputtext.p-component {
 .info-box {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 20px 0;
+  min-width: 312px;
+  margin-inline-end: 10px;
+  @media (max-width: $screen-xs) {
+    min-width: 100%;
+  }
 }
 
 .info-box-item {
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
-  padding: 25px 15px;
-  border-radius: 15px;
+  padding: 22px 33px;
+  border-radius: 32px;
   background-color: #f0f0f0;
+  height: 100%;
 
   &.market-size {
       background-color: #333;
-      color: #fff;
+      h2 {
+        color: #fff;
+      }
+      span {
+        color: #5f819d;
+      }
   }
 
   &.store-clients {
       background-color: #fff;
-      color: #f75c5c;
+      h2 {
+        color: #f75c5c;
+      }
+      span {
+        color: #5f819d;
+      }
   }
 
   &.cart-clients {
       background-color: #E5254A;
-      color: #fff;
-  }
-
-  &.market-clients {
+    }
+    
+    &.market-clients {
       background-color: #fff;
       color: #333;
+
+      span, h2 {
+        color: #5f819d;
+      }
   }
 
   img {
-      width: 88px;
-      height: 102px;
+    margin-inline-end: 25px;
   }
 
   .info-content {
@@ -1267,15 +1291,27 @@ input.p-inputtext.p-component {
 }
 
 .hint-card {
-  width: 45%;
+  width: 35%;
   padding-inline-start: 10px;
   border-right: 2px solid rgba(95, 129, 157, 1);
   font-size: 12px;
   color: #000;
   color: rgba(95, 129, 157, 1);
+  flex-grow: 1;
+  margin-bottom: 0;
+  font-weight: 300;
+  line-height: 1.5;
   @media (max-width: $screen-xs) {
     width: 100%;
     border-right: none;
-    border-bottom: 1px solid rgba(95, 129, 157, 1);
+    padding-inline-start: 0;
+  }
+}
+
+.home-section {
+  display: flex;
+  @media (max-width: 800px) {
+    flex-direction: column;
+    gap: 20px 0;
   }
 }

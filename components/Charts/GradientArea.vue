@@ -3,19 +3,19 @@
 
     <div class="radio-container">
       <input type="radio" :id="`radio1-${uniqueId}`" :name="`slider-${uniqueId}`" value="1" @change="handleRentalTypeChange">
-      <label :for="`radio1-${uniqueId}`" class="main-cl">للمتجر</label>
+      <label :for="`radio1-${uniqueId}`" class="cl-red">للمتجر</label>
 
       <input type="radio" :id="`radio2-${uniqueId}`" :name="`slider-${uniqueId}`" value="0" @change="handleRentalTypeChange" checked>
       <label :for="`radio2-${uniqueId}`">الكل</label>
 
       <input type="radio" :id="`radio3-${uniqueId}`" :name="`slider-${uniqueId}`" value="2" @change="handleRentalTypeChange">
-      <label :for="`radio3-${uniqueId}`" class="cl-red">للسوق</label>
+      <label :for="`radio3-${uniqueId}`" class="main-cl">للسوق</label>
 
       <div class="marker"></div>
     </div>
 
     <div class="d-flex align-items-center justify-content-center gap-4">
-      <label class="label mb-0">اختر الشهر</label>
+      <!-- <label class="label mb-0">اختر الشهر</label> -->
       <div class="with_cun_select custom-select">
         <div class="flex justify-content-center dropdown_card">
           <Dropdown 
@@ -207,7 +207,6 @@ const handleRentalTypeChange = (event) => {
   }
 };
 
-// مراقبة التغييرات في البيانات الشهرية
 watch(() => props.initialMonthlyData, (newData) => {
   if (selectedMonth.value && selectedMonth.value.id !== 0) {
     const monthId = selectedMonth.value.id;

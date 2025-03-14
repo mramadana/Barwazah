@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class="container">
         <div class="info-box-item cart-clients gap-5 flex-wrap mb-4">
             <div class="d-flex gap-3 justify-content-center flex-grow-1 align-items-center">
-                <img src="@/assets/images/cart.svg" alt="User Icon">
+                <img src="@/assets/images/cart-2.svg" alt="User Icon">
                 <div class="info-content">
                     <span>إجمالي قيمة السلات المتروكة للمتجر:</span>
                     <h2>99000 ريال</h2>
@@ -15,27 +15,24 @@
             </nuxt-link>
         </div>
 
-        <div class="layout-form chart_layout">
-            <h1 class="main-title bold text-center mb-5">متوسط حجم السلات المتروكة</h1>
-            <!-- <ChartsOrders 
-            :data-ready="dataReady"
-            :months="months"
-            :all-months="allMonths"
-            :manual-data="manualMonthlyData"
-            :initial-data="initialData"/> -->
-
+        <div class="layout-form chart_layout mb-3">
+            <h1 class="main-title fw-normal text-center mb-5">متوسط حجم السلات المتروكة</h1>
             <ChartsOrders apiEndpoint="AverageAbandonedCartSize" />
         </div>
 
-        <div class="layout-form chart_layout">
+        <div class="layout-form chart_layout mb-3">
             <ChartsProducts 
                 :data-ready="dataReady"
                 :products-data="productsData"
+                :rental-names="rentalNames_2" 
+                :placeholder-text="placeholderText_2"
+                :show-select="true"
+                @filter-change="handleFilterChange"
             />
         </div>
 
-        <div class="layout-form">
-            <!-- <h2 class="main-title bold text-center mb-5">التحليل الديموغرافي</h2> -->
+        <div class="layout-form chart_layout mb-3">
+            <h1 class="main-title fw-normal text-center mb-4">التحليل الديموغرافي</h1>
             <ChartsBar :rental-names="rentalNames" :placeholder-text="placeholderText" :source-data="sourceData" />
         </div>
 
@@ -73,6 +70,13 @@
         females: 'الإناث'
     });
 
+    const placeholderText_2 = ref('معدل الترك');
+    
+    const rentalNames_2 = ref({
+        males: 'الأقسام',
+        females: 'المنتجات'
+    });
+
     // Data for the products chart
     const productsData = computed(() => {
         if (!CommonProducts.value) return {
@@ -92,7 +96,8 @@
             })),
             series: CommonProducts.value.map(commonProduct => Number(commonProduct.precentage.toFixed(2))),
             colors: {
-            bar: '#013660',
+            // bar: '#013660',
+            // bar: CommonProducts.value.map(product => product.id == 2 ? '#000' : '#013660'),
             text: '#ffffff'
             }
         };
@@ -101,20 +106,25 @@
 
     const sourceData = ref([]);
 
+    const handleFilterChange = (filterValue) => {
+        GetCommonProducts(filterValue); // نمرر قيمة الفلتر للدالة
+    };
+
     // ***************************** method ***************************** //
 
-    const GetCommonProducts = async () => {
+    const GetCommonProducts = async (filter = 1) => { // قيمة افتراضية 1
         loading.value = true;
-        await axios.get(`DropoutRate`, config.value).then(res => {
-        if (response(res) == "success") {
-            CommonProducts.value = res.data.data;
-            console.log(CommonProducts.value, "HomeData");
-        }   
-        loading.value = false;
+        await axios.get(`DropoutRate?filter=${filter}`, config.value).then(res => {
+            if (response(res) == "success") {
+                CommonProducts.value = res.data.data;
+                productsData.value.colors.bar = filter === 2 ? '#e5254a' : '#013660';
+            }   
+            loading.value = false;
         }).catch(err => {
             console.error(err);
+            loading.value = false;
         });
-    }
+    };
 
     const getDemographicData = async () => {
         loading.value = true;
@@ -152,6 +162,14 @@
     .sales-icon {
         font-size: 30px;
         margin-inline-end: 20px;
+        color: #fff;
+    }
+
+    .info-box-item.cart-clients span {
+        color: #ff7c95;
+    }
+
+    .info-box-item.cart-clients {
         color: #fff;
     }
 </style>

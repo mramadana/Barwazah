@@ -1,7 +1,7 @@
 <template>
     <section>
 
-        <div class="row accordion accordion-flush mb-5" id="accordionFlushExample" v-if="!loading">
+        <div class="row accordion accordion-flush mb-4" id="accordionFlushExample" v-if="!loading">
             
             <div class="col-12 col-md-6 mb-4" v-for="item in Recommendations" :key="item.id">
                 <div class="chart_layout layout-form">
