@@ -24,7 +24,7 @@
 import { ref, onMounted, computed, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
-import { useAuthStore } from '@/stores/auth'; // تأكد من المسار الصحيح; // تأكد من المسار الصحيح
+import { useAuthStore } from '@/stores/auth';
 
 const axios = useApi();
 const { response } = responseApi();
@@ -38,7 +38,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 echarts.use([LineChart, TooltipComponent, GridComponent, CanvasRenderer, LegendComponent]);
 
 const dataReady = ref(false);
-const chartDataLoaded = ref(false); // متحكم في تحميل البيانات
+const chartDataLoaded = ref(false);
 const selectedYear = ref(null);
 const years = ref([
   { name: '2020', id: 2020 },
@@ -123,11 +123,11 @@ const getData = async (year) => {
       option.value.xAxis.data = Allmonths.value;
       option.value.series[0].data = monthlyData.map(item => Number(item.value));
 
-      await nextTick(); // الانتظار حتى يتم تحديث DOM
+      await nextTick(); 
       if (chart.value && chart.value.chart) {
-        chart.value.chart.resize(); // إعادة ضبط حجم الـ chart
+        chart.value.chart.resize();
       }
-      chartDataLoaded.value = true; // تم تحميل البيانات
+      chartDataLoaded.value = true;
     }
   } catch (err) {
     console.error(err);
@@ -139,7 +139,7 @@ onMounted(async () => {
   const currentYear = new Date().getFullYear();
   selectedYear.value = years.value.find(year => year.id === currentYear);
 
-  await nextTick(); // الانتظار حتى يتم تحديث DOM
+  await nextTick(); 
   getData(currentYear);
 });
 </script>

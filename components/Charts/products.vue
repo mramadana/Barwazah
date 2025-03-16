@@ -32,8 +32,8 @@
         </div>
     </div>
     <ClientOnly>
-      <div v-if="dataReady && !loading" class="w-100 d-flex justify-content-center">
-        <VChart ref="chart" :option="option" style="height: 300px; width: 100%; display: block" />
+      <div v-show="dataReady && !loading" class="w-100 d-flex justify-content-center">
+        <VChart ref="chart" :option="option" style="height: 300px; width: 100%; display: block" :style="{ height: chartHeight }" />
       </div>
     </ClientOnly>
     <div v-if="showSelect" class="text-end">
@@ -112,6 +112,11 @@ const props = defineProps({
     showSelect: {
       type: Boolean,
       default: false
+    },
+
+    chartHeight: {
+      type: String,
+      default: '300px'
     }
 });
 
@@ -183,7 +188,7 @@ const option = ref({
     axisTick: { show: false },
     axisLabel: {
       fontSize: 14,
-      color: '#333',
+      color: '#013660',
       padding: [0, 15, 0, 0],
       formatter: (value, index) => {
         const item = props.productsData.labels[index];
@@ -197,6 +202,8 @@ const option = ref({
       type: 'bar',
       data: [],
       barWidth: '80%',
+      barMaxWidth: 32,
+      // barCategoryGap: '30%',
       itemStyle: {
         borderRadius: [10, 0, 0, 10],
         color: props.productsData.colors.bar,
@@ -205,7 +212,7 @@ const option = ref({
         show: true,
         position: 'insideLeft',
         formatter: '{c}%',
-        offset: [10, 5],
+        offset: [10, 3],
         textStyle: {
           fontSize: 14,
           color: props.productsData.colors.text,
@@ -242,6 +249,8 @@ const updateChartData = async () => {
   if (chart.value?.chart) {
     chart.value.chart.clear();
     chart.value.chart.setOption(option.value, true);
+    resizeChart();
+    console.log('chart resized');
   }
 };
 
@@ -269,9 +278,34 @@ watch(() => props.dataReady, async (newVal) => {
   }
 });
 
+// عشان اظبط الارتفاع
+
+watch(() => props.chartHeight, () => {
+  resizeChart();
+});
+
+const resizeChart = () => {
+  if (chart.value?.chart) {
+    setTimeout(() => {
+      chart.value.chart.resize();
+    }, 100);
+  }
+};
+
+import { useRoute } from 'vue-router';
+const route = useRoute();
+
+watch(() => route.path, () => {
+  nextTick(() => {
+    resizeChart();
+  });
+});
+
+
 onMounted(async () => {
   if (props.dataReady && !props.loading) {
     await updateChartData();
+    resizeChart();
   }
 });
 </script>

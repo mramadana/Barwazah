@@ -107,12 +107,12 @@
     const sourceData = ref([]);
 
     const handleFilterChange = (filterValue) => {
-        GetCommonProducts(filterValue); // نمرر قيمة الفلتر للدالة
+        GetCommonProducts(filterValue);
     };
 
     // ***************************** method ***************************** //
 
-    const GetCommonProducts = async (filter = 1) => { // قيمة افتراضية 1
+    const GetCommonProducts = async (filter = 1) => { 
         loading.value = true;
         await axios.get(`DropoutRate?filter=${filter}`, config.value).then(res => {
             if (response(res) == "success") {

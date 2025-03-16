@@ -56,17 +56,5 @@ import LayoutHomeFooter from '@/components/layout/homefooter.vue';
   opacity: 0;
   filter: blur(.5rem);
 }
-
-.fixed_class {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 5000;
-  transition: all 0.5s;
-  transform: translate3d(0, 0, 0);
-  height: 100vh;
-  background-color: #000;
-}
 </style>
 

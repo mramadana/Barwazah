@@ -518,6 +518,7 @@ const responsiveOptions = ref([
             text-align: start;
             position: relative;
             --p: 0;
+            align-items: center;
             @media (max-width: 550px) {
                 display: flex;
                 align-items: center;

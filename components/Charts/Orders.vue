@@ -40,7 +40,7 @@ const { response } = responseApi();
 const { token } = storeToRefs(useAuthStore());
 const { t } = useI18n();
 const props = defineProps({
-  apiEndpoint: { type: String, required: true } // استلام API مختلف لكل instance
+  apiEndpoint: { type: String, required: true }
 });
 const echarts = await import('echarts/core');
 import { LineChart } from 'echarts/charts';

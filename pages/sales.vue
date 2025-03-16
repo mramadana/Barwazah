@@ -12,11 +12,11 @@
                                 <img src="@/assets/images/Sell_products.svg" alt="Store Icon">
                                 <div class="info-content">
                                     <span class="main-cl main-title bold mb-2">معدل بيع منتجات للمتجر</span>
-                                    <h2 v-if="!HomeSalesData?.length && !loading">{{ HomeSalesData?.storeSalesPercent }} %</h2>
+                                    <h2 v-if="!HomeSalesData?.length && !loading" class="d-flex align-items-end">{{ HomeSalesData?.storeSalesPercent }} <div class="hint-present">%</div></h2>
                                     <Skeleton class="mt-3" v-if="HomeSalesData?.length || loading" width="5rem" height=".5rem"></Skeleton>
                                 </div>
                             </div>
-                            <h4 class="hint-card">نسبة بيع المنتج الواحد من الكمية الكلية المتوفرة ترجمة الرقم: أنه اذا كانت الكمية الكلية للمنتج هي 100 اذن تم بيع 27 تقريبا</h4>
+                            <h4 class="hint-card">نسبة بيع المنتج الواحد من الكمية الكلية المتوفرة ترجمة الرقم: أنه اذا كانت الكمية الكلية للمنتج هي 100 اذن تم بيع {{ HomeSalesData?.storeSalesPercent }} تقريبا</h4>
                         </div>
                     </div>
 
@@ -263,9 +263,6 @@ const getHomeSales = async () => {
     await axios.get(`GetSalesHomeStaticData`, config.value).then(res => {
     if (response(res) == "success") {
         HomeSalesData.value = res.data.data;
-        // if(HomeSalesData?.value?.abondendCartAverage){
-        //     localStorage.setItem('abondendCartAverage', HomeSalesData.value.abondendCartAverage);
-        // }
     }   
     loading.value = false;
     }).catch(err => {
@@ -277,7 +274,8 @@ const GetCommonProducts = async () => {
     loading.value = true;
     await axios.get(`GetSalesCommonProductsData`, config.value).then(res => {
     if (response(res) == "success") {
-        CommonProducts.value = res.data.data;
+        // CommonProducts.value = res.data.data;
+        CommonProducts.value = res.data.data.slice(0, 4).reverse();
         console.log(CommonProducts.value, "HomeData");
     }   
     loading.value = false;
@@ -401,7 +399,11 @@ onBeforeMount(() => {
 
 
 <style>
-
+.hint-present {
+  font-size: 16px;
+  transform: translateY(-5px);
+  margin-inline-start: 5px;
+}
 
 .radio-container {
   position: relative;

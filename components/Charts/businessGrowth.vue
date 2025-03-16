@@ -46,11 +46,11 @@
     <!-- Dialog for Year Data (Business Growth) -->
     <Dialog v-model:visible="dialogVisible" class="auth-daialog custum_dialog_width" modal>
       <div class="dialog-content">
-        <h3 class="main-title bold text-center mb-3">مؤشرات سنة {{ selectedYearName }}</h3>
+        <h3 class="main-title main-cl lg normal text-center mb-4">مؤشرات سنة {{ selectedYearName }}</h3>
         <ul>
-          <li class="mb-2 d-flex gap-2 justify-content-center mb-3">مبيعات السنة: <span class="value">{{ DialogyearData?.salesYear }}</span></li>
-          <li class="mb-2 d-flex gap-2 justify-content-center mb-3">الحصة السوقية للمتجر: <span class="value">{{ DialogyearData?.storeMarketShare }}</span></li>
-          <li class="mb-2 d-flex gap-2 justify-content-center mb-3">نسبة تكرار الشراء: <span class="value">{{ DialogyearData?.repeatPurchaseRate }}</span></li>
+          <li class="mb-2 d-flex gap-2 justify-content-between main-cl mb-3" v-if="DialogyearData?.salesYear !== null && DialogyearData?.salesYear !== '0%' && DialogyearData?.salesYear !== '0ريال'">مبيعات السنة: <span class="value">{{ DialogyearData?.salesYear }}</span></li>
+          <li class="mb-2 d-flex gap-2 justify-content-between main-cl mb-3" v-if="DialogyearData?.storeMarketShare !== null && DialogyearData?.storeMarketShare !== '0%' && DialogyearData?.storeMarketShare !== '0ريال'">الحصة السوقية للمتجر: <span class="value">{{ DialogyearData?.storeMarketShare }}</span></li>
+          <li class="mb-2 d-flex gap-2 justify-content-between main-cl mb-3" v-if="DialogyearData?.repeatPurchaseRate !== null && DialogyearData?.repeatPurchaseRate !== '0%' && DialogyearData?.repeatPurchaseRate !== '0ريال'">نسبة تكرار الشراء: <span class="value">{{ DialogyearData?.repeatPurchaseRate }}</span></li>
         </ul>
       </div>
     </Dialog>
@@ -236,7 +236,7 @@ const option = ref({
   xAxis: {
     type: 'category',
     boundaryGap: true,
-    data: [], // Will be dynamically updated
+    data: [], // Data
     axisLine: {
       lineStyle: {
         color: '#E2E8F0'
@@ -423,13 +423,16 @@ onMounted(async () => {
 .dialog-content {
   text-align: center;
   ul {
+    width: 250px;
+    margin: 0 auto;
     list-style: none;
     padding: 0;
     li {
       margin-bottom: 10px;
     }
     .value {
-      font-weight: bold;
+      color: #E5254A;
+      font-size: 14px;
     }
   }
 }

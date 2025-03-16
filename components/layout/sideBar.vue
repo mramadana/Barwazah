@@ -58,17 +58,29 @@
 
                 <div class="link">
                     <div class="hint-img">
-                        <img src="@/assets/images/Rectangle.svg" alt="hint-img">
+                        <img v-if="userProfileImage" :src="userProfileImage" alt="hint-img">
+                        <!-- <img v-else src="@/assets/images/Rectangle.svg" alt="hint-img"> -->
                     </div>
-                   <span> {{ $t('Sidebar.store') }}</span>
+                   <span> {{ user?.storeName }}</span>
+                </div>
+
+                <div class="progress-container">
+                  <div class="progress-bar-side">
+                    <div class="progress-fill" :style="{ width: user?.classificationPercentage + '%' }"></div>
                   </div>
+                  <div class="progress-labels">
+                    <span>الفئة :</span>
+                    <span>{{ user?.storeClassification }}</span>
+                  </div>
+                </div>
+
 
                 <button class="link w-100 transparent" @click="logoutDialog = true">
                     <div class="hint-img">
                         <img src="@/assets/images/logout.svg" alt="hint-img">
                     </div>
                    <span> {{ $t('Sidebar.logout') }}</span>
-                  </button>
+                </button>
             </div>
 
         </div>
@@ -104,25 +116,36 @@ const props = defineProps({
   isActive: Boolean,
 });
 
+const stepSide = ref('');
+
 const logoutDialog = ref(false);
 
+const isImage = ref("");
+const checkImage = ref(false);
 const scrollPosition = ref(0);
 const linksList = ref(null);
 const router = useRouter();
 const route = useRoute();
 const mini = ref(true);
 
-const closeSiderbar = () => {
-  emit('toggle-active');
-  isActive.value = !isActive.value;
-};
+// ********************* functions *********************
 
-const isActiveLink = (path) => {
-  if (path === '/') {
-    return route.path === path;
+const userProfileImage = computed(() => {
+  const profilePic = user.value?.profilePicture;
+  
+  if (!profilePic || (profilePic && profilePic.includes('barwazah'))) {
+    return ('/Slider/Rectangle.svg');
   }
-  return route.path.startsWith(path);
-};
+  return profilePic;
+});
+
+
+    const isActiveLink = (path) => {
+      if (path === '/') {
+        return route.path === path;
+      }
+      return route.path.startsWith(path);
+    };
 
     const emit = defineEmits(['toggle-active']);
 
@@ -131,11 +154,8 @@ const isActiveLink = (path) => {
 
     // Toast
     const { successToast, errorToast } = toastMsg();
-
-    // Axios
-    const axios = useApi();
     
-    const { token } = storeToRefs(store);
+    const { token, user } = storeToRefs(store);
 
     const config = {
         headers: { Authorization: `Bearer ${token?.value || ''}` }
@@ -144,6 +164,7 @@ const isActiveLink = (path) => {
     const { response } = responseApi();
 
     const { logoutHandler } = store;
+
     const logout = async () => {
           const res = await logoutHandler();
           res.status == "success" ? successToast(res.msg) : errorToast(res.msg);
@@ -231,6 +252,13 @@ const toggleSidebar = () => {
 onMounted(() => {
   restoreScrollPosition();
   scrollToClickedLink();
+
+  if(user?.profilePicture?.includes('barwazah')) {
+    isImage.value = user?.profilePicture;
+    console.log("yes");
+  } else {
+    console.log("no03333", isImage.value);
+  }
 });
 
 </script>

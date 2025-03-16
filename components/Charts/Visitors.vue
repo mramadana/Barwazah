@@ -18,7 +18,7 @@ const { token } = storeToRefs(useAuthStore());
 const axios = useApi();
 const { response } = responseApi();
 const visitorsData = ref({
-  data: [] // Initialize with empty array
+  data: []
 });
 
 const config = computed(() => ({

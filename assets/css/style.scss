@@ -279,13 +279,11 @@ body {
 }
 
 .with_cun_select {
-  // display: flex;
-  // align-items: center;
-  box-shadow: 0px 0px 2px #D9D9D9;
-  border: 1px solid #dddddd;
-  border-radius: 5px;
+
+  border: 1px solid #5F819D;
+  border-radius: 8px;
   // overflow: hidden;
-  .main_input, .dropdown_card {
+  .main_input {
   border: 0;
   box-shadow: none;
   border-radius: 0;
@@ -303,6 +301,7 @@ body {
       }
       .p-inputtext {
         font-size: 12px !important;
+        color: #5F819D;
         &::placeholder {
           font-size: 6px !important;
         }
@@ -314,6 +313,7 @@ body {
     box-shadow: none;
     .p-dropdown-trigger {
         width: 17px;
+        color: #5F819D;
         .p-icon {
         height: 13px;
         }
@@ -329,8 +329,8 @@ body {
 }
 
 .dropdown_card {
-  box-shadow: 0px 0px 2px #D9D9D9;
-  border: 1px solid #dddddd;
+  // box-shadow: 0px 0px 2px #D9D9D9;
+  border: 1px solid #5F819D !important;
   border-radius: 5px;
   overflow: hidden;
   .p-dropdown-label, .p-multiselect-label {
@@ -341,6 +341,7 @@ body {
     outline: 0 !important;
     box-shadow: none !important;
     width: 100%;
+    
   }
   &::placeholder {
     font-size: 12px;
@@ -1240,7 +1241,7 @@ input.p-inputtext.p-component {
   &.store-clients {
       background-color: #fff;
       h2 {
-        color: #f75c5c;
+        color: #E5254A;
       }
       span {
         color: #5f819d;
@@ -1313,5 +1314,39 @@ input.p-inputtext.p-component {
   @media (max-width: 800px) {
     flex-direction: column;
     gap: 20px 0;
+  }
+}
+
+.progress-bar-side {
+  height: 10px;
+  background: #eef6fe;
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 3.2px 2px;
+  position: relative;
+}
+
+.progress-fill {
+  position: absolute;
+  @include dir-left(2px);
+  top: 50%;
+  transform: translateY(-50%);
+  height: 50%;
+  background: #E5254A;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+
+.progress-labels {
+  display: flex;
+  margin-top: 8px;
+  margin-bottom: 15px;
+  font-weight: 500;
+  justify-content: space-between;
+  span {
+    font-size: 13px;
+    color: #5F819D;
   }
 }

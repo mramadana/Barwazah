@@ -121,8 +121,8 @@ const option = ref({
     top: '5%',
     show: false,
     selected: {
-      [t('Global.females')]: true,
-      [t('Global.males')]: true,
+      [t('Global.marketData')]: true,
+      [t('Global.storeDataData')]: true,
     },
   },
   tooltip: {
@@ -146,7 +146,7 @@ const option = ref({
   },
   series: [
     {
-      name: t('Global.females'),
+      name: t('Global.marketData'),
       type: 'line',
       smooth: true,
       symbol: 'square',
@@ -163,7 +163,7 @@ const option = ref({
       data: [],
     },
     {
-      name: t('Global.males'),
+      name: t('Global.storeDataData'),
       type: 'line',
       smooth: true,
       symbol: 'square',
@@ -191,16 +191,16 @@ const handleRentalTypeChange = (event) => {
 
     switch (selectedRental.id) {
       case 0:
-        option.value.legend.selected[t('Global.females')] = true;
-        option.value.legend.selected[t('Global.males')] = true;
+        option.value.legend.selected[t('Global.marketData')] = true;
+        option.value.legend.selected[t('Global.storeDataData')] = true;
         break;
       case 1:
-        option.value.legend.selected[t('Global.females')] = false;
-        option.value.legend.selected[t('Global.males')] = true;
+        option.value.legend.selected[t('Global.marketData')] = false;
+        option.value.legend.selected[t('Global.storeDataData')] = true;
         break;
       case 2:
-        option.value.legend.selected[t('Global.females')] = true;
-        option.value.legend.selected[t('Global.males')] = false;
+        option.value.legend.selected[t('Global.marketData')] = true;
+        option.value.legend.selected[t('Global.storeDataData')] = false;
         break;
     }
     chartInstance.setOption(option.value, true);

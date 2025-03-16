@@ -112,18 +112,18 @@ const productsData = computed(() => {
     labels: [],
     series: [],
     colors: {
-      bar: '#f75c5c',
+      bar: '#E5254A',
       text: '#ffffff'
     }
   };
 
   return {
-    labels: HomeData.value.competitors.map(competitor => ({
+    labels: HomeData.value.competitors.reverse().map(competitor => ({
       id: competitor.id,
       text: competitor.competitorName,
       image: competitor.logo
     })),
-    series: HomeData.value.competitors.map(competitor => competitor.totalMarketVisitors),
+    series: HomeData.value.competitors.reverse().map(competitor => competitor.totalMarketVisitors),
     colors: {
       bar: '#f75c5c',
       text: '#ffffff'

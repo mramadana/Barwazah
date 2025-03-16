@@ -34,13 +34,12 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n';
-import { ref, onMounted, watch } from 'vue';
 const axios = useApi();
 const { response } = responseApi();
 const { token } = storeToRefs(useAuthStore());
 const { t } = useI18n();
 const props = defineProps({
-  apiEndpoint: { type: String, required: true } // استلام API مختلف لكل instance
+  apiEndpoint: { type: String, required: true }
 });
 const echarts = await import('echarts/core');
 import { LineChart } from 'echarts/charts';
@@ -126,7 +125,6 @@ const getPeakTimeData = async (monthId = 0) => {
     console.log('API Response:', res.data);
 
     if (response(res) === "success") {
-      // التحقق من وجود البيانات في أي من الهيكلين
       const data = res.data?.data?.peakTimeData || res.data?.data?.requestRateData;
       
       if (!data) {
@@ -140,32 +138,26 @@ const getPeakTimeData = async (monthId = 0) => {
       chartData.value = data;
       
       try {
-        // تحديث البيانات في الرسم البياني
         if (monthId === 0) {
-          // عرض البيانات الشهرية
           option.value.xAxis.data = data.map(item => item.month);
           option.value.series[0].data = data.map(item => item.value);
         } else {
-          // عرض البيانات اليومية للشهر المحدد
           option.value.xAxis.data = data.map(item => `اليوم ${item.day}`);
           option.value.series[0].data = data.map(item => item.value);
         }
 
-        // تحديث الرسم البياني
         if (chart.value?.chart) {
           chart.value.chart.setOption(option.value, true);
         }
       } catch (mapError) {
         console.error('Error mapping data:', mapError);
         console.log('Data structure:', data);
-        // في حالة حدوث خطأ، تصفير البيانات
         option.value.xAxis.data = [];
         option.value.series[0].data = [];
       }
     }
   } catch (error) {
     console.error("Error fetching peak time data:", error);
-    // تصفير البيانات في حالة الخطأ
     option.value.xAxis.data = [];
     option.value.series[0].data = [];
   } finally {
@@ -173,7 +165,7 @@ const getPeakTimeData = async (monthId = 0) => {
   }
 };
 
-// معالج تغيير الشهر
+
 const handleMonthChange = async (event) => {
   const monthId = event.value?.id;
   if (monthId !== undefined) {
@@ -181,13 +173,12 @@ const handleMonthChange = async (event) => {
   }
 };
 
-// تحميل البيانات الأولية عند تحميل المكون
 onMounted(async () => {
   selectedMonth.value = months.value[0];
   await getPeakTimeData();
 });
 
-// مراقبة التغييرات في البيانات
+
 watch(chartData, () => {
   if (chart.value?.chart) {
     chart.value.chart.setOption(option.value, true);

@@ -8,7 +8,9 @@
           <div class="col-12 col-md-6 mb-4">
             <div class="settings-card">
               <div class="store-image">
-                <img src="@/assets/images/Rectangle.svg" alt="Store Logo" />
+                <img v-if="settingsData?.storeImage" 
+                :src="settingsData.storeImage" alt="Store Logo" />
+                <img v-else src="@/assets/images/Rectangle.svg" alt="Store Logo" />
               </div>
               <div class="store-info">
                 <div class="store-name mb-2">المتجر: {{ settingsData?.storeName }}</div>
@@ -26,17 +28,16 @@
           <div class="col-12 col-md-6 mb-4">
             <div class="settings-card black">
               <div class="store-image">
-                <img :src="settingsData?.userImage" alt="Store Logo" />
               </div>
               <div class="store-info">
                 <div class="store-name mb-2">التاجر: {{ settingsData?.userName }}</div>
                 <div class="social-icons">
-                  <a :href="settingsData?.instagram" target="_blank"><i class="fab fa-instagram"></i></a>
-                  <a :href="settingsData?.twitter" target="_blank">
+                  <a :href="settingsData?.instagram" v-if="settingsData?.instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                  <a :href="settingsData?.twitter" v-if="settingsData?.twitter" target="_blank">
                     <img src="@/assets/images/x-twitter.svg" alt="twitter">
                   </a>
-                  <a :href="settingsData?.snapchat" target="_blank"><i class="fab fa-snapchat-ghost"></i></a>
-                  <a :href="settingsData?.facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                  <a :href="settingsData?.snapchat" v-if="settingsData?.snapchat" target="_blank"><i class="fab fa-snapchat-ghost"></i></a>
+                  <a :href="settingsData?.facebook" v-if="settingsData?.facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
                 </div>
               </div>
             </div>
@@ -152,7 +153,7 @@
   
   <script setup>
   definePageMeta({
-    name: "Home.settings",
+    name: "Sidebar.settings",
     middleware: "auth",
   });
   

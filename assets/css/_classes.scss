@@ -310,13 +310,12 @@ margin: 0;
     justify-content: space-between;
     flex-grow: 1;
     overflow-y: auto;
-    // transition: all 0.8s cubic-bezier(0.5, -0.7, 0.15, 1.55);
     transition: all 0.5s ease;
     background-color: #fff !important;
     padding: 0px 10px  20px;
-
+    
       &::-webkit-scrollbar {
-        width: 6px;
+        width: 0px;
       }
       /* Track */
       &::-webkit-scrollbar-track {
@@ -354,7 +353,7 @@ margin: 0;
       gap: 15px;
       padding: 5px;
       position: relative;
-      color: #000;
+      color: #5F819D;
       transition: .6s, background-position 0s;
       font-size: 13.5px;
       border-radius: 6px;

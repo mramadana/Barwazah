@@ -8,13 +8,6 @@ export default defineNuxtConfig({
     format: ['webp', 'jpeg'], // Use modern formats
   },
 
-  // devServer: {
-  //   https: {
-  //     key: '../../../../Windows/System32/localhost-key.pem',
-  //     cert: '../../../../Windows/System32/localhost.pem'
-  //   }
-  // },
-
   devtools: { enabled: true },
 
   app: {
@@ -28,7 +21,7 @@ export default defineNuxtConfig({
         { name: "description", content: "موقع اميال لتاجير السيارات" },
       ],
       link: [
-        { rel: "icon", type: "image/x-icon", href: "/sm-logo.svg" },
+        { rel: "icon", type: "image/x-icon", href: "/main-logo.jpg" },
       ],
     },
   },

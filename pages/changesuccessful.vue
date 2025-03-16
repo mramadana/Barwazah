@@ -15,7 +15,7 @@
                 <p class="main-title blue mb-5">برجاء تسجيل الدخول لحسابك بكلمة المرور الجديدة</p>
 
                 <div class="d-flex">
-                    <NuxtLink class="custom-btn md mr-auto" to="/Auth/login">
+                    <NuxtLink class="custom-btn md mr-auto" to="/settings">
                         العودة إلى حسابك
                     </NuxtLink>
                 </div>

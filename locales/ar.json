@@ -58,6 +58,8 @@
 
     "Global": {
         "welcome": "مرحبا",
+        "marketData": "السوق",
+        "storeDataData": "متجر",
         "sure_logout": "هل انت متأكد من تسجيل الخروج",
         "retreat": "تراجع",
         "males": "ذكور",

@@ -1,12 +1,37 @@
 <template>
     <div class="container">
-
-        <GlobalFAQ 
-            :loading="loading" 
-            :Recommendations="RecommendationsHome?.data || []" 
-        />
-
         <div class="row">
+            <div class="col-12 col-md-12 col-lg-8 mb-4 p-0">
+                <GlobalFAQ 
+                    :loading="loading" 
+                    :Recommendations="RecommendationsHome?.data || []" 
+                    :successfulcampaigns="RecommendationsHome?.successfulcampaigns || []"
+                />
+            </div>
+
+            <div class="col-12 col-lg-4 col-md-6 mb-4">
+                <div class="layout-form chart_layout">
+                    <h3 class="main-title main-cl fw-normal text-center mb-3">تحسين محركات البحث</h3>
+                    <ChartsProducts :data-ready="dataReady" :products-data="productsData" :chart-height="'190px'"/>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4 col-md-6 mb-5">
+                <div class="layout-form chart_layout">
+
+                    <div class="d-flex align-items-center align-items-center mb-3 gap-3">
+                        <img src="@/assets/images/Calendar.svg" alt="">
+                        <h3 class="main-title bold text-center red-cl">طلب استشارة مع خبير</h3>
+                    </div>
+
+                    <p class="desc text-center mb-4">احجز إستشارة مجانية مع خبراء التسويق لدينا لمساعدتـــك على تطوير خطة إستراتيجية ناجحة معتمدة على تحليل بياناتك الحالية</p>
+                    <nuxt-link to="https://calendly.com/barwazah-info/30min" target="_blank" class="custom-btn red-bg sm w-100">احجز مكالمتك الان</nuxt-link>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- <div class="row">
             
             <div class="col-12 col-md-4">
                 <div class="layout-form chart_layout">
@@ -25,10 +50,10 @@
                 <div class="layout-form chart_layout">
                     <h3 class="main-title fw-normal text-center mb-3">تحسين محركات البحث</h3>
                     <h3 class="desc text-center mb-0">{{ $t("Global.highest_Sales") }}</h3>
-                    <ChartsProducts :data-ready="dataReady" :products-data="productsData"/>
+                    <ChartsProducts :data-ready="dataReady" :products-data="productsData" :chart-height="'200px'"/>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 

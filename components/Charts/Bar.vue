@@ -53,7 +53,6 @@ const props = defineProps({
     },
     placeholderText: {
         type: String,
-        // default: 'اختر'
     }
 });
 
@@ -71,7 +70,7 @@ const option = ref({
     animationDuration: 1000,
     animationEasing: 'cubicOut',
     legend: {
-        top: '92%',
+        top: '90%',
         itemGap: 50,
         selected: {
             [t(props.rentalNames.females)]: true,
@@ -121,15 +120,11 @@ const option = ref({
     ]
 });
 
-// مراقبة التغييرات في sourceData
 watch(() => props.sourceData, (newData) => {
     if (Array.isArray(newData)) {
-        // تحديث البيانات في الرسم البياني
         option.value.xAxis.data = newData.map(item => item.ageRange);
         option.value.series[0].data = newData.map(item => item.maleCount);
         option.value.series[1].data = newData.map(item => item.femaleCount);
-
-        // تحديث الرسم البياني
         if (chart.value?.chart) {
             chart.value.chart.setOption(option.value, true);
         }

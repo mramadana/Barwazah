@@ -71,7 +71,8 @@
 import MarkdownIt from 'markdown-it';
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  name: "Sidebar.marketing_assistant"
 })
 
 const { user } = storeToRefs(useAuthStore());
