@@ -7,7 +7,7 @@
 
                     <div class="info-box">
                         <div class="info-box-item market-size">
-                            <img src="@/assets/images/attach_money.svg" alt="Dollar Icon">
+                            <img src="@/assets/images/attach_money.png" alt="Dollar Icon">
                             <div class="info-content">
                                 <span>حجم السوق</span>
                                 <div class="d-flex align-items-baseline gap-2">
@@ -55,7 +55,9 @@
                             <div class="chart-text">
                                 <span class="hint">الكلمات التي يبحث عنها عملاءك</span>
                                 <div class="key-words">
-                                    <div class="text" v-for="(item, index) in HomeData?.keyWords" :key="index">{{ item.word }}</div>
+                                    <div class="text position-relative" v-for="(item, index) in HomeData?.keyWords" :key="index">{{ item.word }}
+                                        <span class="tooltip main-cl d-block">معدل التحويل: {{ item.searchRate }} %</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +127,7 @@ const productsData = computed(() => {
     })),
     series: HomeData.value.competitors.reverse().map(competitor => competitor.totalMarketVisitors),
     colors: {
-      bar: '#f75c5c',
+      bar: '#E5254A',
       text: '#ffffff'
     }
   };
@@ -173,6 +175,10 @@ onBeforeMount( async () => {
         padding: 10px 18px;
         background-color: #eef6fe;
         border-radius: 24px;
+        @media (max-width: 550px) {
+            flex-direction: column;
+            align-items: start;
+        }
         .hint {
             color: #013660;
             font-size: 14px;
@@ -196,9 +202,45 @@ onBeforeMount( async () => {
             font-size: 14px;
             font-weight: 300;
             margin-bottom: 7px;
+            cursor: default;
             &:not(:last-child) {
                 margin-inline-end: 7px;
             }
         }
     }
+
+.tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: all 0.4s ease-in-out;
+  font-size: 11px;
+  box-shadow: 0 3px 30px rgba(0, 0, 0, 0.102);
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+  box-shadow: 0 3px 30px rgba(0, 0, 0, 0.102);
+}
+
+.key-words .text:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
 </style>

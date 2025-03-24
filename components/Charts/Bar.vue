@@ -166,10 +166,10 @@ const handleRentalTypeChange = (event) => {
                 showAllData();
                 break;
             case 1:
-                toggleFemalesVisibility();
+                toggleMalesVisibility();
                 break;
-                case 2:
-                    toggleMalesVisibility();
+            case 2:
+                toggleFemalesVisibility();
                 break;
         }
     }

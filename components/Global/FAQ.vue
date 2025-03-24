@@ -53,7 +53,8 @@
         <Dialog v-model:visible="faqDialog" :dismissableMask="true" modal class="custum_dialog_width auth-daialog"
             :draggable="false">
             <div class="text-center">
-                <p class="main-title fs-16 md mb-4">
+                <h4 class="main-title fs-16 cl-red mb-4">{{ selectedItem?.title }}</h4>
+                <p class="main-title fs-16 normal mb-4">
                     {{ selectedItem?.details }}
                 </p>
             </div>

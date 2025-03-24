@@ -8,7 +8,14 @@ export default defineNuxtConfig({
     format: ['webp', 'jpeg'], // Use modern formats
   },
 
-  devtools: { enabled: true },
+  devtools: { enabled: false },
+
+  // devServer: {
+  //   https: {
+  //     key: '../../../../Windows/System32/localhost-key.pem',
+  //     cert: '../../../../Windows/System32/localhost.pem'
+  //   }
+  // },
 
   app: {
     pageTransition: { name: 'layout', mode: 'out-in' },

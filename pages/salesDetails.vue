@@ -5,7 +5,8 @@
                 <img src="@/assets/images/cart-2.svg" alt="User Icon">
                 <div class="info-content">
                     <span>إجمالي قيمة السلات المتروكة للمتجر:</span>
-                    <h2>99000 ريال</h2>
+                    <h2 v-if="totalValue !== null && !loading">{{ totalValue }}</h2>
+                    <Skeleton class="mt-3" v-else-if="loading" width="5rem" height=".5rem"></Skeleton>
                 </div>
     
             </div>
@@ -42,7 +43,8 @@
 <script setup>
 
     definePageMeta({
-        middleware: 'auth'
+        middleware: 'auth',
+        title: 'salesDetails'
     });
 
     import * as echarts from 'echarts/core';
@@ -52,7 +54,8 @@
     const axios = useApi();
     const CommonProducts = ref([]);
     const { token } = storeToRefs(useAuthStore());
-    const loading = ref(false);
+    const loading = ref(true);
+    const totalValue = ref(null);
 
     // Flag to indicate if data is ready to be displayed
     const dataReady = ref(false);
@@ -147,10 +150,24 @@
         }
     };
 
+    const getToltaValue = async () => { 
+        loading.value = true;
+        await axios.get(`TotalValueOfAbandonedCarts`, config.value).then(res => {
+            if (response(res) == "success") {
+                totalValue.value = res.data.data;
+            }   
+            loading.value = false;
+        }).catch(err => {
+            console.error(err);
+            loading.value = false;
+        });
+    }; 
+
 
     onMounted( async() => {
         await getDemographicData();
         await GetCommonProducts();
+        await getToltaValue();
     });
 
     onBeforeMount(() => {

@@ -20,7 +20,7 @@
     <div class="chart-container">
       <VChart 
         ref="chart" 
-        class="custom-chart" 
+        class="custom-chart chart-height" 
         :option="option" 
         style="height: 300px; width: 100%; display: block" 
       />
@@ -196,7 +196,7 @@ const handleYearLabelClick = async (year) => {
 // Chart configuration
 const option = ref({
   legend: {
-    bottom: '5%',
+    bottom: '0%',
     show: true,
     left: 'center',
     icon: 'circle',
@@ -205,8 +205,9 @@ const option = ref({
     itemGap: 25,
     textStyle: {
       color: '#2B3674',
-      fontSize: 12,
-      fontFamily: 'Cairo'
+      fontSize: 11,
+      fontFamily: 'Cairo',
+      padding: [0, 10, 0, 0]
     }
   },
   tooltip: {
@@ -412,13 +413,12 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .custom-chart {
   width: 100%;
-  height: 300px !important;
 }
 
-:deep(.echarts) {
-  width: 100% !important;
-  height: 100% !important;
-}
+// :deep(.echarts) {
+//   width: 100% !important;
+//   height: 100% !important;
+// }
 
 .dialog-content {
   text-align: center;
@@ -450,6 +450,11 @@ onMounted(async () => {
   padding: 0 3%;
   margin-top: 1rem;
   border-top: 2px solid #E2E8F0;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  @media (max-width: 550px) {
+    justify-content: start;
+  }
 }
 
 .year-label {
@@ -482,4 +487,12 @@ onMounted(async () => {
     line-height: 1.5;
   }
 }
+</style>
+
+<style lang="scss">
+  .chart-height {
+    @media (max-width: 550px) {
+      height: 400px !important;
+    }
+  }
 </style>

@@ -41,10 +41,10 @@ const dataReady = ref(false);
 const chartDataLoaded = ref(false);
 const selectedYear = ref(null);
 const years = ref([
-  { name: '2020', id: 2020 },
-  { name: '2021', id: 2021 },
-  { name: '2022', id: 2022 },
-  { name: '2023', id: 2023 },
+  // { name: '2020', id: 2020 },
+  // { name: '2021', id: 2021 },
+  // { name: '2022', id: 2022 },
+  // { name: '2023', id: 2023 },
   { name: '2024', id: 2024 },
   { name: '2025', id: 2025 },
 ]);

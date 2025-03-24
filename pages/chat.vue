@@ -128,7 +128,7 @@ const sendMessage = async () => {
   
   try {
     // API call with params in URL
-    const response = await fetch(`https://ai.barwazah.net/Chatbot?customer_id=00000002&query=${encodeURIComponent(messageText)}`, {
+    const response = await fetch(`https://ai.barwazah.net/chatbot?customer_id=${user.value.id}&query=${encodeURIComponent(messageText)}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

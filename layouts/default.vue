@@ -7,7 +7,7 @@
       <slot />
     </div>
     <LayoutHomeFooter :isHomePage="isIndexPage" />
-    <div class="overlay-sidebar" :class="{ 'show': isActive }" @click="toggleActive"></div>
+    <div class="overlay-sidebar" v-if="!isIndexPage" :class="{ 'show': isActive }" @click="toggleActive"></div>
   </div>
 </template>
 
@@ -34,6 +34,7 @@ import LayoutHomeFooter from '@/components/layout/homefooter.vue';
     
   const toggleActive = () => {
     isActive.value = !isActive.value;
+    console.log(isActive.value, "Dssssss");
   };
 
     const nuxtApp = useNuxtApp();

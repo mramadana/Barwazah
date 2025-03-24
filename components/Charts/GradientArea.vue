@@ -127,8 +127,44 @@ const option = ref({
   },
   tooltip: {
     trigger: 'axis',
-    axisPointer: { type: 'cross', label: { backgroundColor: '#6a7985' } },
+    padding: [10, 20],
+    textStyle: {
+      fontSize: 13,            // تكبير حجم الخط
+      color: '#333',           // لون النص
+      fontFamily: 'Arial',     // نوع الخط
+    },
+    borderWidth: 2,
+    axisPointer: { type: 'cross', 
+    type: 'none',
+    label: { backgroundColor: '#6a7985'}
   },
+    formatter: function(params) {
+      let content = '<div style="text-align: right; direction: rtl;">'; // تنسيق عربي
+      params.forEach((item) => {
+        content += `
+          <div style="
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+          ">
+            <span style="
+              display: inline-block;
+              width: 12px;
+              height: 12px;
+              background: ${item.color};
+              border-radius: 2px;
+            "></span>
+            <strong>${item.seriesName}:</strong>
+            <span>${item.value}</span>
+          </div>
+        `;
+      });
+      content += '</div>';
+      return content;
+    },
+  },
+  
   grid: {
     left: '3%',
     right: '4%',
@@ -139,10 +175,12 @@ const option = ref({
     type: 'category',
     boundaryGap: false,
     data: [],
+    axisPointer: { type: 'none' },
   },
   yAxis: {
     type: 'value',
     show: false,
+    axisPointer: { type: 'none' },
   },
   series: [
     {

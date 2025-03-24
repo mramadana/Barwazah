@@ -11,7 +11,7 @@
                             <div class="d-flex">
                                 <img src="@/assets/images/Sell_products.svg" alt="Store Icon">
                                 <div class="info-content">
-                                    <span class="main-cl main-title bold mb-2">معدل بيع منتجات للمتجر</span>
+                                    <span class="main-cl main-title bold mb-2">معدل بيع المنتجات للمتجر</span>
                                     <h2 v-if="!HomeSalesData?.length && !loading" class="d-flex align-items-end">{{ HomeSalesData?.storeSalesPercent }} <div class="hint-present">%</div></h2>
                                     <Skeleton class="mt-3" v-if="HomeSalesData?.length || loading" width="5rem" height=".5rem"></Skeleton>
                                 </div>
@@ -45,6 +45,7 @@
                             :initialSeriesData="SalesseriesData_2"
                             @rental_change="handleSalesMonthChange"
                             :loading="loading"
+                            :showAllOption="true"
                         />
                         </div>
                     </div>
@@ -93,6 +94,7 @@
                             :initialSeriesData="SalesseriesData"
                             :loading="loading"
                             @rental_change="handleMonthChange"
+                            :showAllOption="false"
                         />
                         </div>
                     </div>

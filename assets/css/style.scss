@@ -979,6 +979,7 @@ input.p-inputtext.p-component {
   width: 500px;
   max-width: 100%;
   margin: 0 20px;
+  border-radius: 32px;
   &.without-close {
     .p-dialog-header-icons {
       display: none;
@@ -1098,7 +1099,14 @@ input.p-inputtext.p-component {
 }
 
 .p-dialog .p-dialog-header {
-  padding: 10px;
+  padding: 15px;
+  border-top-right-radius: 32px;
+  border-top-left-radius: 32px;
+}
+
+.p-dialog .p-dialog-content:last-of-type {
+  border-bottom-right-radius: 32px;
+  border-bottom-left-radius: 32px;
 }
 
 .Auth-logo {
@@ -1323,16 +1331,15 @@ input.p-inputtext.p-component {
   display: flex;
   border-radius: 10px;
   overflow: hidden;
-  padding: 3.2px 2px;
+  padding: 5px 3.5px;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: start;
 }
 
 .progress-fill {
-  position: absolute;
-  @include dir-left(2px);
-  top: 50%;
-  transform: translateY(-50%);
-  height: 50%;
+  height: 5px;
   background: #E5254A;
   border-radius: 10px;
   transition: width 0.3s ease;

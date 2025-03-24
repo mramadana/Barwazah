@@ -444,7 +444,7 @@
     }
    }
    .user-img {
-    max-height: 35px;
+    
     @media (max-width: $screen-xs) {
       max-height: 23px;
     }
@@ -457,12 +457,18 @@
 .auth-user {
     border-radius: 16px;
     padding: 12px;
-    border-radius: 16px;
-    padding: 12px;
     min-height: 65px;
     .user-img {
         max-height: 45px;
-        border-radius: 10px !important;
+        @media (max-width: $screen-md) {
+          max-height: 23px;
+        }
+    }
+    @media (max-width: $screen-md) {
+      padding: 5px 10px;
+      width: 45px;
+      border-radius: 6px;
+      min-height: auto;
     }
 }
 
@@ -624,6 +630,9 @@
   @media (max-width: 550px) {
     display: block;
     margin-bottom: 30px;
+  }
+  @media (max-width: 325px) {
+    height: 290px;
   }
 }
 
@@ -951,6 +960,7 @@
   width: 500px;
   max-width: 100%;
   margin: 0 20px;
+  box-shadow: none;
   &.without-close {
     .p-dialog-header-icons {
       display: none;
@@ -1500,6 +1510,7 @@
 
 .p-dropdown-trigger {
   width: .8rem;
+  margin-inline-end: 10px;
 }
 
 .hidden-sm {

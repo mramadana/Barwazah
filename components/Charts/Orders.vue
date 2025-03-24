@@ -105,8 +105,11 @@ const option = ref({
       symbol: 'square',
       symbolSize: 7,
       showSymbol: true,
-      lineStyle: { width: 2, color: '#4681f4' },
-      itemStyle: { color: '#013660' },
+      lineStyle: { width: 2, color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        { offset: 0, color: 'rgba(247, 92, 92, 0.6)' },
+        { offset: 1, color: 'rgba(247, 92, 92, 0.2)' },
+      ]), },
+      itemStyle: { color: '#E5254A' },
       areaStyle: {
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
           { offset: 0, color: 'rgba(247, 92, 92, 0.6)' },

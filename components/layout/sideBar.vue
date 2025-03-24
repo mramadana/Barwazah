@@ -58,8 +58,7 @@
 
                 <div class="link">
                     <div class="hint-img">
-                        <img v-if="userProfileImage" :src="userProfileImage" alt="hint-img">
-                        <!-- <img v-else src="@/assets/images/Rectangle.svg" alt="hint-img"> -->
+                      <img onerror="this.src='Rectangle.svg'" :src="user?.storeImage" alt="img">
                     </div>
                    <span> {{ user?.storeName }}</span>
                 </div>
@@ -116,12 +115,12 @@ const props = defineProps({
   isActive: Boolean,
 });
 
-const stepSide = ref('');
+  // store
+  const store = useAuthStore();
+  const { token, user } = storeToRefs(store);
 
 const logoutDialog = ref(false);
 
-const isImage = ref("");
-const checkImage = ref(false);
 const scrollPosition = ref(0);
 const linksList = ref(null);
 const router = useRouter();
@@ -129,16 +128,6 @@ const route = useRoute();
 const mini = ref(true);
 
 // ********************* functions *********************
-
-const userProfileImage = computed(() => {
-  const profilePic = user.value?.profilePicture;
-  
-  if (!profilePic || (profilePic && profilePic.includes('barwazah'))) {
-    return ('/Slider/Rectangle.svg');
-  }
-  return profilePic;
-});
-
 
     const isActiveLink = (path) => {
       if (path === '/') {
@@ -149,19 +138,12 @@ const userProfileImage = computed(() => {
 
     const emit = defineEmits(['toggle-active']);
 
-    // store
-    const store = useAuthStore();
-
     // Toast
     const { successToast, errorToast } = toastMsg();
     
-    const { token, user } = storeToRefs(store);
-
     const config = {
         headers: { Authorization: `Bearer ${token?.value || ''}` }
     };
-
-    const { response } = responseApi();
 
     const { logoutHandler } = store;
 
@@ -212,33 +194,25 @@ const smoothScrollTo = (position) => {
   }
 };
 
-const handleRouteChange = () => {
-  console.log('Route changed:', router);
-  if (window.innerWidth <= 1250) {
-    emit('toggle-active');
-    handleResize();
-  }
-};
-
-watch(router, handleRouteChange);
-
 router.afterEach((to, from) => {
-    if (window.innerWidth <= 1250) {
+    if (window.innerWidth <= 1250 && route.path !== '/') {
       emit('toggle-active');
-      handleResize();
     }
 });
 
 const toggleSidebar = () => {
     mini.value = !mini.value;
-    const sidebar = document.getElementById("mySidebar");
-    const main = document.getElementById("main");
+    // const sidebar = document.getElementById("mySidebar");
+    // const main = document.getElementById("main");
   
-    if (!mini.value) {
-      sidebar.style.width = "230px";
-    } else {
-      sidebar.style.width = "85px";
-    }
+    // if (!mini.value) {
+    //   sidebar.style.width = "230px";
+    //   if (window.innerWidth <= 550) {
+    //     sidebar.style.width = "85px";
+    //   }
+    // } else {
+    //   sidebar.style.width = "85px";
+    // }
   };
 
 
@@ -252,23 +226,18 @@ const toggleSidebar = () => {
 onMounted(() => {
   restoreScrollPosition();
   scrollToClickedLink();
-
-  if(user?.profilePicture?.includes('barwazah')) {
-    isImage.value = user?.profilePicture;
-    console.log("yes");
-  } else {
-    console.log("no03333", isImage.value);
-  }
 });
 
 </script>
 
 <style lang="scss" scoped>
 .sidebar {
+  width: 230px;
   transition: all 0.5s ease;
 
   &.mini {
-    width: 85px;
+    width: 85px !important;
+
     
     .link {
       gap: 0;
@@ -285,6 +254,10 @@ onMounted(() => {
     .hint-img {
       margin-right: 0;
     }
+  }
+
+  @media (max-width: 550px) {
+    width: 85px !important;
   }
 }
 

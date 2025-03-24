@@ -117,10 +117,7 @@ export const useAuthStore = defineStore("auth", {
         const { data: resData } = await axios.post("Logout", {}, config);
         if (resData.key === "success") {
           this.token = null;
-          this.user = {
-            phone: "",
-            country_code: "",
-          };
+          this.user = null;
           this.isLoggedIn = false;
           navigateTo("/Auth/login");
           return { status: "success", msg: resData.message };

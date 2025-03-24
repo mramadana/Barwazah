@@ -1,7 +1,8 @@
 {
     "Titles": {
         "home": "الرئيسية",
-        "sales": "المبيعات"
+        "sales": "المبيعات",
+        "salesDetails": "تفاصيل المبيعات"
     },
 
     "validation": {

@@ -47,8 +47,6 @@
                                 <nuxt-link to="restorePassword" >{{ $t('Auth.restore_password') }}</nuxt-link>
                             </div>
 
-                            <!-- <NuxtImg format="webp" src="/ramadan.jpg"  width="100" height="100"/>                            
-                            <img src="@/assets/images/ramadan.jpg" style="width: 100px; height: 100px;" />                             -->
                         </div>
                     </div>
                 </form>
@@ -141,7 +139,7 @@
     import { useI18n } from 'vue-i18n';
 
     const { t } = useI18n();
-    const { user } = storeToRefs(useAuthStore());
+    const { user, token } = storeToRefs(useAuthStore());
     const checkType = ref(false);
     const checkTypeNum = ref(null);
     const signUp_dialog = ref(false);
@@ -334,6 +332,9 @@
                 checknich.value = false;
                 successToast(res.data.message);
                 loadingSpecialization.value = false;
+                user.value = res.data.data;
+                token.value = res.data.data.token;
+                console.log(user.value, "user Dataaaa", token.value);
                 navigateTo('/');
             } else {
                 errorToast(res.data.message);

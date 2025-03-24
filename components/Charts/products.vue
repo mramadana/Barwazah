@@ -36,7 +36,7 @@
         <VChart ref="chart" :option="option" style="height: 300px; width: 100%; display: block" :style="{ height: chartHeight }" />
       </div>
     </ClientOnly>
-    <div v-if="showSelect" class="text-end">
+    <div v-if="showSelect && productsData?.labels?.length > 0" class="text-end">
       <button 
         @click="showAll = !showAll" class="toggle-button">
         {{ showAll ? 'عرض أقل' : 'عرض المزيد' }}
@@ -142,17 +142,20 @@ const getRichAndLabels = () => {
     const key = `img_${item.id}`;
     if (item.image) {
       rich[key] = {
-        height: 20,
-        width: 20,
+        height: 25,
+        width: 30,
         backgroundColor: {
           image: item.image,
+          align: 'center',
         },
         align: 'center',
         textAlign: 'center',
+        verticalAlign: 'middle',
         padding: [0, 10, 0, 0],
       };
     }
-    return item.text;
+    return item.text + "\u00A0\u00A0";
+
   });
   return { rich, yAxisLabels };
 };
@@ -179,6 +182,7 @@ const option = ref({
     axisLine: { show: false },
     axisTick: { show: false },
     splitLine: { show: false },
+    inverse: true,
   },
   yAxis: {
     type: 'category',
@@ -189,6 +193,7 @@ const option = ref({
     axisLabel: {
       fontSize: 14,
       color: '#013660',
+      // fontFamily: 'main_font',
       padding: [0, 15, 0, 0],
       formatter: (value, index) => {
         const item = props.productsData.labels[index];
@@ -285,9 +290,11 @@ watch(() => props.chartHeight, () => {
 });
 
 const resizeChart = () => {
-  if (chart.value?.chart) {
+  if (chart.value?.chart) { 
     setTimeout(() => {
-      chart.value.chart.resize();
+      if (chart.value?.chart) { 
+        chart.value.chart.resize();
+      }
     }, 100);
   }
 };

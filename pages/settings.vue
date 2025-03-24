@@ -6,34 +6,42 @@
 
           <!-- First Card -->
           <div class="col-12 col-md-6 mb-4">
-            <div class="settings-card">
+            <div class="settings-card info">
               <div class="store-image">
-                <img v-if="settingsData?.storeImage" 
-                :src="settingsData.storeImage" alt="Store Logo" />
-                <img v-else src="@/assets/images/Rectangle.svg" alt="Store Logo" />
+                <img onerror="this.src='main-logo.jpg'" :src="settingsData?.storeImage" alt="Store Logo" />
               </div>
               <div class="store-info">
-                <div class="store-name mb-2">المتجر: {{ settingsData?.storeName }}</div>
+                <div class="store-name d-flex align-items-center">المتجر:
+                  <Skeleton class="ms-3" v-if="settingsData?.length || loading" width="5rem" height=".5rem"></Skeleton>
+                  <span class="ms-2" v-else>{{ settingsData?.storeName }}</span>
+                </div>
 
-                <Skeleton class="mt-2" v-if="settingsData?.length || loading" width="5rem" height=".5rem"></Skeleton>
+                <div class="progress-container mb-2" v-if="!settingsData?.length && !loading">
+                  <div class="progress-bar-side">
+                    <div class="progress-fill" :style="{ width: settingsData?.classificationPercentage + '%' }"></div>
+                  </div>
+                </div>
 
-                <div class="store-category">الفئة: {{ settingsData?.store_category }}</div>
+                <div class="store-category d-flex align-items-center"> 
+                  الفئة:  
+                  <Skeleton class="ms-3" v-if="settingsData?.length || loading" width="5rem" height=".5rem"></Skeleton>
+                  <span class="ms-2" v-else>{{ settingsData?.storeClassification }}</span>
+                </div>
 
-                <Skeleton class="mt-2" v-if="settingsData?.length || loading" width="5rem" height=".5rem"></Skeleton>
               </div>
             </div>
           </div>
 
           <!-- Second Card with Social Icons -->
           <div class="col-12 col-md-6 mb-4">
-            <div class="settings-card black">
+            <div class="settings-card black info">
               <div class="store-image">
               </div>
               <div class="store-info">
                 <div class="store-name mb-2">التاجر: {{ settingsData?.userName }}</div>
                 <div class="social-icons">
                   <a :href="settingsData?.instagram" v-if="settingsData?.instagram" target="_blank"><i class="fab fa-instagram"></i></a>
-                  <a :href="settingsData?.twitter" v-if="settingsData?.twitter" target="_blank">
+                  <a class="twitter" :href="settingsData?.twitter" v-if="settingsData?.twitter" target="_blank">
                     <img src="@/assets/images/x-twitter.svg" alt="twitter">
                   </a>
                   <a :href="settingsData?.snapchat" v-if="settingsData?.snapchat" target="_blank"><i class="fab fa-snapchat-ghost"></i></a>
@@ -46,66 +54,68 @@
         </div>
 
         <!-- Additional Settings Cards -->
-        <div class="row layout-form chart_layout accordion accordion-flush">
-
-          <div class="col-12 col-xl-4 col-md-6 mb-4">
-
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#flush-collapseOne'" aria-expanded="false" :aria-controls="'flush-collapseOne'">
-                        <span class="hint-accordion">رقم الهاتف</span>
-                    </button>
-                </h2>
-                <div :id="'flush-collapseOne'" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        {{ settingsData?.phoneNumber }}
-                    </div>
+         <div class="mb-5">
+           <div class="row layout-form chart_layout accordion accordion-flush m-0">
+   
+             <div class="col-12 col-xl-4 col-md-6 mb-4">
+   
+               <div class="accordion-item">
+                   <h2 class="accordion-header">
+                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#flush-collapseOne'" aria-expanded="false" :aria-controls="'flush-collapseOne'">
+                           <span class="hint-accordion">رقم الهاتف</span>
+                       </button>
+                   </h2>
+                   <div :id="'flush-collapseOne'" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                       <div class="accordion-body">
+                           {{ settingsData?.phoneNumber }}
+                       </div>
+                   </div>
                 </div>
+                 
              </div>
-              
-          </div>
-
-          <div class="col-12 col-xl-4 col-md-6 mb-4">
-            
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSector" aria-expanded="false" aria-controls="flush-collapseSector">
-                  <span class="hint-accordion">القطاع الخاص بك</span>
-                </button>
-              </h2>
-              <div id="flush-collapseSector" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">
-                  {{ settingsData?.nisheName }}
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="col-12 col-xl-4 col-md-6 mb-4">
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseEmail" aria-expanded="false" aria-controls="flush-collapseEmail">
-                  <span>البريد الإلكتروني</span>
-                </button>
-              </h2>
-              <div id="flush-collapseEmail" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">
-                  {{ settingsData?.email }}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-12 col-xl-4 col-md-6 mb-4">
-            <div class="settings-card blue-bg" @click="changePassword_dialog = true">
-              <div class="card-content">
-                <span class="card-label">تغيير كلمة السر</span>
-              </div>
-              <button class="edit-button">***</button>
-            </div>
-          </div>
-        </div>
+   
+             <div class="col-12 col-xl-4 col-md-6 mb-4">
+               
+               <div class="accordion-item">
+                 <h2 class="accordion-header">
+                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSector" aria-expanded="false" aria-controls="flush-collapseSector">
+                     <span class="hint-accordion">القطاع الخاص بك</span>
+                   </button>
+                 </h2>
+                 <div id="flush-collapseSector" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                   <div class="accordion-body">
+                     {{ settingsData?.nisheName }}
+                   </div>
+                 </div>
+               </div>
+   
+             </div>
+   
+             <div class="col-12 col-xl-4 col-md-6 mb-4">
+               <div class="accordion-item">
+                 <h2 class="accordion-header">
+                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseEmail" aria-expanded="false" aria-controls="flush-collapseEmail">
+                     <span>البريد الإلكتروني</span>
+                   </button>
+                 </h2>
+                 <div id="flush-collapseEmail" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                   <div class="accordion-body">
+                     {{ settingsData?.email }}
+                   </div>
+                 </div>
+               </div>
+             </div>
+   
+             <div class="col-12 col-xl-4 col-md-6 mb-4">
+               <div class="settings-card blue-bg" @click="changePassword_dialog = true">
+                 <div class="card-content">
+                   <span class="card-label">تغيير كلمة السر</span>
+                 </div>
+                 <button class="edit-button">***</button>
+               </div>
+             </div>
+           </div>
+         </div>
       </div>
 
       <!-- Password Dialog -->
@@ -160,10 +170,10 @@
   // Pinia store
   import { useAuthStore } from "~/stores/auth";
   const { token, user, newemail } = storeToRefs(useAuthStore());
+  const store = useAuthStore();
   const { response } = responseApi();
   const { successToast, errorToast } = toastMsg();
   const axios = useApi();
-  const store = useAuthStore();
   const { deleteAccountHandler } = store;
 
   // ******************** Data ********************
@@ -269,16 +279,30 @@
     .settings-card {
       background-color: var(--wh);
       border-radius: 10px;
-      padding: 15px 20px;
+      padding: 0 20px;
       display: flex;
       align-items: center;
       gap: 20px;
       flex-wrap: wrap;
+      &.info {
+        height: 100%;
+        margin-bottom: 30px;
+      }
+      @media (max-width: 768px) {
+        gap: 15px;
+      }
       .store-name {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        color: #013660;
+        margin-bottom: 20px;
+        @media (max-width: 768px) {
+          font-size: 1.1rem;
+          margin-bottom: 15px;
+        }
       }
       .store-category {
         font-size: 1rem;
+        color: #5F819D;
       }
       &.black {
         background: #2d2d2d;
@@ -300,6 +324,10 @@
         height: 120px;
         border-radius: 12px;
         object-fit: cover;
+        @media (max-width: 768px) {
+          width: 90px;
+          height: 90px;
+        }
       }
     
       .card-content .card-label {
