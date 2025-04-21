@@ -94,7 +94,7 @@
             labels: [],
             series: [],
             colors: {
-            bar: '#f75c5c',
+            bar: '#E5254A',
             text: '#ffffff'
             }
         };
@@ -110,7 +110,7 @@
                 return parseFloat(competitor.precentage.replace('k', ''));
             }),
             colors: {
-            bar: '#f75c5c',
+            bar: '#E5254A',
             text: '#ffffff'
             }
         };

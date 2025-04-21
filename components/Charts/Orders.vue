@@ -77,7 +77,7 @@ const months = ref([
 const option = ref({
   tooltip: {
     trigger: 'axis',
-    axisPointer: { type: 'cross', label: { backgroundColor: '#6a7985' } },
+    axisPointer: { type: 'none', label: { backgroundColor: '#6a7985' } },
   },
   grid: {
     left: '3%',

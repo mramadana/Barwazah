@@ -274,7 +274,7 @@
                 if (!response.data.hasNiche) {
                     checknich.value = true;  // Show niche selection if not present
                 } else {
-                    navigateTo('/');  // Navigate to home if niche exists
+                    navigateTo('/home');  // Navigate to home if niche exists
                 }
             }
         } catch (error) {
@@ -335,7 +335,7 @@
                 user.value = res.data.data;
                 token.value = res.data.data.token;
                 console.log(user.value, "user Dataaaa", token.value);
-                navigateTo('/');
+                navigateTo('/home');
             } else {
                 errorToast(res.data.message);
             }

@@ -52,6 +52,7 @@
           <li class="mb-2 d-flex gap-2 justify-content-between main-cl mb-3" v-if="DialogyearData?.storeMarketShare !== null && DialogyearData?.storeMarketShare !== '0%' && DialogyearData?.storeMarketShare !== '0ريال'">الحصة السوقية للمتجر: <span class="value">{{ DialogyearData?.storeMarketShare }}</span></li>
           <li class="mb-2 d-flex gap-2 justify-content-between main-cl mb-3" v-if="DialogyearData?.repeatPurchaseRate !== null && DialogyearData?.repeatPurchaseRate !== '0%' && DialogyearData?.repeatPurchaseRate !== '0ريال'">نسبة تكرار الشراء: <span class="value">{{ DialogyearData?.repeatPurchaseRate }}</span></li>
         </ul>
+        <li class="d-flex gap-2 justify-content-center main-cl mt-4 mb-3" v-if="DialogyearData?.salesYear === null || DialogyearData?.salesYear === '0%' || DialogyearData?.salesYear === '0ريال' || DialogyearData?.storeMarketShare === null || DialogyearData?.storeMarketShare === '0%' || DialogyearData?.storeMarketShare === '0ريال'"> <span class="value">ليس لديك بيانات مسجله لهذه السنة</span></li>
       </div>
     </Dialog>
   </div>
@@ -71,6 +72,7 @@ const echarts = await import('echarts/core');
 import { LineChart } from 'echarts/charts';
 import { TooltipComponent, GridComponent, LegendComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
+import { number } from 'echarts/core';
 
 echarts.use([LineChart, TooltipComponent, GridComponent, CanvasRenderer, LegendComponent]);
 
@@ -106,8 +108,15 @@ const fetchChartData = async (year = 0) => {
   try {
     loading.value = true;
     const res = await axios.get(`BusinessGrowthChart?year=${year}`, config.value);
+    // if (response(res) === "success") {
+    //   chartData.value = res.data.data;
+    //   updateChartData();
+    // }
     if (response(res) === "success") {
-      chartData.value = res.data.data;
+      chartData.value = {
+        marketData: res.data.data.marketData,
+        storeDataData: res.data.data.storeDataData
+      };
       updateChartData();
     }
   } catch (error) {
@@ -210,24 +219,40 @@ const option = ref({
       padding: [0, 10, 0, 0]
     }
   },
-  tooltip: {
-    trigger: 'axis',
-    axisPointer: { 
-      type: 'line',
-      lineStyle: {
-        color: '#E2E8F0',
-        width: 1
+  
+
+tooltip: {
+  trigger: 'axis',
+  formatter: (params) => { 
+    let result = `<div style="padding: 5px;">${params[0].axisValue}</div>`;
+    params.forEach((item) => {
+      const value = Number(item.value);
+      let formattedValue;
+      
+      // Format sales series (index 0) with 2 decimals and %
+      if (item.seriesIndex === 0) {
+        // formattedValue = `${value.toFixed(2)}`;
+        formattedValue = Number.isInteger(value) ? `${value}` : `${value.toFixed(2)}`;
+      } 
+      // Keep market share series (index 1) as original format
+      else {
+        formattedValue = Number.isInteger(value) 
+          ? `${value}` 
+          : `${value.toFixed(2)}%`;
       }
-    },
-    backgroundColor: '#fff',
-    borderColor: '#E2E8F0',
-    borderWidth: 1,
-    textStyle: {
-      color: '#2B3674',
-      fontFamily: 'Cairo'
-    }
+
+      result += `
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${item.color};"></span>
+          <span>${item.seriesName}: <b>${formattedValue}</b></span>
+        </div>
+      `;
+    });
+    return result;
   },
-  grid: {
+},
+
+grid: {
     left: '3%',
     right: '4%',
     bottom: '15%',
@@ -401,7 +426,7 @@ onMounted(async () => {
   const initialYear = years.value[0];
   selectedYear.value = initialYear;
   await fetchChartData(initialYear.id);
-  await fetchGrowthReport(); // Fetch the report text
+  await fetchGrowthReport();
   dataReady.value = true;
 
   if (chart.value && chart.value.chart) {
@@ -430,10 +455,10 @@ onMounted(async () => {
     li {
       margin-bottom: 10px;
     }
-    .value {
-      color: #E5254A;
-      font-size: 14px;
-    }
+  }
+  .value {
+    color: #E5254A;
+    font-size: 14px;
   }
 }
 

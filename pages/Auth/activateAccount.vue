@@ -39,39 +39,6 @@
     </div>
 </template>
 
-
-<!-- <script>
-
-definePageMeta({
-        name: "Home.activation_code",
-    });
-import VOtpInput from "vue3-otp-input";
-
-export default {
-    components: {
-        VOtpInput,
-    },
-  data() {
-    return {
-      otpInput: null,
-      bindModal: "",
-    };
-  },
-  methods: {
-
-    submitData() {   
-        this.$router.push('/')
-    }
-
-  },
-  
-  mounted() {
-    this.otpInput = this.$refs.otpInput;
-  },
-};
-</script> -->
-
-
 <script setup>
 
 definePageMeta({

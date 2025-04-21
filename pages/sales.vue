@@ -240,7 +240,7 @@ const productsData = computed(() => {
     labels: [],
     series: [],
     colors: {
-      bar: '#f75c5c',
+      bar: '#E5254A',
       text: '#ffffff'
     }
   };
@@ -253,7 +253,7 @@ const productsData = computed(() => {
     })),
     series: CommonProducts.value.map(commonProduct => Number(commonProduct.saleRate.toFixed(2))),
     colors: {
-      bar: '#f75c5c',
+      bar: '#E5254A',
       text: '#ffffff'
     }
   };

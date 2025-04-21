@@ -77,7 +77,13 @@ const months = ref([
 const option = ref({
   tooltip: {
     trigger: 'axis',
-    axisPointer: { type: 'cross', label: { backgroundColor: '#6a7985' } },
+
+    axisPointer: { 
+      type: 'cross',
+       label: { backgroundColor: '#6a7985' },
+       type: 'none'
+
+   },
   },
   grid: {
     left: '3%',
@@ -118,39 +124,31 @@ const option = ref({
   ]
 });
 
-// دالة جلب البيانات من API
 const getPeakTimeData = async (monthId = 0) => {
   loading.value = true;
   try {
     const res = await axios.get(`${props.apiEndpoint}${monthId ? `?filterByMonth=${monthId}` : ''}`, config.value);
-    console.log('API Response:', res.data); // طباعة البيانات المرجعة
 
     if (response(res) === "success") {
-      // التحقق من وجود البيانات
+
       if (!res.data?.data?.peakTimeData) {
-        console.log('No peakTimeData found in response');
         option.value.xAxis.data = [];
         option.value.series[0].data = [];
         return;
       }
 
       const data = res.data.data.peakTimeData;
-      console.log('Chart Data:', data); // طباعة بيانات الرسم البياني
       chartData.value = data;
       
       try {
-        // تحديث البيانات في الرسم البياني
         if (monthId === 0) {
-          // عرض البيانات الشهرية
           option.value.xAxis.data = data.map(item => item.month);
           option.value.series[0].data = data.map(item => item.value);
         } else {
-          // عرض البيانات اليومية للشهر المحدد
           option.value.xAxis.data = data.map(item => `اليوم ${item.day}`);
           option.value.series[0].data = data.map(item => item.value);
         }
 
-        // تحديث الرسم البياني
         if (chart.value?.chart) {
           chart.value.chart.setOption(option.value, true);
         }
@@ -164,7 +162,7 @@ const getPeakTimeData = async (monthId = 0) => {
     }
   } catch (error) {
     console.error("Error fetching peak time data:", error);
-    // تصفير البيانات في حالة الخطأ
+
     option.value.xAxis.data = [];
     option.value.series[0].data = [];
   } finally {
@@ -172,7 +170,7 @@ const getPeakTimeData = async (monthId = 0) => {
   }
 };
 
-// معالج تغيير الشهر
+
 const handleMonthChange = async (event) => {
   const monthId = event.value?.id;
   if (monthId !== undefined) {
@@ -180,13 +178,13 @@ const handleMonthChange = async (event) => {
   }
 };
 
-// تحميل البيانات الأولية عند تحميل المكون
+
 onMounted(async () => {
   selectedMonth.value = months.value[0];
   await getPeakTimeData();
 });
 
-// مراقبة التغييرات في البيانات
+
 watch(chartData, () => {
   if (chart.value?.chart) {
     chart.value.chart.setOption(option.value, true);

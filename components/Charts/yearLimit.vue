@@ -67,7 +67,10 @@ const option = ref({
   },
   tooltip: {
     trigger: 'axis',
-    axisPointer: { type: 'cross', label: { backgroundColor: '#6a7985' } },
+    axisPointer: { type: 'cross', label: { show: false }, lineStyle: { width: 0 } },
+    axisPointer: {
+      type: 'none'
+    }
   },
   grid: {
     left: '3%',
@@ -78,6 +81,7 @@ const option = ref({
   xAxis: {
     type: 'category',
     boundaryGap: false,
+    // show: false,
     data: [],
     axisLabel: {
       interval: 0,
@@ -90,7 +94,7 @@ const option = ref({
   },
   series: [
     {
-      name: t('Global.females'),
+      name: 'زیارات',
       type: 'line',
       smooth: true,
       symbol: 'square',

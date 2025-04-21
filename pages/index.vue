@@ -147,7 +147,8 @@
                     <!-- Main Title Section -->
                     <div class="text-center packages-text">
                         <h2 class="fw-bold color-white mb-4">نفهم تفاصيل متجرك ونعمل <br/> على تحسينه</h2>
-                        <p class="mx-auto color-white" style="max-width: 700px;">كل ما تحتاج إليه من تحليل دقيق وأدوات متكاملة وبيانات مفيدة في السوق لتحسين المنتجات المتداولة في متجرك الذي يحتاج إلى تطوير لا تقييم وتعطيل</p>
+                        <p class="mx-auto color-white" style="max-width: 700px;">كل ما تحتاج إلیھ من تحلیل شامل لأدائك وأداء منافسیك مع مقارنات دقیقة في السوق المستھدف
+                            بالإضافة إلي العدید من الخدمات الأخرى نوفرھا لك و نفھم تفاصیلھا</p>
                     </div>
 
                     
@@ -259,7 +260,7 @@
         
                                                 </div>
                                             </div>
-                                            <button class="btn-package">
+                                            <button class="btn-package" @click="cart_dialog = true">
                                                 <img src="@/assets/images/cart-img.svg" alt="cart-img" class="cart-img">
                                             </button>
         
@@ -293,7 +294,7 @@
         
                                                 </div>
                                             </div>
-                                            <button class="btn-package">
+                                            <button class="btn-package" @click="cart_dialog = true">
                                                 <img src="@/assets/images/cart-img.svg" alt="cart-img" class="cart-img">
                                             </button>
         
@@ -310,6 +311,24 @@
             
              <!-- start to FAQ -->
             <GlobalHomeFAQ class="mb-5"/>
+
+        <!-- signUp dialog -->
+
+        <Dialog v-model:visible="cart_dialog" dismissableMask modal class="custum_dialog_width auth-daialog"
+            :draggable="false">
+            <div class="text-center">
+                <div class="section-btns mb-4">
+                  
+                    <button @click="() => { navigateToUrl('https://apps.salla.sa/ar/app/853407611'); cart_dialog = false; }" class="typeSection salla">
+                        <img src="@/assets/images/salla.svg" alt="">
+                    </button>
+
+                    <button @click="() => { navigateToUrl('https://apps.zid.sa/application/4359'); cart_dialog = false; }" class="typeSection zid">
+                        <img src="@/assets/images/zid.svg" alt="">
+                    </button>
+                </div>
+            </div>
+        </Dialog>
     
         </main>
     </div>
@@ -359,7 +378,7 @@ const sections = ref([
 
 const activeSection = ref(0);
 const direction = ref('down');
-
+const cart_dialog = ref(false);
 const setActiveSection = (index) => {
     direction.value = index > activeSection.value ? 'up' : 'down';
     activeSection.value = index;
@@ -440,6 +459,10 @@ const responsiveOptions = ref([
 
 
 ]);
+
+const navigateToUrl = (url) => {
+        window?.open(url, '_blank');
+    };
     
 </script>
 

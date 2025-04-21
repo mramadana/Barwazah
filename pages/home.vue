@@ -7,7 +7,7 @@
 
                     <div class="info-box">
                         <div class="info-box-item market-size">
-                            <img src="@/assets/images/attach_money.png" alt="Dollar Icon">
+                            <img src="@/assets/images/download.svg" alt="Dollar Icon" loading="lazy" class="dollar-icon">
                             <div class="info-content">
                                 <span>حجم السوق</span>
                                 <div class="d-flex align-items-baseline gap-2">
@@ -169,6 +169,9 @@ onBeforeMount( async () => {
 </script>
 
 <style lang="scss" scoped>
+.dollar-icon {
+    max-width: 57px;
+}
     .chart-text {
         display: flex;
         align-items: center;

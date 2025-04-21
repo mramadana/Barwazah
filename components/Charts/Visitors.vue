@@ -58,18 +58,14 @@ const option = computed(() => ({
       data: visitorsData.value.data?.map(item => item.value) || [],
       type: 'bar',
       barWidth: '50%',
+      showBackground: true, // أضف هذه الخاصية لعرض خلفية الأعمدة
+      backgroundStyle: {
+        color: '#EEF6FE', // لون الخلفية
+        borderRadius: [5, 5, 0, 0],
+      },
+      
       itemStyle: {
-        color: (params) => {
-          const colors = [
-            '#c1c1c1',
-            '#c1c1c1',
-            '#c1c1c1',
-            '#d9534f',
-            '#c1c1c1',
-            '#d9534f',
-          ];
-          return colors[params.dataIndex];
-        },
+        color: '#E5254A',
         borderRadius: [5, 5, 0, 0],
       },
       label: {
