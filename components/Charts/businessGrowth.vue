@@ -100,7 +100,7 @@ const years = ref([
   { name: '2022', id: 2022 },
   { name: '2023', id: 2023 },
   { name: '2024', id: 2024 },
-  { name: '2025', id: 2025 }
+  // { name: '2025', id: 2025 }
 ]);
 
 // Fetch chart data from API
@@ -400,11 +400,11 @@ const yearlyData = {
     market: 105,
     repeatRate: 20
   },
-  2025: {
-    sales: 115,
-    market: 150,
-    repeatRate: 18
-  }
+  // 2025: {
+  //   sales: 115,
+  //   market: 150,
+  //   repeatRate: 18
+  // }
 };
 
 // Year text from API
@@ -416,6 +416,7 @@ const fetchGrowthReport = async () => {
     const res = await axios.get('GetGrowthReport', config.value);
     if (response(res) === "success") {
       YearText.value = res.data.data;
+      console.log(YearText.value, "89988989");
     }
   } catch (error) {
     console.error('Error fetching growth report:', error);

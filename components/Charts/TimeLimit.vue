@@ -24,6 +24,17 @@
               />
             </div>
           </div>
+          <!-- <div class="with_cun_select custom-select">
+            <div class="flex justify-content-center dropdown_card">
+              <Dropdown 
+                v-model="selectedYear" 
+                @change="handleYearChange" 
+                :options="years" 
+                optionLabel="name" 
+                placeholder="اختر السنة"
+              />
+            </div>
+          </div> -->
         </div>
 
         <VChart ref="chart" class="custom-chart" :option="option" style="height: 265px; width: 100%; display: block" />
@@ -39,9 +50,39 @@ const axios = useApi();
 const { response } = responseApi();
 const { token } = storeToRefs(useAuthStore());
 const { t } = useI18n();
+
 const props = defineProps({
-  apiEndpoint: { type: String, required: true } // استلام API مختلف لكل instance
+  apiEndpoint: { type: String, required: true },
+  initialYears: {
+        type: Array,
+        default: () => [
+            { name: '2024', id: 2024 },
+            { name: '2025', id: 2025 }
+        ]
+    }
 });
+
+const years = ref(props.initialYears);
+const selectedYear = ref(years.value[0]);
+
+const handleFilterChange = async () => {
+  const monthId = selectedMonth.value?.id || 0;
+  const yearId = selectedYear.value?.id || 0;
+  await getPeakTimeData(monthId, yearId);
+};
+
+
+const handleMonthChange = async (event) => {
+  selectedMonth.value = event.value;
+  await handleFilterChange();
+};
+
+
+const handleYearChange = async (event) => {
+  selectedYear.value = event.value;
+  await handleFilterChange();
+};
+
 const echarts = await import('echarts/core');
 import { LineChart } from 'echarts/charts';
 import { TooltipComponent, GridComponent, LegendComponent } from 'echarts/components';
@@ -124,10 +165,21 @@ const option = ref({
   ]
 });
 
-const getPeakTimeData = async (monthId = 0) => {
+const getPeakTimeData = async (monthId = 0 , yearId = 0) => {
   loading.value = true;
   try {
-    const res = await axios.get(`${props.apiEndpoint}${monthId ? `?filterByMonth=${monthId}` : ''}`, config.value);
+    // const res = await axios.get(`${props.apiEndpoint}${monthId ? `?filterByMonth=${monthId}` : ''}${yearId ? `&year=${yearId}` : ''}`, config.value);
+    let apiUrl = props.apiEndpoint;
+    const params = [];
+    
+    if (monthId > 0) params.push(`filterByMonth=${monthId}`);
+    if (yearId > 0) params.push(`year=${yearId}`);
+    
+    if (params.length > 0) {
+      apiUrl += `?${params.join('&')}`;
+    }
+
+    const res = await axios.get(apiUrl, config.value);
 
     if (response(res) === "success") {
 
@@ -171,16 +223,16 @@ const getPeakTimeData = async (monthId = 0) => {
 };
 
 
-const handleMonthChange = async (event) => {
-  const monthId = event.value?.id;
-  if (monthId !== undefined) {
-    await getPeakTimeData(monthId);
-  }
-};
+// const handleMonthChange = async (event) => {
+//   const monthId = event.value?.id;
+//   if (monthId !== undefined) {
+//     await getPeakTimeData(monthId);
+//   }
+// };
 
 
 onMounted(async () => {
-  selectedMonth.value = months.value[0];
+  // selectedMonth.value = months.value[0];
   await getPeakTimeData();
 });
 

@@ -38,6 +38,7 @@
                     <div class="col-12 mb-3">
                         <div class="layout-form chart_layout">
                         <h3 class="main-title text-center fw-normal mb-4">{{ $t("Global.sales") }}</h3>
+                        
                         <ChartsGradientArea
                             :initialMonths="months"
                             :initialAllMonths="allMonths"
@@ -46,8 +47,11 @@
                             @rental_change="handleSalesMonthChange"
                             :loading="loading"
                             :showAllOption="true"
+                            :initialYears="yearsList"
+                            @year_change="handleYearChange"
                         />
-                        </div>
+                      
+                      </div>
                     </div>
 
                     <div class="col-12 col-lg-6 mb-3">
@@ -64,6 +68,7 @@
                     <div class="col-12 col-lg-6 mb-3">
                         <div class="layout-form chart_layout">
                           <h3 class="main-title text-center fw-normal mb-4">وقت الذروة</h3>
+                            <!-- <ChartsTimeLimit apiEndpoint="GetPeakTime" /> -->
                             <ChartsTimeLimit apiEndpoint="GetPeakTime" />
                         </div>
                     </div>
@@ -95,6 +100,8 @@
                             :loading="loading"
                             @rental_change="handleMonthChange"
                             :showAllOption="false"
+                            :initialYears="yearsList" 
+                            @year_change="handleYearChangeForCart"
                         />
                         </div>
                     </div>
@@ -118,6 +125,27 @@ definePageMeta({
 const { t } = useI18n();
 
 // **************** Data ******************//
+
+// years list code 
+
+const selectedYear = ref(2025);
+const selectedMonth = ref(0);
+const yearsList = ref([
+  { name: '2024', id: 2024 },
+  { name: '2025', id: 2025 },
+]);
+
+// دى عشان التشارت الاولى الخاصة بالمبيعات
+const handleYearChange = (yearId) => {
+  selectedYear.value = yearId;
+  handleSalesMonthChange(selectedMonth.value, yearId);
+};
+
+// دى عشان التشارت الثانية الخاصة متوسط حجم سلة الشراء
+const handleYearChangeForCart = (yearId) => {
+    selectedYear.value = yearId;
+    handleMonthChange(selectedMonth.value, yearId);
+};
 
 const { response } = responseApi();
 const axios = useApi();
@@ -288,11 +316,11 @@ const GetCommonProducts = async () => {
 
 // get sales chart Data (شارت المبيعات)
 
-const getData = async (monthId = 0) => {
+const getData = async (monthId = 0, yearId = 0) => {
   loading.value = true;
   try {
     console.log(`Fetching data for monthId: ${monthId}`);
-    const res = await axios.get(`AverageShoppingCartSize?type=0&filterByMonth=${monthId}`, config.value);
+    const res = await axios.get(`AverageShoppingCartSize?type=0&filterByMonth=${monthId}&year=${selectedYear.value}`, config.value);
     if (response(res) === "success") {
       const data = res.data.data;
       if (monthId === 0) {
@@ -302,8 +330,8 @@ const getData = async (monthId = 0) => {
         ];
       } else {
         const dailyData = {
-          market: data.marketData.map(item => item.value),
-          store: data.storeDataData.map(item => item.value)
+          market: data.storeDataData.map(item => item.value),
+          store: data.marketData.map(item => item.value)
         };
         manualMonthlyData.value[monthId] = dailyData;
         console.log("Updated manualMonthlyData:", manualMonthlyData.value);
@@ -322,7 +350,7 @@ const getSalesData = async (monthId = 0) => {
   loading.value = true;
   try {
     console.log(`Fetching data for monthId: ${monthId}`);
-    const res = await axios.get(`GetSalesChartData?type=0&filterByMonth=${monthId}`, config.value);
+    const res = await axios.get(`GetSalesChartData?type=0&filterByMonth=${monthId}&year=${selectedYear.value}`, config.value);
     if (response(res) === "success") {
       const data = res.data.data;
       if (monthId === 0) {
@@ -332,8 +360,8 @@ const getSalesData = async (monthId = 0) => {
         ];
       } else {
         const dailyData = {
-          market: data.marketData.map(item => item.value),
-          store: data.storeDataData.map(item => item.value)
+          market: data.storeDataData.map(item => item.value),
+          store: data.marketData.map(item => item.value)
         };
         manualMonthlyData_2.value[monthId] = dailyData;
         console.log("Updated manualMonthlyData:", manualMonthlyData_2.value);
@@ -368,16 +396,16 @@ const getDemographicData = async () => {
   }
 };
 
-const handleMonthChange = async (monthId) => {
-  console.log(`Handling month change for monthId: ${monthId}`);
-  await getData(monthId);
-  console.log("manualMonthlyData.value after update:", manualMonthlyData.value);
+const handleMonthChange = async (monthId, yearId = selectedYear.value) => {
+    selectedMonth.value = monthId;
+    console.log(`Month: ${monthId}, Year: ${yearId}`);
+    await getData(monthId, yearId); // سيتم إرسال الشهر والسنة معًا
 };
 
-const handleSalesMonthChange = async (monthId) => {
-  console.log(`Handling month change for monthId: ${monthId}`);
-  await getSalesData(monthId);
-  console.log("manualMonthlyData.value after update:", manualMonthlyData.value);
+const handleSalesMonthChange = async (monthId, yearId = selectedYear.value) => {
+  selectedMonth.value = monthId; // تحديث قيمة الشهر المحدد
+  console.log(`Month: ${monthId}, Year: ${yearId}`);
+  await getSalesData(monthId, yearId);
 };
 
 

@@ -120,6 +120,7 @@ const handleYearChange = async () => {
 };
 
 const getData = async (year) => {
+
   try {
     const res = await axios.get(`AverageMarketVisits?year=${year}`, config.value);
     if (response(res) == "success") {

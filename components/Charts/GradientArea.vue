@@ -15,7 +15,8 @@
     </div>
 
     <div class="d-flex align-items-center justify-content-center gap-4">
-      <!-- <label class="label mb-0">اختر الشهر</label> -->
+
+      <!-- filter by month -->
       <div class="with_cun_select custom-select">
         <div class="flex justify-content-center dropdown_card">
           <Dropdown 
@@ -28,6 +29,20 @@
           />
         </div>
       </div>
+
+      <!-- filter by year -->
+      <!-- <div class="with_cun_select custom-select">
+        <div class="flex justify-content-center dropdown_card">
+          <Dropdown 
+            v-model="selectedYear" 
+            @change="handleYearChange" 
+            :options="years" 
+            optionLabel="name" 
+            :placeholder="'اختر السنة'" 
+            class="w-full md:w-14rem custum-dropdown" 
+          />
+        </div>
+      </div> -->
     </div>
 
     <VChart ref="chart" :option="option" style="height: 250px; width: 100%; display: block" />
@@ -45,9 +60,21 @@ const props = defineProps({
   initialOption: { type: Object, required: true },
   initialMonthlyData: { type: Object, required: true },
   initialSeriesData: { type: Array, required: true },
+  // add initial years
+  initialYears: { type: Array, required: true },
 });
 
-const emit = defineEmits(['rental_change']);
+const emit = defineEmits(['rental_change', 'year_change']);
+
+//   add selected year variable and method
+const selectedYear = ref({ id: 0 });
+const years = ref(props.initialYears);
+
+const handleYearChange = () => {
+console.log("Selected Year ID:", selectedYear.value.id);
+emit('year_change', selectedYear.value.id);
+};
+
 const uniqueId = ref(Math.random().toString(36).substr(2, 9));
 const { t } = useI18n();
 
@@ -129,9 +156,9 @@ const option = ref({
     trigger: 'axis',
     padding: [10, 20],
     textStyle: {
-      fontSize: 13,            // تكبير حجم الخط
-      color: '#333',           // لون النص
-      fontFamily: 'Arial',     // نوع الخط
+      fontSize: 13,            
+      color: '#333',           
+      fontFamily: 'Arial',     
     },
     borderWidth: 2,
     axisPointer: { type: 'cross', 
@@ -156,7 +183,7 @@ const option = ref({
               border-radius: 2px;
             "></span>
             <strong>${item.seriesName}:</strong>
-            <span>${item.value}</span>
+            <span>${item.value} ريال</span>
           </div>
         `;
       });

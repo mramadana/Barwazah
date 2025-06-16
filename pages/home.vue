@@ -52,14 +52,14 @@
                             <h3 class="main-title fw-normal text-center mb-3 main-cl">{{ $t("Global.distribution") }}</h3>
                             <h3 class="desc text-center mb-0">{{ $t("Global.distribution_channels") }}</h3>
                             <ChartsVisitors />
-                            <div class="chart-text">
+                            <!-- <div class="chart-text">
                                 <span class="hint">الكلمات التي يبحث عنها عملاءك</span>
                                 <div class="key-words">
                                     <div class="text position-relative" v-for="(item, index) in HomeData?.keyWords" :key="index">{{ item.word }}
                                         <span class="tooltip main-cl d-block">معدل التحويل: {{ item.searchRate }} %</span>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
 
@@ -72,6 +72,19 @@
                               :products-data="productsData"
                               :loading="loading"
                             />
+                        </div>
+                    </div>
+
+                    <div class="col-12 mb-4">
+                        <div class="layout-form chart_layout">
+                            <div class="chart-text flex-column">
+                                <span class="hint w-100 text-center pt-3 mb-4">الكلمات التي يبحث عنها عملاءك</span>
+                                <div class="key-words">
+                                    <div class="text position-relative" v-for="(item, index) in HomeData?.keyWords" :key="index">{{ item.word }}
+                                        <span class="tooltip main-cl d-block">معدل التحويل: {{ item.searchRate }} %</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -120,12 +133,12 @@ const productsData = computed(() => {
   };
 
   return {
-    labels: HomeData.value.competitors.reverse().map(competitor => ({
+    labels: HomeData.value.competitors.map(competitor => ({
       id: competitor.id,
       text: competitor.competitorName,
       image: competitor.logo
     })),
-    series: HomeData.value.competitors.reverse().map(competitor => competitor.totalMarketVisitors),
+    series: HomeData.value.competitors.map(competitor => competitor.totalMarketVisitors),
     colors: {
       bar: '#E5254A',
       text: '#ffffff'
