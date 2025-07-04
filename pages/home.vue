@@ -137,8 +137,8 @@ const productsData = computed(() => {
       id: competitor.id,
       text: competitor.competitorName,
       image: competitor.logo
-    })),
-    series: HomeData.value.competitors.map(competitor => competitor.totalMarketVisitors),
+    })).reverse(),
+    series: HomeData.value.competitors.map(competitor => competitor.totalMarketVisitors).reverse(),
     colors: {
       bar: '#E5254A',
       text: '#ffffff'

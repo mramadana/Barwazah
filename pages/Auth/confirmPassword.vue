@@ -69,7 +69,7 @@
     const { successToast, errorToast } = toastMsg();
     const axios = useApi();
     const store = useAuthStore();
-    const { user } = storeToRefs(store);
+    const { user, newemail } = storeToRefs(store);
     const loading = ref(false);
     const confirmPasswordForm = ref(null);
     const passwordVisible = ref({
@@ -84,6 +84,10 @@
         for (let i = 0; i < allInputs.length; i++) {
             if (allInputs[i].value === '') {
                 errors.value.push(t(`validation.${allInputs[i].name}`));
+            };
+
+            if (password.value !== confirmPassword.value) {
+                errors.value.push(t(`validation.confirmPassword`));
             }
         }
     }
@@ -97,6 +101,7 @@
     };
 
     const submitData = async () => {
+        console.log(newemail.value, "user");
         validate();
         if (errors.value.length) {
             errorToast(errors.value[0]);
@@ -107,10 +112,10 @@
         try {
 
             const data = {
-                accountType: user.value.accountType,
-                email: user.value.email,
-                oldPassword: password.value,
-                newPassword: confirmPassword.value
+                accountType: user.value?.accountType ?? 0,
+                email: newemail.value ?? '',
+                newPassword: password.value,
+                confirmPassword: confirmPassword.value
             };
             
             const res = await axios.post("ChangePassword", data);

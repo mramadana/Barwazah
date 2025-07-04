@@ -57,7 +57,8 @@
 
 
 definePageMeta({
-  layout: false
+//   layout: false,
+  layout: 'empty',
 //   middleware: 'auth'
 });
 
@@ -133,7 +134,8 @@ const verificationCode = async () => {
                 errorToast(res.data.msg);
             }
         } catch (err) {
-            console.log(err);
+            errorToast(err.response.data.message);
+
         } finally {
             loading.value = false;
         }

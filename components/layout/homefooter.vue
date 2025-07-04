@@ -28,11 +28,11 @@
                 <div class="footer-section">
                     <h3>اربط متجرك الآن</h3>
                     <div class="section-btns align-items-start">
-                        <button class="typeSection salla" @click="() => { navigateToUrl('https://salla.com/') }">
+                        <button class="typeSection salla" @click="() => { navigateToUrl('https://apps.salla.sa/ar/app/853407611') }">
                             <img src="@/assets/images/salla.svg" alt="">
                         </button>
 
-                        <button class="typeSection zid" @click="() => { navigateToUrl('https://zid.sa/') }">
+                        <button class="typeSection zid" @click="() => { navigateToUrl('https://apps.zid.sa/application/4359') }">
                             <img src="@/assets/images/zid.svg" alt="">
                         </button>
                     </div>

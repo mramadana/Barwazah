@@ -88,11 +88,11 @@
                 <h5 class="main-title sm blue mb-4"> اختر المنصة التي ترغب في ربط متجرك بها عبر تطبيق بروزه من خلال سوق تطبيقات سلة وزد.</h5>
                 <div class="section-btns mt-4 mb-4">
                   
-                    <button @click="() => { navigateToUrl('https://salla.com/'); signUp_dialog = false; }" class="typeSection salla">
+                    <button @click="() => { navigateToUrl('https://apps.salla.sa/ar/app/853407611'); signUp_dialog = false; }" class="typeSection salla">
                         <img src="@/assets/images/salla.svg" alt="">
                     </button>
 
-                    <button @click="() => { navigateToUrl('https://zid.sa/'); signUp_dialog = false; }" class="typeSection zid">
+                    <button @click="() => { navigateToUrl('https://apps.zid.sa/application/4359'); signUp_dialog = false; }" class="typeSection zid">
                         <img src="@/assets/images/zid.svg" alt="">
                     </button>
                 </div>

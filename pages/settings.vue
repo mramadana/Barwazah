@@ -165,6 +165,7 @@
   definePageMeta({
     name: "Sidebar.settings",
     middleware: "auth",
+    layout: 'default'
   });
   
   // Pinia store

@@ -25,7 +25,7 @@ export default defineNuxtConfig({
       viewport: "width=device-width, initial-scale=1",
       htmlAttrs: { lang: "ar", class: "html_direction" },
       meta: [
-        { name: "description", content: "موقع اميال لتاجير السيارات" },
+        { name: "description", content: "مساعدك التسويقي الذكي معك من تحليل البيانات إلى ابتكار الأفكار لتحقيق نمو مستدام" },
       ],
       link: [
         { rel: "icon", type: "image/x-icon", href: "/main-logo.jpg" },

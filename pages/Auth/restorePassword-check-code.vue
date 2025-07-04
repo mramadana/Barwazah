@@ -106,7 +106,7 @@ import { useAuthStore } from '~/stores/auth';
 // Store
 const store = useAuthStore();
 
-const {user, hasTwoAccount} = storeToRefs(store);
+const {user, hasTwoAccount, newemail} = storeToRefs(store);
 
 const loading = ref(false);
 
@@ -116,7 +116,8 @@ const bindModal = ref("");
 const verificationCode = async () => {
     loading.value = true;
     const data = {
-        email: user.value.email,
+        // email: user.value.email,
+        email: user.value.email? user.value.email : newemail.value,
         code: parseInt(bindModal.value),
 
         // accountType: user.value.accountType
@@ -133,10 +134,10 @@ const verificationCode = async () => {
                 navigateTo('/Auth/confirmPassword');
                 localStorage.setItem('newCode', bindModal.value);
             } else {
-                errorToast(res.data.msg);
+                errorToast(res.data.message);
             }
         } catch (err) {
-            console.log(err);
+            errorToast(err.response.data.message);
         } finally {
             loading.value = false;
         }
@@ -155,8 +156,7 @@ const resendCode = async () => {
             errorToast(res.data.message);
         }
     } catch (err) {
-        console.error(err);
-        errorToast(t('Global.error_occurred'));
+        errorToast(err.response.data.message);
     }
 }
 

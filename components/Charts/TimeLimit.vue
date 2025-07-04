@@ -63,7 +63,7 @@ const props = defineProps({
 });
 
 const years = ref(props.initialYears);
-const selectedYear = ref(years.value[0]);
+const selectedYear = ref(years.value[1]);
 
 const handleFilterChange = async () => {
   const monthId = selectedMonth.value?.id || 0;

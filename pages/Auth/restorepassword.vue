@@ -94,7 +94,7 @@ import { useAuthStore } from '~/stores/auth';
 
 // Store
 const store = useAuthStore();
-const { user, hasTwoAccount } = storeToRefs(store);
+const { user, hasTwoAccount, newemail } = storeToRefs(store);
 
 // success response
 
@@ -130,6 +130,7 @@ const countries = ref([]);
         try {
             loading.value = true;
             const fd = new FormData(forgetForm.value);
+
             validate();
 
             if (errors.value.length) {
@@ -137,10 +138,13 @@ const countries = ref([]);
                 return;
             }
 
-            const email = encodeURIComponent(fd.get('email'));
+            const email = fd.get('email');
             const res = await axios.post(`SendCode?email=${email}`);
             if (response(res) === "success") {
-                user.value.email = fd.get('email');
+                newemail.value = email;
+                if (user.value?.email) {
+                    user.value.email = fd.get('email');
+                }
                 successToast(res.data.message);
                 hasTwoAccount.value = res.data.hasTwoAccounts;
                 if (res.data.hasTwoAccounts) {

@@ -56,7 +56,8 @@
 
 <script setup>
     definePageMeta({
-        layout: false
+        // layout: false,
+        layout: 'empty',
     });
 
     const { t } = useI18n({ useScope: 'global' });

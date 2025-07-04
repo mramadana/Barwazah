@@ -223,6 +223,12 @@ const option = ref({
 
 tooltip: {
   trigger: 'axis',
+  axisPointer: {
+      type: 'none', // هذا السطر يخفي الخط
+      shadowStyle: {
+        opacity: 0 // هذا السطر يخفي الظل
+      }
+    },
   formatter: (params) => { 
     let result = `<div style="padding: 5px;">${params[0].axisValue}</div>`;
     params.forEach((item) => {
@@ -390,6 +396,16 @@ const yearlyData = {
     market: 110,
     repeatRate: 15
   },
+  2021: {
+    sales: 95,
+    market: 115,
+    repeatRate: 20
+  },
+  2022: {
+    sales: 100,
+    market: 120,
+    repeatRate: 25
+  },
   2023: {
     sales: 102,
     market: 140,
@@ -416,7 +432,6 @@ const fetchGrowthReport = async () => {
     const res = await axios.get('GetGrowthReport', config.value);
     if (response(res) === "success") {
       YearText.value = res.data.data;
-      console.log(YearText.value, "89988989");
     }
   } catch (error) {
     console.error('Error fetching growth report:', error);
